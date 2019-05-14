@@ -2,10 +2,6 @@
 
 public static class Buoyancysort
 {
-    // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 999, 999, 999, 999, 999, 999, 999, 999, 5
-
-
-
     /// <summary>
     /// 
     /// </summary>
@@ -59,9 +55,55 @@ public static class Buoyancysort
     ///     
     /// </pseudocode>
     /// <param name="mutable_array"></param>
-    public static sort(ref List<int> mutable_array)
+    public static sort(ref List<int> mutable_array, SortStage stage = SortStage.Min, int iterations = 6)
     {
+        // if remaining size of array is n <= 64, Insertion-Sort and return
+        // if iterations <= 0 use Timsort(remaining range) and return
+        // if (stage == SortStage.Min)
+        //{
+        //    Build-Reversed-Min-Leonardo-Heap();
+        //    Do Lazy-Insertion-Sort() while adaptive performance is O(k*log(log(k))) or you reach a boundary for the next Leonardo heap
+        //    Either go to 2n times the number of elements sorted in this heap or the next Leonardo heap root (whichever is smaller)
+        //    Bubblesort back (for one iteration) that element until it reaches the sorted bound.
+        //    When you get to the sorted bound, do insertion sort on the sorted sequence.
+        //    The final location of that node has all prior elements sorted (and therefore those elements can be ignored).
+        //    Pick partition from median of medians (9 total elements) spanning 4n/16::n/16::12n/16 (4n/16, 5n/16, 6n/16 ... 10n/16, 11n/16, 12n/16)
+        //    Find already partitioned elements in the left and right using linear search
+        //    Do a Semi-Stable-Partition() of unpartitioned elements
+        //    buoyancysort(first_unsorted_left...pivot-1, SortStage.Median, iterations-1)
+        //    buoyancysort(pivot+1...n, SortStage.Median, iterations-1)
+        //}
+        //else if (stage == SortStage.Max)
+        //{
+        //    Build-Forward-Max-Leonardo-Heap();
+        //    Do Lazy-Insertion-Sort() backwards from end while adaptive performance is O(k*log(log(k))) or you reach a boundary for the next Leonardo heap
+        //    Either go to 2n times the number of elements sorted in this heap or the next Leonardo heap root (whichever is smaller)
+        //    Bubblesort towards end (for one iteration) until the max element reaches the sorted bound.
+        //    When you get to the sorted bound, do insertion sort on the sorted sequence.
+        //    The final location of that node has all prior elements sorted (and therefore those elements can be ignored).
+        //    Pick partition from median of medians (9 total elements) spanning 4n/16::n/16::12n/16 (4n/16, 5n/16, 6n/16 ... 10n/16, 11n/16, 12n/16)
+        //    Find already partitioned elements in the left and right using linear search
+        //    Do a Semi-Stable-Partition() of unpartitioned elements
+        //    buoyancysort(1...pivot-1, SortStage.Min, iterations-1)
+        //    buoyancysort(pivot+1...first_unsorted_right, SortStage.Min, iterations-1)
+        //}
+        //else if (stage == SortStage.Median)
+        //{
+        //    Pick partition from median of medians (9 total elements) spanning 4n/16::n/16::12n/16 (4n/16, 5n/16, 6n/16 ... 10n/16, 11n/16, 12n/16)
+        //    Find already partitioned elements in the left and right using linear search
+        //    Count elements above, below, and equal to partition line / pivot
+        //    Swap pivot with middle element (elements_above + elements_equal_to/2)
+        //    if pivot invalidates already_partitioned elements, do a quick fix
+        //    Do a Semi-Stable-Partition() of unpartitioned elements
+        //    Build-Forward-Max-Interlaced-and-Ternary-Median-Leonardo-Heap(1...pivot-1);
+        //    Build-Reversed-Min-Interlaced-and-Ternary-Median-Leonardo-Heap(pivot+1...n);
+        //    buoyancysort(1...pivot-2, SortStage.Max, iterations-1)
+        //    buoyancysort(pivot+2...first_unsorted_right, SortStage.Max, iterations-1)
+        //}
     }
+
+    
+    private enum SortStage { Min, Median, Max}
 }
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
