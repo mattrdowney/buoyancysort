@@ -27,6 +27,15 @@
     <ClInclude Include="interlaced-double-binary-heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hierarchysort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="median-of-medians.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="insertion-sort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
