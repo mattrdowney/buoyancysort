@@ -3,7 +3,6 @@
 
 namespace MedianOfMedians
 {
-
 	/// <summary>
 	/// Mutator - Sorts values in range [first, after_last) using INSERTION-SORT algorithm. No reverse variant necessary.
 	/// </summary>
