@@ -38,8 +38,8 @@ namespace Buoyancysort
 		//        "Insertion-Sort" on values in the range 4/16n : 1/16n : 12/16n
 		//        pivot = Hoare-Partition(1...n) with the "Insertion-Sort"ed value at ~8/16n (from prior step) as the partition line
 		//        left = pivot
-		Buoyancysort::sort(data, first_unsorted_left, pivot - 1, chunk_size);
-		Buoyancysort::sort(data, pivot + 1, first_unsorted_right, chunk_size);
+		Buoyancysort::sort(data, new_first, pivot - 1, chunk_size);
+		Buoyancysort::sort(data, pivot + 1, new_after_last, chunk_size);
 	}
 
 	template <typename Type>

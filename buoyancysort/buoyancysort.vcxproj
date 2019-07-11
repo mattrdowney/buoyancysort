@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="buoyancysort.h" />
+    <ClInclude Include="heuristics.h" />
     <ClInclude Include="hierarchysort.h" />
     <ClInclude Include="insertion-sort.h" />
     <ClInclude Include="interlaced-double-binary-heap.h" />
