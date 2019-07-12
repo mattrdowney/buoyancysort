@@ -5,8 +5,8 @@
 
 namespace Heuristics
 {
-	double sqrt_log_log(std::size_t n)
+	double n_sqrt_log_log(std::size_t n)
 	{
-		return sqrt(log(log(n)));
+		return n*sqrt(log(log(n)));
 	}
 }

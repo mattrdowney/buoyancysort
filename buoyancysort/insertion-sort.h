@@ -13,9 +13,9 @@ namespace InsertionSort
 	template <typename Type>
 	std::size_t sort(Type *data, std::size_t first, std::size_t after_last)
 	{
-		for (std::ptrdiff_t unsorted_index = after_last-2; unsorted_index >= 0; unsorted_index -= 1)
+		for (std::size_t cursor = 1; cursor < after_last - first; cursor += 1)
 		{
-			InsertionSort::insert_from_left((std::size_t)unsorted_index, after_last);
+			InsertionSort::insert_from_left((after_last - 1) - cursor, after_last);
 		}
 	}
 
@@ -120,14 +120,14 @@ namespace InsertionSort
 	std::size_t insert_from_right(Type *data, std::size_t first, std::size_t rightmost_to_insert)
 	{
 		Type unsorted_value = data[rightmost_to_insert];
-		std::ptrdiff_t cursor = rightmost_to_insert-1;
-		while (cursor >= 0 && data[cursor] > unsorted_value)
+		std::size_t cursor = 1;
+		while (first + cursor <= rightmost_to_insert && data[rightmost_to_insert - cursor] > unsorted_value)
 		{
-			data[cursor + 1] = data[cursor];
-			cursor -= 1;
+			data[rightmost_to_insert - cursor + 1] = data[rightmost_to_insert - cursor];
+			cursor += 1;
 		}
-		data[cursor + 1] = unsorted_value;
-		return rightmost_to_insert - ((std::size_t)cursor + 1);
+		data[rightmost_to_insert - cursor + 1] = unsorted_value;
+		return 0;// FIXME: rightmost_to_insert - ((std::size_t)cursor + 1);
 	}
 
 	/// <summary>

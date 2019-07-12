@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bubble-sort.h" />
     <ClInclude Include="buoyancysort.h" />
     <ClInclude Include="heuristics.h" />
     <ClInclude Include="hierarchysort.h" />
