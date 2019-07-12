@@ -11,11 +11,11 @@ namespace InsertionSort
 	/// <param name="first">An index into the <see cref="InsertionSort::sort(data)"> representing the element at the start of the range to be sorted.</param>
 	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sorted.</param>
 	template <typename Type>
-	std::size_t sort(Type *data, std::size_t first, std::size_t after_last)
+	void sort(Type *data, std::size_t first, std::size_t after_last)
 	{
 		for (std::size_t cursor = 1; cursor < after_last - first; cursor += 1)
 		{
-			InsertionSort::insert_from_left((after_last - 1) - cursor, after_last);
+			InsertionSort::insert_from_left(data, (after_last - 1) - cursor, after_last);
 		}
 	}
 
@@ -26,6 +26,7 @@ namespace InsertionSort
 	/// <param name="data">A pointer to a contiguous array of data.</param>
 	/// <param name="first">An index into the <see cref="InsertionSort::lazy_leftward_sort(data)"/> representing the element at the start of the range to be sorted.</param>
 	/// <param name="after_last">An index into the <see cref="InsertionSort::lazy_leftward_sort(data)"/> representing the element one-past the end of the range to be sorted.</param>
+	/// <returns>The number of elements that were sorted.</returns>
 	template <typename Type>
 	std::size_t lazy_leftward_sort(Type *data, std::size_t first, std::size_t after_last, double (*budget_heuristic_function)(std::size_t))
 	{
@@ -36,7 +37,7 @@ namespace InsertionSort
 		std::size_t unsorted_index = 1;
 		while (unsorted_index < after_last)
 		{
-			inversion_budget_exceeded -= InsertionSort::insert_from_left((after_last - 1) - unsorted_index, after_last);
+			inversion_budget_exceeded -= InsertionSort::insert_from_left(data, (after_last - 1) - unsorted_index, after_last);
 			inversion_budget_exceeded += budget_allowance;
 			if (inversion_budget_exceeded < 0)
 			{
@@ -49,16 +50,6 @@ namespace InsertionSort
 				// amortize the budget across the next n elements encountered (64, 128, 256...)
 				budget_allowance = (budget_heuristic_function(budget_milestone * 2) - budget_heuristic_function(budget_milestone)) / budget_milestone;
 				budget_milestone *= 2;
-			}
-		}
-		for (unsorted_index = after_last - 2; unsorted_index >= 0; unsorted_index -= 1)
-		{
-			inversion_budget_exceeded -= InsertionSort::insert_from_left((std::size_t)unsorted_index, after_last);
-			inversion_budget_exceeded += (after_last - 1) - unsorted_index;
-			if (inversion_budget_exceeded < 0)
-			{
-				unsorted_index += 1;
-				break;
 			}
 		}
 		return unsorted_index;
@@ -71,6 +62,7 @@ namespace InsertionSort
 	/// <param name="data">A pointer to a contiguous array of data.</param>
 	/// <param name="first">An index into the <see cref="InsertionSort::lazy_rightward_sort(data)"/> representing the element at the start of the range to be sorted.</param>
 	/// <param name="after_last">An index into the <see cref="InsertionSort::lazy_rightward_sort(data)"/> representing the element one-past the end of the range to be sorted.</param>
+	/// <returns>The number of elements that were sorted.</returns>
 	template <typename Type>
 	std::size_t lazy_rightward_sort(Type *data, std::size_t first, std::size_t after_last, double(*budget_heuristic_function)(std::size_t))
 	{
@@ -81,7 +73,7 @@ namespace InsertionSort
 		std::size_t unsorted_index = 1;
 		while (unsorted_index < after_last)
 		{
-			inversion_budget_exceeded -= InsertionSort::insert_from_right(0, unsorted_index);
+			inversion_budget_exceeded -= InsertionSort::insert_from_right(data, 0, unsorted_index);
 			inversion_budget_exceeded += budget_allowance;
 			if (inversion_budget_exceeded < 0)
 			{
@@ -96,16 +88,6 @@ namespace InsertionSort
 				budget_milestone *= 2;
 			}
 		}
-		for (unsorted_index = after_last - 2; unsorted_index >= 0; unsorted_index -= 1)
-		{
-			inversion_budget_exceeded -= InsertionSort::insert_from_left((std::size_t)unsorted_index, after_last);
-			inversion_budget_exceeded += (after_last - 1) - unsorted_index;
-			if (inversion_budget_exceeded < 0)
-			{
-				unsorted_index += 1;
-				break;
-			}
-		}
 		return unsorted_index;
 	}
 
@@ -116,6 +98,7 @@ namespace InsertionSort
 	/// <param name="data">A pointer to a contiguous array of data.</param>
 	/// <param name="first">An index into the <see cref="InsertionSort::insert_from_right(data)"> representing the element at the start of the sorted range.</param>
 	/// <param name="rightmost_to_insert">An index into the <see cref="InsertionSort::insert_from_right(data)"> representing the element that needs to be sorted.</param>
+	/// <returns>The number of inversions that were removed (i.e. the number of sequence shifts necessary to insert).</returns>
 	template <typename Type>
 	std::size_t insert_from_right(Type *data, std::size_t first, std::size_t rightmost_to_insert)
 	{
@@ -137,6 +120,7 @@ namespace InsertionSort
 	/// <param name="data">A pointer to a contiguous array of data.</param>
 	/// <param name="leftmost_to_insert">An index into the <see cref="InsertionSort::insert_from_left(data)"> representing the element that needs to be sorted.</param>
 	/// <param name="after_last">An index into the <see cref="InsertionSort::insert_from_left(data)"> representing the element one-past the end of the sorted range.</param>
+	/// <returns>The number of inversions that were removed (i.e. the number of sequence shifts necessary to insert).</returns>
 	template <typename Type>
 	std::size_t insert_from_left(Type *data, std::size_t leftmost_to_insert, std::size_t after_last)
 	{

@@ -18,7 +18,6 @@ namespace MedianOfMedians
 	{
 		int insertion_sort_size = tuple_size*insertion_sort_group_size;
 
-
 		// TODO: RESEARCH: keep heap structure on both sides.
 		//     alternate on build-min-heap and build-max-heap calls (using the recursive variant, not iterative)
 		//     when a element must be swapped, get the complementary_node using (approximately) `1 - n`

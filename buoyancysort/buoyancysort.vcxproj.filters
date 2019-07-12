@@ -42,6 +42,9 @@
     <ClInclude Include="bubble-sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hoare-partition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
