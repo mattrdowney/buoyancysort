@@ -127,7 +127,7 @@ namespace InsertionSort
 			cursor += 1;
 		}
 		data[rightmost_to_insert - cursor + 1] = unsorted_value;
-		return 0;// FIXME: rightmost_to_insert - ((std::size_t)cursor + 1);
+		return cursor - 1;
 	}
 
 	/// <summary>
@@ -142,7 +142,7 @@ namespace InsertionSort
 	{
 		Type unsorted_value = data[leftmost_to_insert];
 		std::size_t cursor = leftmost_to_insert + 1;
-		while (cursor < after_last && data[cursor] < unsorted_value)
+		while (cursor < after_last && unsorted_value > data[cursor])
 		{
 			data[cursor - 1] = data[cursor];
 			cursor += 1;

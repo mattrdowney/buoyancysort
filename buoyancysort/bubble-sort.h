@@ -16,7 +16,6 @@ namespace BubbleSort
 			{
 				std::swap(data[cursor - 1], data[cursor]);
 			}
-
 			cursor += 1;
 		}
 	}
