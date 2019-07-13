@@ -16,6 +16,15 @@ namespace MedianOfMedians
 	template <typename Type, int tuple_size, int insertion_sort_group_size>
 	std::size_t pivot(Type *data, std::size_t first, std::size_t after_last)
 	{
+		// Currently leaning towards:
+		// Step 0: InsertionSort on chunk sizes 7 (I have long seen k=8 as the approximate optimal crossover point for quicksort): https://cs.stackexchange.com/questions/37956/why-is-the-optimal-cut-off-for-switching-from-quicksort-to-insertion-sort-machin
+		// Step 1: partition
+		// Step 2: median5 (since 7 and 5 are more dissimilar and you ignore more values)
+		// Step 3: partition
+		// Step 4: median3
+		// Step 5: repeat from "Step 1"
+		// I can't guarantee this works with my skill level, but it seems intuitive that it should work.
+
 		// Big *Asterisk: I am not really planning on implementing median of medians, unless it is in the context of shattering asymptotic running time. (eh, but it's probably important for shattering asymptotic complexity, if that's even possible)
 		// also "minimize y = 2g(g-1)/(g-3), g > 3" yields 3 + sqrt(6) or ~5.45 (if you are trying to minimize comparisons)
 		// trying to look at the best case instead of the worst case you get the formula: y = 1/(1/2+1/c)/c*ceil(lg2(c!)), c = 3,5,7... (optimal is 3 by a long shot, then 5)
