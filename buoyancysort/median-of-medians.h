@@ -17,17 +17,21 @@ namespace MedianOfMedians
 	std::size_t pivot(Type *data, std::size_t first, std::size_t after_last)
 	{
 		// Currently leaning towards:
-		// Step 0: InsertionSort on chunk sizes 7 (I have long seen k=8 as the approximate optimal crossover point for quicksort): https://cs.stackexchange.com/questions/37956/why-is-the-optimal-cut-off-for-switching-from-quicksort-to-insertion-sort-machin
+		// Step 0: InsertionSort on chunk sizes 9/7 -- alternating (I have long seen k=8 as the approximate optimal crossover point for quicksort): https://cs.stackexchange.com/questions/37956/why-is-the-optimal-cut-off-for-switching-from-quicksort-to-insertion-sort-machin
 		// Step 1: partition
-		// Step 2: median5 (since 7 and 5 are more dissimilar and you ignore more values)
+		// Step 2: median5
 		// Step 3: partition
 		// Step 4: median3
+		// Step 5: partition
+		// Step 6: median5
+		// Step 7: partition
+		// Step 8: median7
 		// Step 5: repeat from "Step 1"
-		// I can't guarantee this works with my skill level, but it seems intuitive that it should work.
 
 		// Big *Asterisk: I am not really planning on implementing median of medians, unless it is in the context of shattering asymptotic running time. (eh, but it's probably important for shattering asymptotic complexity, if that's even possible)
 		// also "minimize y = 2g(g-1)/(g-3), g > 3" yields 3 + sqrt(6) or ~5.45 (if you are trying to minimize comparisons)
-		// trying to look at the best case instead of the worst case you get the formula: y = 1/(1/2+1/c)/c*ceil(lg2(c!)), c = 3,5,7... (optimal is 3 by a long shot, then 5)
+		// trying to look at the best case instead of the worst case you get the formula: y = 1/(1-(1/2+1/c))/c*ceil(lg2(c!)), c= 3,4,5... (optimal is 5, then 4 and 6 are tied) [I previously forgot the "1-" and should have used common sense, but didn't]
+		// That being said, if you use the more proper equation for insertion sort you get: y = 1/(1-(1/2+1/c))/c*(c*(c-1)/2), c=3,4,5... (which works better with smaller numbers like 3 (in theory, probably not practice))
 		// I think I am leaning towards the "Repeated Step Algorithm" (https://stackoverflow.com/questions/3908073/optimal-median-of-medians-selection-3-element-blocks-vs-5-element-blocks)
 		// Thus I would use a combination of:
 		// median5 -> partition -> median5 -> partition and
