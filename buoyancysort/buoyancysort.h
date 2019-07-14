@@ -30,13 +30,13 @@ namespace Buoyancysort
 		//     After this point, all values preceding or equal to that element are sorted and can be ignored
 
 		std::size_t first_detected_inversion = InsertionSort::lazy_leftward_sort(data, first, after_last, Heuristics::n_log_log);
-		std::size_t inversion_finder = min(first + 2 * (first_detected_inversion - first) - 1, after_last);
-		BubbleSort::leftward_pass(data, first_inversion_detected, inversion_finder);
-		std::size_t new_first = InsertionSort::insert_from_right(first, first_detected_inversion);
+		std::size_t inversion_finder = std::min(first + 2 * (first_detected_inversion - first) - 1, after_last);
+		BubbleSort::leftward_pass(data, first_detected_inversion, inversion_finder);
+		std::size_t new_first = InsertionSort::insert_from_right(data, first, first_detected_inversion);
 		std::size_t last_detected_inversion = InsertionSort::lazy_leftward_sort(data, new_first, after_last, Heuristics::n_log_log);
-		inversion_finder = max(after_last - 2 * (after_last - last_detected_inversion) + 1, new_first); // TODO: VERIFY: off-by-ones or similar
-		BubbleSort::righward_pass(data, inversion_finder, last_detected_inversion);
-		std::size_t new_after_last = InsertionSort::insert_from_left(last_detected_inversion, after_last);
+		inversion_finder = std::max(after_last - 2 * (after_last - last_detected_inversion) + 1, new_first); // TODO: VERIFY: off-by-ones or similar
+		BubbleSort::rightward_pass(data, inversion_finder, last_detected_inversion);
+		std::size_t new_after_last = InsertionSort::insert_from_left(data, last_detected_inversion, after_last);
 
 		// Get approximation of "median of medians"
 		//medianplex3<int, 13> (approximating phi^2) -- swap between these 
@@ -64,6 +64,6 @@ namespace Buoyancysort
 		unsigned long long asymptotic_chunk_size = (unsigned long long)(((double)count) / log(log((double)count)));
 		unsigned long long unclamped_chunk_size = std::max(minimum_chunk_size, asymptotic_chunk_size);
 		std::size_t chunk_size = (std::size_t)std::min((unsigned long long)count, unclamped_chunk_size);
-		sort(data, 0, count, chunk_size); // NOTE: count = after_last
+		sort<Type>(data, 0, count, chunk_size); // NOTE: count = after_last
 	}
 }

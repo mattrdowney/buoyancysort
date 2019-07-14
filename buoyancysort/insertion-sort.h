@@ -140,7 +140,7 @@ namespace InsertionSort
 		const double starting_inversion_budget = 6; // log_2(64)==6
 		double budget_allowance = starting_inversion_budget;
 		std::size_t budget_milestone = 64;
-
+		double inversion_budget_exceeded = 0;
 		std::size_t unsorted_index = 1;
 		while (unsorted_index < after_last)
 		{
@@ -176,7 +176,7 @@ namespace InsertionSort
 		const double starting_inversion_budget = 6; // log_2(64)==6
 		double budget_allowance = starting_inversion_budget;
 		std::size_t budget_milestone = 64;
-
+		double inversion_budget_exceeded = 0;
 		std::size_t unsorted_index = 1;
 		while (unsorted_index < after_last)
 		{
