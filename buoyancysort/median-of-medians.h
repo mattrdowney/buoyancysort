@@ -56,71 +56,74 @@ namespace MedianOfMedians
 	/// <param name="first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element at the start of the range to be partitioned.</param>
 	/// <param name="after_last">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-past the end of the range to be partitioned.</param>
 	/// <returns>An index into the <see cref="MedianOfMedians::partition(data)"> representing an approximation of the "median of medians" (which itself is an approximation of the median).</returns>
-	template <typename Type, int tuple_size, int run_size>
+	template <typename Type, int run_size>
 	std::size_t medianplex(Type *data, std::size_t first, std::size_t after_last)
 	{
-		// use a stack and store pairs of (index, sort_group) <-- this is the less-hacky, more elegant way of doing it.
-		// linearly process the data by taking adjacent tuples of size tuple_size with matching sort_group
-		// then sorting them to find a new median of sort_group+1.
-		// HACK:
-
-		// it is best to run this on tuple_size chunks and get the median of those chunks.
-		// This mitigates bad luck (a simple case being merging two medians at the end)
-		std::vector<Type*> upper_medians;
-		for (int tuple_index = 0; tuple_index < tuple_size; tuple_index += 1)
+		// if n <= e.g. 13 then INSERTION-SORT and return median
+		std::size_t size = after_last - first;
+		if (size <= run_size)
 		{
-			std::vector<Type*> runs = InsertionSort::medians_of_runs<Type, run_size>(data, first, after_last); // FIXME: you need to take 1/tuple_size of sequence (although this probably isn't the final version anyway)
-			while (runs.size() > 1)
-			{
-				runs = InsertionSort::medians_of_runs<Type, tuple_size>(runs);
-			}
-			upper_medians.push_back(runs[0]);
+			InsertionSort::sort<Type>(data, first, after_last);
+			return first + size/2;
 		}
-		upper_medians = InsertionSort::medians_of_runs<Type, tuple_size>(upper_medians);
-		return upper_medians[0] - data;
-
-		// Ideally what I want to do is: (for medianplex of 5 -- 3 makes more sense though).
-		// for e.g. 5^3 - 1 (or 124 elements)
-		// <24><25><26><25><24>
-		// <4><5><6><5><4><25><26*><25><4><5><6><5><4>
-		// or e.g. 5^2+1 (or 26 elements)
-		// <5><5><6><5><5>
-		// <5><5><1><1><2><1><1><5><5>
-		// or e.g. 100 elements
-		// <20><20><20><20><20>
-		// <4><4><4><4><4><20><20><20><20> (those 4s are not ideal at all)
-
-		// or e.g. 100 elements (tuple_size = 3) -- I'm sort of curious if I could discern anything from the Collatz_conjecture to help with a derivation of how to split the problem.
-		// <33><34><33>
-		// <<11><11><11>> <<11><12><11>> <<11><11><11>>
-		// <<<3><5><3>> <<3><5><3>> <<3><5><3>>>  <<<3><5><3>> <<3><6><3>> <<3><5><3>>>  <<<3><5><3>> <<3><5><3>> <<3><5><3>>>
-
-		// Ground rules (many of which are different ways of saying the same thing):
-		// For even numbers, put an even number in the center (avoid bias)
-		// Always make middle number greater than left and right (avoid lopsidedness) -- is this really a good idea?
-		// Always make left and right equal (avoid bias)
-		// Always ensure left (or right) and center differ by at most ? (3?)
-		// The only number that can be even is the center (left and right are always odd)
-
-		// Another idea: what are the ways you combine? -- even numbers always seem to discard some information being considered (is that necessary? -- I think it is)
-		// 1 -> <1>
-		// 3 -> <1><1><1>
-		// 5 -> <1><3><1> // special case <1>{5} (insertion sort)
-		// 7 -> <3><1><3> // special case <1>{7}
-		// 9 -> <3><3><3> // special case <1>{9}
-		// 11 -> <3><5><3> // special case <1>{11}
-		// 13 -> <5><3><5> // special case <1>{13}
-		// 15 -> <5><5><5>
-		// 17 -> <5><7><5> -- you can basically continue this forever. If you get an even number you should remove one value for simplicity.
-
-		// TODO: think about Collatz_conjecture with respect to this algorithm 
 		// This code is good about cache-coherency.
-		// if even then subtract 1 (this can only happen once at the very beginning so put it in the initial calling function) -- CONSIDER: removing this element prevents it from being sorted, maybe you want to swap it if necessary at the very end
-		// if n <= 13 then INSERTION-SORT and return median
+
+		// if n % 6 == 0/2/4 aren't possible because there should not be any even numbers
 		// if n % 6 == 3 then <n/3><n/3><n/3>
 		// if n % 6 == 5 then <n/3><n/3+2><n/3>
-		// if n % 6 == 1 then <n/3+2><n/3><n/3+2>
+		// if n % 6 == 1 then <n/3+1><n/3-1><n/3+1>
 
-		// I'm still trying to figure out if any of this is useful...
+		std::size_t remainder = size % 6;
+		std::size_t one_third = first + size/3;
+		std::size_t two_thirds = one_third + size/3;
+		if (remainder == 5)
+		{
+			two_thirds += 2;
+		}
+		else if (remainder == 1)
+		{
+			one_third += 1;
+		}
+		
+		std::size_t first_median = medianplex<Type, run_size>(data, first, one_third);
+		std::size_t second_median = medianplex<Type, run_size>(data, one_third, two_thirds);
+		std::size_t third_median = medianplex<Type, run_size>(data, two_thirds, after_last);
+
+		if (data[first_median] > data[second_median])
+		{
+			std::swap(data[first_median], data[second_median]);
+		}
+		if (data[second_median] > data[third_median])
+		{
+			std::swap(data[second_median], data[third_median]);
+		}
+		if (data[first_median] > data[second_median])
+		{
+			std::swap(data[first_median], data[second_median]);
+		}
+
+		return second_median;
+		// TODO: think about Collatz_conjecture with respect to this algorithm
+	}
+	template <typename Type, int run_size>
+	std::size_t medianplex(Type *data, std::size_t size)
+	{
+		std::size_t result;
+		bool even_size = (size % 2 == 0);
+		if (even_size)
+		{
+			// you can't get a true median of even numbers (this can only happen once at the very beginning so it is in the initial calling function)
+			result = medianplex<Type, run_size>(data, 0, size - 1);
+			// Removing this element prevents it from being sorted, you want to swap it if necessary at the very end
+			if (data[size - 2] > data[size - 1])
+			{
+				std::swap(data[size - 2], data[size - 1]);
+			}
+		}
+		else
+		{
+			result = medianplex<Type, run_size>(data, 0, size);
+		}
+		return result;
 	}
 }
