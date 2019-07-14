@@ -16,9 +16,7 @@ int main()
 
 	std::cout << std::endl;
 
-	//medianplex3<int, 13> (approximating phi)
-	//medianplex5<int, 8> (approximating phi)
-	std::cout << MedianOfMedians::medianplex5<int, 13>((int*)data, (std::size_t)(sizeof(data) / sizeof(data[0]))) << std::endl;
+	Buoyancysort::sort<int>((int*)data, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";

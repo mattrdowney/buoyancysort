@@ -5,6 +5,7 @@
 
 namespace Heuristics
 {
+	// FIXME: I probably need another version for each of these. It might be log(func) but it could be something else.
 	double n_sqrt_log_log(std::size_t n)
 	{
 		return n * sqrt(log(log(n)));

@@ -3,8 +3,11 @@
 #include <algorithm>
 #include <math.h>
 #include <stddef.h>
+#include "bubble-sort.h"
+#include "heuristics.h"
 #include "hierarchysort.h"
 #include "interlaced-double-binary-heap.h"
+#include "median-of-medians.h"
 
 namespace Buoyancysort
 {
@@ -19,9 +22,6 @@ namespace Buoyancysort
 			return;
 		}
 		
-		std::size_t new_first = first;
-		std::size_t new_after_last = after_last;
-
 		// For forwards and backwards directions:
 		//     "Insertion Sort" while O(a_constant) to sort a region of size "first_known_inversion" 
 		//     Skip to 2*"first_known_inversion"
@@ -29,15 +29,30 @@ namespace Buoyancysort
 		//     "Insertion-Sort" back that greatest/least element into sorted subarray
 		//     After this point, all values preceding or equal to that element are sorted and can be ignored
 
-		std::size_t pivot = (after_last + first)/2;
-		// "Insertion-Sort" on values in the range 4/16n : 1/16n : 12/16n
-		// pivot = Hoare-Partition(1...n) with the "Insertion-Sort"ed value at ~8/16n (from prior step) as the partition line
-		// if pivot is bad (outside of inter-quartile range i.e. middle 50%) you need to fallback to statistical sampling then fallback to median of medians.
+		std::size_t first_detected_inversion = InsertionSort::lazy_leftward_sort(data, first, after_last, Heuristics::n_log_log);
+		std::size_t inversion_finder = min(first + 2 * (first_detected_inversion - first) - 1, after_last);
+		BubbleSort::leftward_pass(data, first_inversion_detected, inversion_finder);
+		std::size_t new_first = InsertionSort::insert_from_right(first, first_detected_inversion);
+		std::size_t last_detected_inversion = InsertionSort::lazy_leftward_sort(data, new_first, after_last, Heuristics::n_log_log);
+		inversion_finder = max(after_last - 2 * (after_last - last_detected_inversion) + 1, new_first); // TODO: VERIFY: off-by-ones or similar
+		BubbleSort::righward_pass(data, inversion_finder, last_detected_inversion);
+		std::size_t new_after_last = InsertionSort::insert_from_left(last_detected_inversion, after_last);
+
+		// Get approximation of "median of medians"
+		//medianplex3<int, 13> (approximating phi^2) -- swap between these 
+		//medianplex5<int, 8> (approximating phi)
+		std::size_t pivot = MedianOfMedians::medianplex3<Type, 13>(data, new_first, new_after_last);
+		// Create a partition line
+		pivot = HoarePartition::partition(data, new_first, new_after_last, pivot);
+
+		// Remainder to be implemented:
+		// if pivot is bad (outside of inter-quartile range i.e. middle 50%) you need to fallback to median of medians.
 		// (optional) for left and right partition:
 		//    While (left > e.g. O(nlglgn)) // ditto for right tail-end
 		//        "Insertion-Sort" on values in the range 4/16n : 1/16n : 12/16n
 		//        pivot = Hoare-Partition(1...n) with the "Insertion-Sort"ed value at ~8/16n (from prior step) as the partition line
 		//        left = pivot
+
 		Buoyancysort::sort(data, new_first, pivot - 1, chunk_size);
 		Buoyancysort::sort(data, pivot + 1, new_after_last, chunk_size);
 	}
