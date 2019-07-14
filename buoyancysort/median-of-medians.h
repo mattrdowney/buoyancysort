@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include "insertion-sort.h"
 
 namespace MedianOfMedians
 {
@@ -50,17 +51,23 @@ namespace MedianOfMedians
 	/// </summary>
 	/// <param name="Type">The type of data being sorted.</param>
 	/// <param name="tuple_size">The max number of elements sorted (e.g. 5) in each group/tuple.</param>
-	/// <param name="insertion_sort_group_size">The number of iterations that are skipped by using INSERTION-SORT on a range of tuple_size*insertion_sort_group_size values.</param>
+	/// <param name="run_size">The run size of small groups that are INSERTION-SORT'ed.</param>
 	/// <param name="data">A pointer to a contiguous array of data.</param>
 	/// <param name="first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element at the start of the range to be partitioned.</param>
 	/// <param name="after_last">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-past the end of the range to be partitioned.</param>
 	/// <returns>An index into the <see cref="MedianOfMedians::partition(data)"> representing the "median of medians", which approximates the true median.</returns>
-	template <typename Type, int tuple_size, int insertion_sort_group_size>
+	template <typename Type, int tuple_size, int run_size>
 	std::size_t medianplex(Type *data, std::size_t first, std::size_t after_last)
 	{
-		// use a stack and store pairs of (index, sort_group)
+		// use a stack and store pairs of (index, sort_group) <-- this is the less-hacky, more elegant way of doing it.
 		// linearly process the data by taking adjacent tuples of size tuple_size with matching sort_group
 		// then sorting them to find a new median of sort_group+1.
-		int insertion_sort_size = tuple_size * insertion_sort_group_size;
+		// HACK:
+		std::vector<Type*> runs = InsertionSort::medians_of_runs<Type, run_size>(data, first, after_last);
+		while (runs.size() > 1)
+		{
+			runs = InsertionSort::medians_of_runs<Type, tuple_size>(runs);
+		}
+		return runs[0] - data;
 	}
 }

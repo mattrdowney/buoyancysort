@@ -4,6 +4,7 @@
 #include "bubble-sort.h"
 #include "insertion-sort.h"
 #include "hoare-partition.h"
+#include "median-of-medians.h"
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
 
 	std::cout << std::endl;
 
-	HoarePartition::partition((int*)data, 0, sizeof(data)/sizeof(data[0]), 5);
+	std::cout << MedianOfMedians::medianplex<int, 5, 5>((int*)data, (std::size_t)0, (std::size_t)(sizeof(data) / sizeof(data[0]))) << std::endl;
 	for (int datum : data)
 	{
 		std::cout << datum << " ";
