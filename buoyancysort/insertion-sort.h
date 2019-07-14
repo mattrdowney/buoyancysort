@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include <vector>
 
 namespace InsertionSort
 {
@@ -17,6 +18,89 @@ namespace InsertionSort
 		{
 			InsertionSort::insert_from_left(data, (after_last - 1) - cursor, after_last);
 		}
+	}
+
+	/// <summary>
+	/// Mutator - Partially sorts values in range [first, after_last) in the subranges [0, run_size) using INSERTION-SORT algorithm. A reversed implementation would have a similar result.
+	/// </summary>
+	/// <param name="Type">The type of data being sorted.</param>
+	/// <param name="data">A pointer to a contiguous array of data.</param>
+	/// <param name="first">An index into the <see cref="InsertionSort::sort(data)"> representing the element at the start of the range to be sorted.</param>
+	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sorted.</param>
+	template <typename Type, std::size_t run_size>
+	void sort_runs(Type *data, std::size_t first, std::size_t after_last)
+	{
+		std::size_t total_elements = (after_last - first);
+		std::size_t runs = total_elements / run_size;
+		std::size_t full_run_elements = runs * run_size;
+		std::size_t remainder = total_elements - full_run_elements;
+		for (std::size_t run = 0; run <= runs; run += 1)
+		{
+			std::size_t run_first = first + run * run_size;
+			std::size_t run_after_last = run_first + run_size;
+			for (std::size_t cursor = 1; cursor < run_size; cursor += 1)
+			{
+				InsertionSort::insert_from_left(data, (run_after_last - 1) - cursor, run_after_last);
+			}
+		}
+		if (remainder >= 1)
+		{
+			for (std::size_t cursor = 1; cursor < remainder; cursor += 1)
+			{
+				InsertionSort::insert_from_left(data, (after_last - 1) - cursor, after_last);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Mutator - Partially sorts values in range [first, after_last) in the subranges [0, run_size) using INSERTION-SORT algorithm and returns pointers to the medians. A reversed implementation would have a similar result.
+	/// </summary>
+	/// <param name="Type">The type of data being sorted.</param>
+	/// <param name="data">A pointer to a contiguous array of data.</param>
+	/// <param name="first">An index into the <see cref="InsertionSort::sort(data)"> representing the element at the start of the range to be sorted.</param>
+	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sorted.</param>
+	/// <returns>A list of the medians after running the insertion sorts on each run.</returns>
+	template <typename Type, std::size_t run_size>
+	std::vector medians_of_runs(Type *data, std::size_t first, std::size_t after_last) // I know I shouldn't be too concerned with cache coherency (because I am creating code duplication) but w/e
+	{
+		std::vector medians = new std::vector<Type>();
+		std::size_t total_elements = (after_last - first);
+		std::size_t runs = total_elements / run_size;
+		std::size_t full_run_elements = runs * run_size;
+		std::size_t remainder = total_elements - full_run_elements;
+		for (std::size_t run = 0; run <= runs; run += 1)
+		{
+			std::size_t run_first = first + run * run_size;
+			std::size_t run_after_last = run_first + run_size;
+			for (std::size_t cursor = 1; cursor < run_size; cursor += 1)
+			{
+				InsertionSort::insert_from_left(data, (run_after_last - 1) - cursor, run_after_last);
+			}
+			medians.push(data + run_first + run_size / 2);
+		}
+		if (remainder >= 1)
+		{
+			for (std::size_t cursor = 1; cursor < remainder; cursor += 1)
+			{
+				InsertionSort::insert_from_left(data, (after_last - 1) - cursor, after_last);
+			}
+			medians.push(data + run_first + run_size / 2);
+		}
+	}
+
+	/// <summary>
+	/// Mutator - Partially sorts values in range [first, after_last) in the subranges [0, run_size) using INSERTION-SORT algorithm and returns pointers to the medians. A reversed implementation would have a similar result.
+	/// </summary>
+	/// <param name="Type">The type of data being sorted.</param>
+	/// <param name="data">A pointer to a contiguous array of data.</param>
+	/// <param name="first">An index into the <see cref="InsertionSort::sort(data)"> representing the element at the start of the range to be sorted.</param>
+	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sorted.</param>
+	/// <returns>A list of the medians after running the insertion sorts on each run.</returns>
+	template <typename Type, std::size_t run_size>
+	std::vector median_run(std::vector<Type> data) // I know I shouldn't be too concerned with cache coherency (because I am creating code duplication) but w/e
+	{
+		std::vector next_medians = new std::vector<Type>();
+		
 	}
 
 	/// <summary>
