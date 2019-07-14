@@ -16,7 +16,9 @@ int main()
 
 	std::cout << std::endl;
 
-	std::cout << MedianOfMedians::medianplex<int, 13>((int*)data, (std::size_t)(sizeof(data) / sizeof(data[0]))) << std::endl;
+	//medianplex3<int, 13> (approximating phi)
+	//medianplex5<int, 8> (approximating phi)
+	std::cout << MedianOfMedians::medianplex5<int, 13>((int*)data, (std::size_t)(sizeof(data) / sizeof(data[0]))) << std::endl;
 	for (int datum : data)
 	{
 		std::cout << datum << " ";
