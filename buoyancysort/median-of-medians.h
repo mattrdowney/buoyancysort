@@ -105,13 +105,21 @@ namespace MedianOfMedians
 		// Another idea: what are the ways you combine? -- even numbers always seem to discard some information being considered (is that necessary? -- I think it is)
 		// 1 -> <1>
 		// 3 -> <1><1><1>
-		// 5 -> <1><3><1> // special case <1>{5}
+		// 5 -> <1><3><1> // special case <1>{5} (insertion sort)
 		// 7 -> <3><1><3> // special case <1>{7}
 		// 9 -> <3><3><3> // special case <1>{9}
 		// 11 -> <3><5><3> // special case <1>{11}
 		// 13 -> <5><3><5> // special case <1>{13}
 		// 15 -> <5><5><5>
 		// 17 -> <5><7><5> -- you can basically continue this forever. If you get an even number you should remove one value for simplicity.
+
+		// TODO: think about Collatz_conjecture with respect to this algorithm 
+		// This code is good about cache-coherency.
+		// if even then subtract 1 (this can only happen once at the very beginning so put it in the initial calling function) -- CONSIDER: removing this element prevents it from being sorted, maybe you want to swap it if necessary at the very end
+		// if n <= 13 then INSERTION-SORT and return median
+		// if n % 6 == 3 then <n/3><n/3><n/3>
+		// if n % 6 == 5 then <n/3><n/3+2><n/3>
+		// if n % 6 == 1 then <n/3+2><n/3><n/3+2>
 
 		// I'm still trying to figure out if any of this is useful...
 	}
