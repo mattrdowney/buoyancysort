@@ -29,12 +29,13 @@ namespace Buoyancysort
 		//     "Insertion-Sort" back that greatest/least element into sorted subarray
 		//     After this point, all values preceding or equal to that element are sorted and can be ignored
 
-		std::size_t first_detected_inversion = InsertionSort::lazy_leftward_sort(data, first, after_last, Heuristics::n_log_log);
-		std::size_t inversion_finder = std::min(first + 2 * (first_detected_inversion - first) - 1, after_last);
+		std::size_t first_detected_inversion = InsertionSort::lazy_rightward_sort(data, first, after_last, Heuristics::n_log_log);
+		std::size_t inversion_finder = std::min(first + 2 * (first_detected_inversion - first) - 1, after_last); // TODO: VERIFY: especially because of +0/+1 indexing differences (e.g. off-by-ones or unsigned underflow)
 		BubbleSort::leftward_pass(data, first_detected_inversion, inversion_finder);
 		std::size_t new_first = InsertionSort::insert_from_right(data, first, first_detected_inversion);
+		
 		std::size_t last_detected_inversion = InsertionSort::lazy_leftward_sort(data, new_first, after_last, Heuristics::n_log_log);
-		inversion_finder = std::max(after_last - 2 * (after_last - last_detected_inversion) + 1, new_first); // TODO: VERIFY: off-by-ones or similar
+		inversion_finder = std::max(after_last - 2 * (after_last - last_detected_inversion) + 1, new_first); // TODO: VERIFY: especially because of +0/+1 indexing differences (e.g. off-by-ones or unsigned underflow)
 		BubbleSort::rightward_pass(data, inversion_finder, last_detected_inversion);
 		std::size_t new_after_last = InsertionSort::insert_from_left(data, last_detected_inversion, after_last);
 
