@@ -13,7 +13,7 @@ namespace InterlacedDoubleBinaryHeap
 			std::size_t last = after_last - 1;
 			if (size % 2 == 1)
 			{
-				std::size_t last_parent
+				//std::size_t last_parent
 			}
 		}
 	}
