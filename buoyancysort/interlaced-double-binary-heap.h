@@ -7,35 +7,83 @@
 namespace InterlacedDoubleBinaryHeap
 {
 	template <typename Type>
+	void build_strip(Type *data, std::size_t first, std::size_t after_last, std::size_t build_index) // FIXME: buoyancysort is broken until this maintains both heap properties
+	{
+		// Base case is build_index == first (no need to swap an element with itself and you need to stop the recursion).
+		if (build_index > first)
+		{
+			std::size_t forward_build_index = build_index;
+			std::size_t reverse_build_index = (after_last - 1) - (build_index - first);
+			std::size_t forward_parent_index = Heap::parent(forward_build_index, after_last - 1);
+			std::size_t reverse_parent_index = Heap::parent(reverse_build_index, first);
+			if ((build_index-first) % 2 == 0)
+			{
+				if (data[forward_build_index] > data[forward_parent_index])
+				{
+					std::swap(data[forward_build_index], data[forward_parent_index]);
+				}
+				if (data[reverse_parent_index] > data[reverse_build_index])
+				{
+					std::swap(data[reverse_parent_index], data[reverse_build_index]);
+				}
+				forward_build_index += 1;
+				forward_parent_index += 1;
+				reverse_build_index -= 1;
+				reverse_parent_index -= 1;
+			}
+			std::size_t lower_power = PowerOfTwo::lower_power_of_two(forward_build_index-first)+first;
+			while (forward_build_index > lower_power)
+			{
+				if (data[forward_build_index] > data[forward_parent_index])
+				{
+					std::swap(data[forward_build_index], data[forward_parent_index]);
+				}
+				if (data[reverse_parent_index] > data[reverse_build_index])
+				{
+					std::swap(data[reverse_parent_index], data[reverse_build_index]);
+				}
+
+				if (data[forward_build_index+1] > data[forward_parent_index])
+				{
+					std::swap(data[forward_build_index+1], data[forward_parent_index]);
+				}
+				if (data[reverse_parent_index] > data[reverse_build_index-1])
+				{
+					std::swap(data[reverse_parent_index], data[reverse_build_index-1]);
+				}
+
+				forward_build_index += 2;
+				forward_parent_index += 1;
+				reverse_build_index -= 2;
+				reverse_parent_index -= 1;
+			}
+			// This is often of the form 2^i-1 (where i is an integer).
+			std::size_t build_index_parent = Heap::parent(build_index, first);
+			// Recursively build strips e.g. 128, 64, 32, 16, 8, 4, 2, 1, 0
+			// While it's not immediately apparent, cache coherency is very good.
+			// Strips are essentially proccessed linearly to the root of the heap.
+			build_strip<Type>(data, first, after_last, build_index_parent);
+		}
+	}
+
+	template <typename Type>
 	void build(Type *data, std::size_t first, std::size_t after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
 	{
-		std::size_t size = after_last - first;
-		std::size_t build_index = size;
-		if (size > 1)
+		std::size_t build_index = after_last - 1;
+		std::size_t lower_power;
+		while (build_index > first)
 		{
-			std::size_t last = after_last - 1;
-			if (size % 2 == 1)
+			build_strip<Type>(data, first, after_last, build_index);
+			lower_power = PowerOfTwo::lower_power_of_two(build_index - first);
+			if (build_index == lower_power + first)
 			{
-				std::size_t last = after_last - 1;
-				std::size_t parent_of_first = Heap::parent(first, last);
-				if (data[first] > data[parent_of_first])
-				{
-					std::swap(data[first], data[parent_of_first]);
-				}
-				std::size_t parent_of_last = Heap::parent(last, first);
-				if (data[parent_of_last] > data[last])
-				{
-					std::swap(data[parent_of_last], data[last]);
-				}
+				// E.g. lower_power(256) == 256, but we actually want 128 
+				build_index = lower_power/2 + first;
 			}
-			build_index -= 1;
-			std::size_t lower_power = PowerOfTwo::lower_power_of_two(size);
-			for (std::size_t heap_row_remainder = size; heap_row_remainder > lower_power; size -= 1)
+			else
 			{
-
-				build_index -= 2;
+				build_index = lower_power + first;
 			}
-
 		}
 	}
 
