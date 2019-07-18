@@ -25,7 +25,7 @@ int main()
 
 	std::cout << std::endl;
 
-	InterlacedDoubleBinaryHeap::build<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	Heap::build_min_heap<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";

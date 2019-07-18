@@ -97,7 +97,6 @@ namespace InterlacedDoubleBinaryHeap
 			for (int i = first; i < after_last; i += 1)
 			{
 				std::cout << data[i] << " ";
-
 			}
 			std::cout << std::endl << std::endl;
 		}
