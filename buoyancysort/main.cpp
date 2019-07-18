@@ -11,7 +11,13 @@
 int main()
 {
 	HeapTests::heap_tests();
-	int data[]{ 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	const int size = 64;
+	int data[size];
+	for (int i = 0; i < size; i += 1)
+	{
+		data[i] = size - i;
+	}
+
 	for (int datum : data)
 	{
 		std::cout << datum << " ";
@@ -19,7 +25,7 @@ int main()
 
 	std::cout << std::endl;
 
-	Buoyancysort::sort<int>((int*)data, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	InterlacedDoubleBinaryHeap::build<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";

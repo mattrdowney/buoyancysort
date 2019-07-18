@@ -1,21 +1,11 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(17): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(75): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build_strip<Type>(Type *,size_t,size_t,size_t)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(86): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build_strip<Type>(Type *,size_t,size_t,size_t)' being compiled
           with
           [
               Type=int
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\buoyancysort.h(17): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build<Type>(Type *,size_t,size_t)' being compiled
-          with
-          [
-              Type=int
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\buoyancysort.h(68): note: see reference to function template instantiation 'void Buoyancysort::sort<Type>(Type *,size_t,size_t,size_t)' being compiled
-          with
-          [
-              Type=int
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(22): note: see reference to function template instantiation 'void Buoyancysort::sort<int>(Type *,size_t)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(28): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build<int>(Type *,size_t,size_t)' being compiled
           with
           [
               Type=int

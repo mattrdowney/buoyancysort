@@ -10,7 +10,7 @@ namespace InterlacedDoubleBinaryHeap
 	void build_strip(Type *data, std::size_t first, std::size_t after_last, std::size_t build_index) // FIXME: buoyancysort is broken until this maintains both heap properties
 	{
 		// Base case is build_index == first (no need to swap an element with itself and you need to stop the recursion).
-		if (build_index > first)
+		if (build_index > first + 1)
 		{
 			std::size_t forward_build_index = (after_last - 1) - build_index;
 			std::size_t reverse_build_index = first + build_index;
@@ -63,6 +63,17 @@ namespace InterlacedDoubleBinaryHeap
 			// While it's not immediately apparent, cache coherency is very good.
 			// Strips are essentially proccessed linearly to the root of the heap.
 			build_strip<Type>(data, first, after_last, build_index_parent);
+		}
+		else if (build_index == first+1)
+		{
+			if (data[first] > data[first+1])
+			{
+				std::swap(data[first], data[first+1]);
+			}
+			if (data[after_last-2] > data[after_last-1])
+			{
+				std::swap(data[after_last-2], data[after_last-1]);
+			}
 		}
 	}
 
