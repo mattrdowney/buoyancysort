@@ -34,18 +34,18 @@ namespace InterlacedDoubleBinaryHeap
 			std::size_t lower_power = PowerOfTwo::lower_power_of_two(build_index-first)+first;
 			while (reverse_build_index >= lower_power)
 			{
-				if (data[forward_build_index] > data[forward_parent_index])
+				if (data[forward_build_index] > data[forward_build_index+1])
 				{
-					std::swap(data[forward_build_index], data[forward_parent_index]);
+					std::swap(data[forward_build_index], data[forward_build_index+1]);
 				}
-				if (data[reverse_parent_index] > data[reverse_build_index])
-				{
-					std::swap(data[reverse_parent_index], data[reverse_build_index]);
-				}
-
 				if (data[forward_build_index+1] > data[forward_parent_index])
 				{
 					std::swap(data[forward_build_index+1], data[forward_parent_index]);
+				}
+
+				if (data[reverse_build_index-1] > data[reverse_build_index])
+				{
+					std::swap(data[reverse_build_index - 1], data[reverse_build_index]);
 				}
 				if (data[reverse_parent_index] > data[reverse_build_index-1])
 				{
@@ -94,6 +94,12 @@ namespace InterlacedDoubleBinaryHeap
 			{
 				build_index = lower_power + first;
 			}
+			for (int i = first; i < after_last; i += 1)
+			{
+				std::cout << data[i] << " ";
+
+			}
+			std::cout << std::endl << std::endl;
 		}
 	}
 
