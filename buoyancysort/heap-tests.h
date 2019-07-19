@@ -72,5 +72,27 @@ namespace HeapTests // The amount of namespaces is basically parody at this poin
 		assert(Heap::right_child(+6, +4) == +9);
 		assert(Heap::right_child(+7, +4) == +11);
 		assert(Heap::right_child(+8, +4) == +13);
+
+		// Sibling, unshifted
+		assert(Heap::sibling(-4, 0) == -5);
+		assert(Heap::sibling(-3, 0) == -2);
+		assert(Heap::sibling(-2, 0) == -3);
+		assert(Heap::sibling(-1, 0) == +1);
+		assert(Heap::sibling(0, 0) == 0);
+		assert(Heap::sibling(+1, 0) == -1);
+		assert(Heap::sibling(+2, 0) == +3);
+		assert(Heap::sibling(+3, 0) == +2);
+		assert(Heap::sibling(+4, 0) == +5);
+
+		// Sibling, shifted
+		assert(Heap::sibling(0, +4) == -1);
+		assert(Heap::sibling(+1, +4) == +2);
+		assert(Heap::sibling(+2, +4) == +1);
+		assert(Heap::sibling(+3, +4) == +5);
+		assert(Heap::sibling(+4, +4) == +4);
+		assert(Heap::sibling(+5, +4) == +3);
+		assert(Heap::sibling(+6, +4) == +7);
+		assert(Heap::sibling(+7, +4) == +6);
+		assert(Heap::sibling(+8, +4) == +9);
 	}
 }

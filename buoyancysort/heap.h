@@ -20,21 +20,21 @@ namespace Heap
 	/// -1/0/+1 - based
 	long long right_child(long long parent, long long center)
 	{
-		return (parent - center) * 2 + (parent >= center) + center;
+		return (parent - center) * 2 + (parent >= center) + center; 
 	}
 
 	long long sibling(long long child, long long center)
 	{
 		// I can't think of how to remove branch prediction (the compiler is optimizing my code, but it doesn't seem to remove comparisons entirely)
-		if (child - center > 1)
-		{
-			return (child - center) ^ 1 + center;
-		}
 		if (center - child > 1)
 		{
-			return -((center - child) ^ 1) + center;
+			return child + ((center - child) % 2 == 0 ? -1 : +1);
 		}
-		return -(child - center) + child;
+		if (center - child >= -1)
+		{
+			return -2 * (child - center) + child;
+		}
+		return child + ((child - center) % 2 == 0 ? +1 : -1);
 	}
 
 	template <typename Type>
