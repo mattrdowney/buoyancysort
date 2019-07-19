@@ -23,6 +23,20 @@ namespace Heap
 		return (parent - center) * 2 + (parent >= center) + center;
 	}
 
+	long long sibling(long long child, long long center)
+	{
+		// I can't think of how to remove branch prediction (the compiler is optimizing my code, but it doesn't seem to remove comparisons entirely)
+		if (child - center > 1)
+		{
+			return (child - center) ^ 1 + center;
+		}
+		if (center - child > 1)
+		{
+			return -((center - child) ^ 1) + center;
+		}
+		return -(child - center) + child;
+	}
+
 	template <typename Type>
 	void build_max_strip(Type *data, std::size_t first, std::size_t after_last, std::size_t build_index) // FIXME: buoyancysort is broken until this maintains both heap properties
 	{
