@@ -1,20 +1,2 @@
 ﻿  main.cpp
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap.h(177): warning C4018: '<': signed/unsigned mismatch
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(28): note: see reference to function template instantiation 'void Heap::build_min_heap<int>(Type *,size_t,size_t)' being compiled
-          with
-          [
-              Type=int
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap.h(120): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap.h(166): note: see reference to function template instantiation 'void Heap::build_min_strip<Type>(Type *,size_t,size_t,size_t)' being compiled
-          with
-          [
-              Type=int
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(28): note: see reference to function template instantiation 'void Heap::build_min_heap<int>(Type *,size_t,size_t)' being compiled
-          with
-          [
-              Type=int
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap.h(145): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
   buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe
