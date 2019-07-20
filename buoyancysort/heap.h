@@ -41,18 +41,19 @@ namespace Heap
 		return child + ((child - center) % 2 == 0 ? +1 : -1);
 	}
 
+	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	std::size_t min_heapify(Type *data, std::size_t first, std::size_t after_last, std::size_t root)
+	long min_heapify(Type *data, long first, long after_last, long root)
 	{
-		std::size_t left = Heap::left_child(root, first);
+		long left = Heap::left_child(root, first-1); // NOTE: one-before-start intentionally
 		if (left < after_last) // OPTIMIZATION: early return
 		{
-			std::size_t smallest = root;
+			long smallest = root;
 			if (data[smallest] > data[left]) // OPTIMIZATION: left is smaller than (or equal to) right in sorted order
 			{
 				smallest = left;
 			}
-			std::size_t right = left + 1; // OPTIMIZATION: only works because first is the pivot
+			long right = left + 1; // OPTIMIZATION: only works because first-1 is the pivot
 			if (right < after_last && data[smallest] > data[right])
 			{
 				smallest = right;
@@ -63,22 +64,22 @@ namespace Heap
 				return max_heapify(data, first, after_last, smallest); // NOTE: "smallest" has since changed.
 			}
 		}
-		return root;
+		return root; // FIXME: eh, this isn't great. I have to decide how this works with out-of-bounds values (but also preserving behavior for the initial iteration).
 	}
 
-	// TODO: VERIFY: does this sort of std::ptrdiff_t usage result in undefined behavior? 
+	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	std::ptrdiff_t max_heapify(Type *data, std::ptrdiff_t first, std::ptrdiff_t after_last, std::ptrdiff_t root)
+	long max_heapify(Type *data, long first, long after_last, long root)
 	{
-		std::ptrdiff_t right = Heap::right_child(root, after_last-1); // NOTE: std::ptrdiff_t (or signed type) required or underflow might occur
+		long right = Heap::right_child(root, after_last); // NOTE: signed type required or underflow can happen, NOTE: one-past-end intentionally
 		if (first <= right) // OPTIMIZATION: early return
 		{
-			std::ptrdiff_t largest = root;
+			long largest = root;
 			if (data[right] > data[largest]) // OPTIMIZATION: right is larger than (or equal to) left in sorted order
 			{
 				largest = right;
 			}
-			std::ptrdiff_t left = right - 1; // OPTIMIZATION: only works because after_last-1 is the pivot
+			long left = right - 1; // OPTIMIZATION: only works because after_last is the pivot
 			if (first <= left && data[left] > data[largest])
 			{
 				largest = left;
@@ -89,25 +90,27 @@ namespace Heap
 				return max_heapify(data, first, after_last, largest); // NOTE: "largest" has since changed.
 			}
 		}
-		return root;
+		return root; // FIXME: eh, this isn't great. I have to decide how this works with out-of-bounds values (but also preserving behavior for the initial iteration).
 	}
 
+	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build_max_heap(Type *data, std::size_t first, std::size_t after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
+	void build_max_heap(Type *data, long first, long after_last)
 	{
-		std::size_t max_heapify_from = Heap::parent(first, after_last-1);
-		while (max_heapify_from < after_last-1)
+		long max_heapify_from = Heap::parent(first, after_last-1);
+		while (max_heapify_from < after_last)
 		{
 			max_heapify(data, first, after_last, max_heapify_from);
 			max_heapify_from += 1;
 		}
 	}
 
+	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build_min_heap(Type *data, std::size_t first, std::size_t after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
+	void build_min_heap(Type *data, long first, long after_last)
 	{
-		std::size_t min_heapify_from = Heap::parent(after_last - 1, first);
-		while (min_heapify_from > first)
+		long min_heapify_from = Heap::parent(after_last-1, first);
+		while (min_heapify_from >= first)
 		{
 			min_heapify(data, first, after_last, min_heapify_from);
 			min_heapify_from -= 1;
