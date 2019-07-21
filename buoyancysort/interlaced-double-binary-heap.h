@@ -69,12 +69,20 @@ namespace InterlacedDoubleBinaryHeap
 	{
 		if (known_dubious_nodes.size() > 0)
 		{
+			long max_right_line_of_trust = MaxHeap::parent(known_dubious_nodes[0], after_last); // when on a line of trust, a node is still trusted
+			long max_left_line_of_trust = MaxHeap::parent(before_first+1, after_last)-1;
+			long min_left_line_of_trust = MinHeap::parent(known_dubious_nodes[known_dubious_nodes.size() - 1], before_first);
+			long min_right_line_of_trust = MinHeap::parent(after_last-1, before_first)+1;
+
 			std::set<long> dubious_nodes; // essentially a std::ordered_set<long> (not a std::unordered_set<long>)
+										  // The dubious nodes must include all of the parents of dubious nodes (in both directions), *except* those before known_dubious_nodes[0] (or after known_dubious_nodes[size-1]). 
 			long dubious_node;
-			long max_right_line_of_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
-			long max_left_line_of_trust = max_right_line_of_trust - 1;
-			long min_left_line_of_trust = MinHeap::parent(after_last - 1, before_first);
-			long min_right_line_of_trust = min_left_line_of_trust + 1;
+
+			// Compute dubious nodes
+			known_dubious_nodes.clear();
+
+			// Refactor to step through a set<long> as a forwards or backwards in-order traversal (but also with a fair, alternating strategy)
+
 			while (max_right_line_of_trust < after_last)
 			{
 				dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_trust);
@@ -105,6 +113,8 @@ namespace InterlacedDoubleBinaryHeap
 				std::cout << index << " ";
 			}
 			std::cout << std::endl;
+
+			build(data, before_first, after_last, known_dubious_nodes);
 		}
 	}
 
