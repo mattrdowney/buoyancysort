@@ -26,7 +26,7 @@ int main()
 
 	std::cout << std::endl;
 
-	MaxHeap::build_heap<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	MinHeap::build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";

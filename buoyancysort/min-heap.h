@@ -53,12 +53,12 @@ namespace MinHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build_heap(Type *data, long first, long after_last)
+	void build(Type *data, long before_first, long after_last)
 	{
-		long min_heapify_from = parent(after_last - 1, first);
-		while (min_heapify_from >= first)
+		long min_heapify_from = parent(after_last-1, before_first);
+		while (min_heapify_from > before_first)
 		{
-			heapify(data, first, after_last, min_heapify_from);
+			heapify(data, before_first, after_last, min_heapify_from);
 			min_heapify_from -= 1;
 		}
 	}

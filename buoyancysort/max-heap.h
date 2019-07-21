@@ -27,10 +27,10 @@ namespace MaxHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	long heapify(Type *data, long first, long after_last, long root)
+	long heapify(Type *data, long before_first, long after_last, long root)
 	{
 		long right = right_child(root, after_last); // NOTE: signed type required or underflow can happen
-		if (first <= right) // OPTIMIZATION: early return
+		if (before_first < right) // OPTIMIZATION: early return
 		{
 			long largest = root;
 			if (data[right] > data[largest]) // OPTIMIZATION: right is larger than (or equal to) left in sorted order
@@ -38,14 +38,14 @@ namespace MaxHeap
 				largest = right;
 			}
 			long left = right - 1;
-			if (first <= left && data[left] > data[largest])
+			if (before_first < left && data[left] > data[largest])
 			{
 				largest = left;
 			}
 			if (largest != root)
 			{
 				std::swap(data[root], data[largest]);
-				return heapify(data, first, after_last, largest); // NOTE: "largest" has since changed.
+				return heapify(data, before_first, after_last, largest); // NOTE: "largest" has since changed.
 			}
 		}
 		return root;
@@ -53,12 +53,12 @@ namespace MaxHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build_heap(Type *data, long first, long after_last)
+	void build(Type *data, long before_first, long after_last)
 	{
-		long max_heapify_from = parent(first, after_last - 1);
+		long max_heapify_from = parent(before_first+1, after_last);
 		while (max_heapify_from < after_last)
 		{
-			heapify(data, first, after_last, max_heapify_from);
+			heapify(data, before_first, after_last, max_heapify_from);
 			max_heapify_from += 1;
 		}
 	}
