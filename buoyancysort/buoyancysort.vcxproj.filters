@@ -54,6 +54,15 @@
     <ClInclude Include="power-of-two.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="median-heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="min-heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="max-heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

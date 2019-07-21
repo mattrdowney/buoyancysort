@@ -3,7 +3,8 @@
 #include "buoyancysort.h"
 #include "bubble-sort.h"
 #include "insertion-sort.h"
-#include "heap.h"
+#include "min-heap.h"
+#include "max-heap.h"
 #include "heap-tests.h"
 #include "hoare-partition.h"
 #include "median-of-medians.h"
@@ -25,7 +26,7 @@ int main()
 
 	std::cout << std::endl;
 
-	Heap::build_min_heap<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	MaxHeap::build_heap<int>((int*)data, 0, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";
