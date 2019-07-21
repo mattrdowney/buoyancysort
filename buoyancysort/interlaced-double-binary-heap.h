@@ -8,7 +8,7 @@
 namespace InterlacedDoubleBinaryHeap
 {
 	template <typename Type>
-	void lazy_build(Type *data, long before_first, long after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
+	void lazy_build(Type *data, long before_first, long after_last)
 	{
 		long max_heapify_from = MaxHeap::parent(before_first+1, after_last);
 		long min_heapify_from = MinHeap::parent(after_last-1, before_first);
@@ -22,9 +22,9 @@ namespace InterlacedDoubleBinaryHeap
 	}
 
 	template <typename Type>
-	void build(Type *data, long before_first, long after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
+	void build(Type *data, long before_first, long after_last)
 	{
-		std::set<long> dubious_nodes;
+		std::set<long> dubious_nodes; // essentially a std::ordered_set<long> (not a std::unordered_set<long>)
 		long dubious_node;
 		long max_right_line_of_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
 		long max_left_line_of_trust = max_right_line_of_trust - 1;
@@ -60,6 +60,52 @@ namespace InterlacedDoubleBinaryHeap
 			std::cout << index << " ";
 		}
 		std::cout << std::endl;
+		
+		build(data, before_first, after_last, dubious_nodes);
+	}
+
+	template <typename Type>
+	void build(Type *data, long before_first, long after_last, std::set<long> &known_dubious_nodes)
+	{
+		if (known_dubious_nodes.size() > 0)
+		{
+			std::set<long> dubious_nodes; // essentially a std::ordered_set<long> (not a std::unordered_set<long>)
+			long dubious_node;
+			long max_right_line_of_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
+			long max_left_line_of_trust = max_right_line_of_trust - 1;
+			long min_left_line_of_trust = MinHeap::parent(after_last - 1, before_first);
+			long min_right_line_of_trust = min_left_line_of_trust + 1;
+			while (max_right_line_of_trust < after_last)
+			{
+				dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_trust);
+				while (dubious_node < max_right_line_of_trust)
+				{
+					if (min_left_line_of_trust < dubious_node && dubious_node < min_right_line_of_trust)
+					{
+						known_dubious_nodes.insert(dubious_node); // NOTE: invalidation can happen with parent or children
+					}
+					dubious_node = MaxHeap::parent(dubious_node, after_last);
+				}
+				dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_trust);
+				while (dubious_node > min_left_line_of_trust)
+				{
+					if (max_left_line_of_trust < dubious_node && dubious_node < max_right_line_of_trust)
+					{
+						known_dubious_nodes.insert(dubious_node); // NOTE: invalidation can happen with parent or children
+					}
+					dubious_node = MinHeap::parent(dubious_node, before_first);
+				}
+				max_right_line_of_trust += 1;
+				min_left_line_of_trust -= 1;
+			}
+
+			std::cout << std::endl;
+			for (long index : known_dubious_nodes)
+			{
+				std::cout << index << " ";
+			}
+			std::cout << std::endl;
+		}
 	}
 
 	// use min_heapify() and max_heapify() in an alternating fasion (as subroutines).
