@@ -79,6 +79,9 @@ namespace InterlacedDoubleBinaryHeap
 			long dubious_node;
 
 			// Compute dubious nodes
+			// dubious_nodes.find(known_dubious_nodes[0])
+			// dubious_nodes.find(known_dubious_nodes[known_dubious_nodes.size() - 1])
+			// be lazy: alternate between moving the two iterators (it probably doesn't make a significant difference in complexity / outcomes -- if it makes a difference at all)
 			known_dubious_nodes.clear();
 
 			// Refactor to step through a set<long> as a forwards or backwards in-order traversal (but also with a fair, alternating strategy)
