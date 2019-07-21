@@ -9,6 +9,7 @@
 #include "hoare-partition.h"
 #include "median-of-medians.h"
 #include "interlaced-double-binary-heap.h"
+#include "print.h"
 
 int main()
 {
@@ -20,18 +21,12 @@ int main()
 		data[i] = size - i;
 	}
 
-	for (int datum : data)
-	{
-		std::cout << datum << " ";
-	}
+	Print::print((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
-	std::cout << std::endl;
+	InterlacedDoubleBinaryHeap::build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
-	InterlacedDoubleBinaryHeap::lazy_build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
-	for (int datum : data)
-	{
-		std::cout << datum << " ";
-	}
+	Print::print((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
+
 	char word;
 	std::cin >> word;
 	return 0;
