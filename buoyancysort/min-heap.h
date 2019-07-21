@@ -27,9 +27,9 @@ namespace MinHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	long heapify(Type *data, long first, long after_last, long root)
+	long heapify(Type *data, long before_first, long after_last, long root)
 	{
-		long left = left_child(root, first);
+		long left = left_child(root, before_first);
 		if (left < after_last) // OPTIMIZATION: early return
 		{
 			long smallest = root;
@@ -45,7 +45,7 @@ namespace MinHeap
 			if (smallest != root)
 			{
 				std::swap(data[root], data[smallest]);
-				return heapify(data, first, after_last, smallest); // NOTE: "smallest" has since changed.
+				return heapify(data, before_first, after_last, smallest); // NOTE: "smallest" has since changed.
 			}
 		}
 		return root;

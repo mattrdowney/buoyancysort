@@ -7,14 +7,14 @@
 namespace InterlacedDoubleBinaryHeap
 {
 	template <typename Type>
-	void build(Type *data, std::size_t first, std::size_t after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
+	void lazy_build(Type *data, long before_first, long after_last) // FIXME: buoyancysort is broken until this maintains both heap properties
 	{
-		std::size_t max_heapify_from = Heap::parent(first, after_last - 1);
-		std::size_t min_heapify_from = Heap::parent(after_last - 1, first);
-		while (max_heapify_from < after_last - 1)
+		long max_heapify_from = MaxHeap::parent(before_first+1, after_last);
+		long min_heapify_from = MinHeap::parent(after_last-1, before_first);
+		while (max_heapify_from < after_last)
 		{
-			max_heapify(data, first, after_last, max_heapify_from);
-			min_heapify(data, first, after_last, min_heapify_from);
+			MaxHeap::heapify(data, before_first, after_last, max_heapify_from);
+			MinHeap::heapify(data, before_first, after_last, min_heapify_from);
 			max_heapify_from += 1;
 			min_heapify_from -= 1;
 		}

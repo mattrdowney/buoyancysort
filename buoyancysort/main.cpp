@@ -8,6 +8,7 @@
 #include "heap-tests.h"
 #include "hoare-partition.h"
 #include "median-of-medians.h"
+#include "interlaced-double-binary-heap.h"
 
 int main()
 {
@@ -26,7 +27,7 @@ int main()
 
 	std::cout << std::endl;
 
-	MinHeap::build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	InterlacedDoubleBinaryHeap::lazy_build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	for (int datum : data)
 	{
 		std::cout << datum << " ";
