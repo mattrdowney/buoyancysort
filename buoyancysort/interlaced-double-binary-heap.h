@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits.h>
 #include <set>
 #include <stddef.h>
 #include "heap.h"
@@ -35,9 +36,17 @@ namespace InterlacedDoubleBinaryHeap
 		{
 			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_trust);
 			get_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			if (dubious_min_nodes.size() > 0)
+			{
+				verify(data, before_first, after_last, dubious_min_nodes, dubious_max_nodes, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			}
 
 			dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_trust);
 			get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			if (dubious_max_nodes.size() > 0)
+			{
+				verify(data, before_first, after_last, dubious_min_nodes, dubious_max_nodes, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			}
 
 			max_right_line_of_trust += 1;
 			min_left_line_of_trust -= 1;
@@ -49,16 +58,51 @@ namespace InterlacedDoubleBinaryHeap
 			std::cout << index << " ";
 		}
 		std::cout << std::endl;
-		
-		build(data, before_first, after_last, dubious_min_nodes);
 	}
 
-	template <typename Type>
-	void build(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes, std::set<long> &dubious_max_nodes, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
-	{
-		while (dubious_min_nodes.size() > 0 && dubious_max_nodes,size() > 0)
-		{
+	enum class AdjustType { Undecided, Min, Max };
 
+	template <typename Type>
+	void verify(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes, std::set<long> &dubious_max_nodes, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
+	{
+		while (dubious_min_nodes.size() > 0 || dubious_max_nodes.size() > 0)
+		{
+			AdjustType mode = AdjustType::Undecided;
+
+			// TODO: std::set has O(k) performance here but I don't care yet.
+			if (dubious_min_nodes.size() > 0)
+			{
+				mode = AdjustType::Min;
+			}
+
+			if (dubious_max_nodes.size() > 0)
+			{
+				if (mode == AdjustType::Undecided)
+				{
+					mode = AdjustType::Max;
+				}
+				else
+				{
+					long max_distance = (*dubious_max_nodes.begin() - before_first);
+					long min_distance = (after_last - *dubious_min_nodes.rbegin());
+					mode = (max_distance < min_distance ? AdjustType::Max : AdjustType::Min);
+				}
+			}
+			
+			if (mode == AdjustType::Min)
+			{
+				long adjust_index = *dubious_min_nodes.rbegin();
+				dubious_min_nodes.erase(adjust_index);
+				long dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_trust);
+				get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			}
+			else // if (mode == AdjustType.Max)
+			{
+				long adjust_index = *dubious_max_nodes.begin();
+				dubious_max_nodes.erase(adjust_index);
+				long dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_trust);
+				get_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			}
 		}
 	}
 
