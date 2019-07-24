@@ -107,26 +107,34 @@ namespace InterlacedDoubleBinaryHeap
 	template <typename Type>
 	void get_dubious_min_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes, long dubious_node, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
 	{
-		while (dubious_node < max_right_line_of_trust)
+		if (dubious_node < max_right_line_of_trust)
 		{
-			if (min_left_line_of_trust < dubious_node && dubious_node < min_right_line_of_trust)
+			while (dubious_node <= max_right_line_of_trust)
 			{
-				dubious_min_nodes.insert(dubious_node);
+				if (min_left_line_of_trust < dubious_node && dubious_node < min_right_line_of_trust)
+				{
+					dubious_min_nodes.insert(dubious_node);
+					// the real problem is that other nodes are dependent on these nodes (even on the bottom half of the heap)
+					// the best solution is to immediately verify no order was disrupted (verify and defer restructuring to a new iteration)
+				}
+				dubious_node = MaxHeap::parent(dubious_node, after_last);
 			}
-			dubious_node = MaxHeap::parent(dubious_node, after_last);
 		}
 	}
 
 	template <typename Type>
 	void get_dubious_max_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_max_nodes, long dubious_node, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
 	{
-		while (dubious_node > min_left_line_of_trust)
+		if (dubious_node > min_left_line_of_trust)
 		{
-			if (max_left_line_of_trust < dubious_node && dubious_node < max_right_line_of_trust)
+			while (dubious_node >= min_left_line_of_trust)
 			{
-				dubious_max_nodes.insert(dubious_node);
+				if (max_left_line_of_trust < dubious_node && dubious_node < max_right_line_of_trust)
+				{
+					dubious_max_nodes.insert(dubious_node);
+				}
+				dubious_node = MinHeap::parent(dubious_node, before_first);
 			}
-			dubious_node = MinHeap::parent(dubious_node, before_first);
 		}
 	}
 
