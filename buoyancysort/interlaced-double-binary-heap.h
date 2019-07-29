@@ -172,35 +172,28 @@ namespace InterlacedDoubleBinaryHeap
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{
-		// FIXME: The problem here: if I add e.g. ~n/2 nodes to this ordered_set (e.g. binary tree) then the performance devolves to O(nlgn)...
-		// I could use a std::unordered_set<long>, but I don't know if even perfect hashing here would guarantee constant-time access.
-		// There's definitely a good data structure I just need to find it
-		// (prioritizing constant-time insertion (with duplicates), never really deleting, and retrieving an inorder traversal once -- all in O(n) time)
-		// Alternatively, I could go for the whole build *times* as_many_times_as_i_need_to_get_the_job_done, with a small optimization where you can get the minimum / maximum "trusty" indices.
-		// I basically want a sparse array representation, so maybe I should see if any of those (e.g. Skip List) could work better.
-		// Most likely anything I try devolves to O(lgn) for insert key, even if traversing the inorder list is quick.
-		// a van Emde Boas tree would probably be a step in the right direction, but I honestly think perfect hashing might be the only solution with any real hope upon thinking about this more.
-		// (upon further research) Perfect hashing seems to work here, although getting an inorder traversal is difficult since you have to do a build heap call as a subroutine (absurd, right?)
-		// just to get a rough priority queue (and you couldn't actually dequeue without incurring O(nlgn)).
-		// At the same time, I guess you don't need the "lines of trust" concept anymore, you could just check if the node is "dubious"/"trusty".
-		// I think you can do this with perfect hashing, where the size is (after_last - (before_first + 1)), so that will be how I approach this from now on.
-		// I will implement the code with std::unordered_set<long> now, but keep in mind that a perfect hash performs better in the worst case.
-		std::set<long> dubious_min_nodes{ before_first + 1 }; // essentially a std::ordered_set<long> (not a std::unordered_set<long>)
-		std::set<long> dubious_max_nodes{ after_last - 1 }; // sentinel nodes, which simplify logic (in my opinion)
+		// TODO: A lot of this boilerplate will be repeated later. How can I get around that?
+		long bitset_size = after_last - before_first + 1;
+		long heap_depth = bitset_size; // FIXME:
+		std::vector<bool> dubious_min_matrix(bitset_size); // To index into this array, always subtract before_first.
+		std::vector<bool> dubious_max_matrix(bitset_size); // Cannot use a c-style array unfortunately -- for clarity of static size
+		// TODO: set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-2" into dubious nodes.
+		std::vector<std::vector<long>> dubious_min_nodes(heap_depth);
+		std::vector<std::vector<long>> dubious_max_nodes(heap_depth);
 		long dubious_node;
-		long max_right_line_of_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
-		long max_left_line_of_trust = max_right_line_of_trust - 1;
-		long min_left_line_of_trust = MinHeap::parent(after_last - 1, before_first);
-		long min_right_line_of_trust = min_left_line_of_trust + 1;
-		while (max_right_line_of_trust < after_last)
+		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
+		long max_left_line_of_implicit_trust = max_right_line_of_explicit_trust - 1;
+		long min_left_line_of_explicit_trust = MinHeap::parent(after_last - 1, before_first);
+		long min_right_line_of_implicit_trust = min_left_line_of_explicit_trust + 1;
+		while (max_right_line_of_explicit_trust < after_last)
 		{
-			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_trust);
-			max_right_line_of_trust += 1;
-			get_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_explicit_trust);
+			max_right_line_of_explicit_trust += 1;
+			get_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes, dubious_node, min_left_line_of_explicit_trust, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, max_right_line_of_explicit_trust);
 
-			dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_trust);
-			min_left_line_of_trust -= 1;
-			get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
+			dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_explicit_trust);
+			min_left_line_of_explicit_trust -= 1;
+			get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_explicit_trust, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, max_right_line_of_explicit_trust);
 		}
 
 		std::cout << std::endl;
