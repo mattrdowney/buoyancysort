@@ -184,8 +184,7 @@ namespace InterlacedDoubleBinaryHeap
 		long heap_depth;
 		std::vector<bool> dubious_min_matrix(bitset_size); // To index into this array, always subtract before_first.
 		std::vector<bool> dubious_max_matrix(bitset_size); // Cannot use a c-style array unfortunately -- for clarity of static size
-		std::vector<char> min_depth_matrix(bitset_size); // NOTE: Theoretically, this *could* fail with certain char/long definitions (sort of undefined behavior)
-		std::vector<char> max_depth_matrix(bitset_size);
+		std::vector<char> depth_matrix(bitset_size); // NOTE: Theoretically, this *could* fail with certain char/long definitions (sort of undefined behavior)
 		long array_index = 0;
 		long memset_index_begin = 1;
 		long memset_index_end = memset_index_begin + 1;
@@ -197,8 +196,7 @@ namespace InterlacedDoubleBinaryHeap
 			long end = std::min(after_last+1, memset_index_end);
 			long offset = memset_index_begin;
 			long length = end - memset_index_begin;
-			memset(min_depth_matrix.data() + (before_first+1) + offset, array_index, length);
-			memset(max_depth_matrix.data() + (after_last-1) - (end-3), array_index, length);
+			memset(depth_matrix.data() + (before_first+1) + offset, array_index, length);
 			heap_depth = array_index;
 			array_index += 1;
 			memset_index_begin *= 2;
@@ -206,23 +204,25 @@ namespace InterlacedDoubleBinaryHeap
 		}
 
 		std::cout << std::endl;
-		for (char parent : min_depth_matrix)
+		for (char parent : depth_matrix)
 		{
 			std::cout << ((int)parent) << " ";
 		}
 		std::cout << std::endl;
-		for (char parent : max_depth_matrix)
-		{
-			std::cout << ((int)parent) << " ";
-		}
-		std::cout << std::endl;
-		std::cout << max_depth_matrix.size();
+		std::cout << depth_matrix.size();
 
-		return;
-		/*
-		// TODO: set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-2" into dubious nodes.
+		
 		std::vector<std::vector<long>> dubious_min_nodes(heap_depth+1);
 		std::vector<std::vector<long>> dubious_max_nodes(heap_depth+1);
+
+		// Set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-1" into dubious nodes.
+		dubious_min_nodes[0].push_back(before_first + 1);
+		dubious_min_matrix[0] = true;
+		dubious_min_matrix[1] = true;
+		dubious_max_nodes[0].push_back(after_last - 1);
+		dubious_max_matrix[dubious_max_matrix.size() - 1] = true;
+		dubious_max_matrix[dubious_max_matrix.size() - 2] = true;
+
 		long dubious_node;
 		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
 		long max_left_line_of_implicit_trust = max_right_line_of_explicit_trust - 1;
@@ -250,7 +250,7 @@ namespace InterlacedDoubleBinaryHeap
 		}
 		std::cout << std::endl;
 
-		rebuild(data, before_first, after_last, dubious_min_nodes, dubious_max_nodes);*/
+		rebuild(data, before_first, after_last, dubious_min_nodes, dubious_max_nodes);
 	}
 
 	// use min_heapify() and max_heapify() in an alternating fasion (as subroutines).
