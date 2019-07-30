@@ -45,9 +45,6 @@
     <ClInclude Include="hoare-partition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="heap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="heap-tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>

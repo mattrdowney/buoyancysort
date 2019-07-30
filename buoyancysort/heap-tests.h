@@ -1,7 +1,9 @@
 #pragma once
 
 #include <assert.h>
-#include "heap.h"
+#include "min-heap.h"
+#include "max-heap.h"
+#include "median-heap.h"
 
 namespace HeapTests // The amount of namespaces is basically parody at this point
 {
