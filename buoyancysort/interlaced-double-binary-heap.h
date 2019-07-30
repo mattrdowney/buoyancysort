@@ -180,6 +180,7 @@ namespace InterlacedDoubleBinaryHeap
 		// TODO: set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-2" into dubious nodes.
 		std::vector<std::vector<long>> dubious_min_nodes(heap_depth);
 		std::vector<std::vector<long>> dubious_max_nodes(heap_depth);
+		// TODO: Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(n))) I think), I think I have to cache the powers_of_two that are used in dubious_min/max_nodes.
 		long dubious_node;
 		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
 		long max_left_line_of_implicit_trust = max_right_line_of_explicit_trust - 1;
