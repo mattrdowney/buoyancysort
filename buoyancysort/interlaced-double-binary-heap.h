@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <set>
 #include <stddef.h>
+#include <string.h>
 #include "heap.h"
 #include "power-of-two.h"
 
@@ -177,6 +178,19 @@ namespace InterlacedDoubleBinaryHeap
 		long heap_depth = bitset_size; // FIXME:
 		std::vector<bool> dubious_min_matrix(bitset_size); // To index into this array, always subtract before_first.
 		std::vector<bool> dubious_max_matrix(bitset_size); // Cannot use a c-style array unfortunately -- for clarity of static size
+		std::vector<int> min_depth_matrix(bitset_size);
+		std::vector<int> min_depth_matrix(bitset_size);
+		long array_index = 0;
+		long memset_index_begin = 1;
+		long memset_index_end = memset_index_begin + 1;
+		while (memset_index_begin < after_last)
+		{
+			long end = min(after_last, memset_index_end);
+			memset(min_depth_matrix.data() + memset_index_begin, array_index, end - memset_index_begin);
+			array_index += 1;
+			memset_index_begin *= 2;
+			memset_index_end *= 2;
+		}
 		// TODO: set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-2" into dubious nodes.
 		std::vector<std::vector<long>> dubious_min_nodes(heap_depth);
 		std::vector<std::vector<long>> dubious_max_nodes(heap_depth);
