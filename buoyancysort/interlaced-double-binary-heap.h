@@ -113,6 +113,14 @@ namespace InterlacedDoubleBinaryHeap
 		long memset_index_begin = 1;
 		long memset_index_end = memset_index_begin + 1;
 
+		// the future topple() function no longer has a sentinel node because of this choice =/
+		trusty_matrix[0] = true;
+		trusty_matrix[bitset_size-1] = true;
+		if ((bitset_size % 2) == 1)
+		{
+			trusty_matrix[bitset_size/2] = true;
+		}
+
 		// Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(N))) I think),
 		// I have to cache the powers_of_two that are used in dubious_min/max_nodes.
 		while (memset_index_begin < bitset_size-1)
@@ -139,13 +147,21 @@ namespace InterlacedDoubleBinaryHeap
 			memset_index_end *= 2;
 		}
 
+		std::cout << depth_matrix.size();
+		std::cout << std::endl;
+		std::cout << std::endl;
+		for (bool trust : trusty_matrix)
+		{
+			std::cout << ((int)trust) << " ";
+		}
+		std::cout << std::endl;
+
 		std::cout << std::endl;
 		for (char parent : depth_matrix)
 		{
 			std::cout << ((int)parent) << " ";
 		}
 		std::cout << std::endl;
-		std::cout << depth_matrix.size();
 
 		std::cout << std::endl;
 		for (std::vector<long> subarray : dubious_min_nodes)
@@ -168,7 +184,7 @@ namespace InterlacedDoubleBinaryHeap
 		std::cout << std::endl;
 	}
 
-	bool trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
+	bool cached_trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
 	{
 		if (node >= min_right_line_of_implicit_trust)
 		{
@@ -177,13 +193,29 @@ namespace InterlacedDoubleBinaryHeap
 		return trusty_matrix[node - before_first];
 	}
 
-	bool trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust)
+	bool test_trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
+	{
+		long right_child = MinHeap::right_child(node, before_first);
+		long left_child = right_child - 1;
+		return cached_trust_min_node(before_first, after_last, trusty_matrix, left_child, min_right_line_of_implicit_trust) &&
+				cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust);
+	}
+
+	bool cached_trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust)
 	{
 		if (node <= max_left_line_of_implicit_trust)
 		{
 			return true;
 		}
 		return trusty_matrix[node - before_first];
+	}
+
+	bool test_trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust)
+	{
+		long left_child = MaxHeap::left_child(node, after_last);
+		long right_child = left_child + 1;
+		return cached_trust_min_node(before_first, after_last, trusty_matrix, left_child, max_left_line_of_implicit_trust) &&
+			cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, max_left_line_of_implicit_trust);
 	}
 
 	template <typename Type>

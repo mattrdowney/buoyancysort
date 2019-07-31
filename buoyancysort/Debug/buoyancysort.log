@@ -1,8 +1,2 @@
 ﻿  main.cpp
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(184): warning C4101: 'dubious_node': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(26): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build<int>(Type *,long,long)' being compiled
-          with
-          [
-              Type=int
-          ]
   buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe
