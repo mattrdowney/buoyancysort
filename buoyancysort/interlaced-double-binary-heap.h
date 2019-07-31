@@ -99,26 +99,44 @@ namespace InterlacedDoubleBinaryHeap
 		dubious_max_nodes = all_dubious_nodes;
 	}
 
-	template <typename Type>
-	void build(Type *data, long before_first, long after_last)
+	void initialize(long before_first, long after_last,
+			std::vector<bool> &trusty_matrix,
+			std::vector<char> &depth_matrix,
+			std::vector<std::vector<long>> &dubious_min_nodes,
+			std::vector<std::vector<long>> &dubious_max_nodes,
+			std::vector<std::vector<long>> &next_dubious_min_nodes,
+			std::vector<std::vector<long>> &next_dubious_max_nodes)
 	{
 		long bitset_size = after_last - before_first + 1;
 		long heap_depth;
-		std::vector<bool> trusty_matrix(bitset_size); // To index into this array, always subtract before_first (contains min and max definitions -- since bottom half rounded up is implicitly trusted).
-		std::vector<char> depth_matrix(bitset_size); // NOTE: Theoretically, this *could* fail with certain char/long definitions (sort of undefined behavior)
+		trusty_matrix.resize(bitset_size); // To index into this array, always subtract before_first (contains min and max definitions -- since bottom half rounded up is implicitly trusted).
+		depth_matrix.resize(bitset_size); // NOTE: Theoretically, this *could* fail with certain char/long definitions (sort of undefined behavior)
+
 		long array_index = 0;
 		long memset_index_begin = 1;
 		long memset_index_end = memset_index_begin + 1;
 
 		// Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(N))) I think),
 		// I have to cache the powers_of_two that are used in dubious_min/max_nodes.
-		while (memset_index_begin <= after_last)
+		while (memset_index_begin < bitset_size-1)
 		{
-			long end = std::min(after_last+1, memset_index_end);
+			long end = std::min(bitset_size - 1, memset_index_end);
 			long offset = memset_index_begin;
 			long length = end - memset_index_begin;
-			memset(depth_matrix.data() + (before_first+1) + offset, array_index, length);
+			memset(depth_matrix.data() + (before_first + 1) + offset, array_index, length);
 			heap_depth = array_index;
+			dubious_min_nodes.resize(heap_depth + 1);
+			dubious_max_nodes.resize(heap_depth + 1);
+			next_dubious_min_nodes.resize(heap_depth + 1);
+			next_dubious_max_nodes.resize(heap_depth + 1);
+			dubious_min_nodes[heap_depth].reserve(length);
+			dubious_max_nodes[heap_depth].reserve(length);
+			for (int forward_index = offset; forward_index < end; forward_index += 1)
+			{
+				dubious_min_nodes[heap_depth].push_back(before_first + forward_index);
+				dubious_max_nodes[heap_depth].push_back(after_last - forward_index);
+			}
+
 			array_index += 1;
 			memset_index_begin *= 2;
 			memset_index_end *= 2;
@@ -132,8 +150,39 @@ namespace InterlacedDoubleBinaryHeap
 		std::cout << std::endl;
 		std::cout << depth_matrix.size();
 
-		std::vector<std::vector<long>> dubious_min_nodes(heap_depth+1);
-		std::vector<std::vector<long>> dubious_max_nodes(heap_depth+1);
+		std::cout << std::endl;
+		for (std::vector<long> subarray : dubious_min_nodes)
+		{
+			for (long index : subarray)
+			{
+				std::cout << index << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+		for (std::vector<long> subarray : dubious_max_nodes)
+		{
+			for (long index : subarray)
+			{
+				std::cout << index << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	}
+
+	template <typename Type>
+	void build(Type *data, long before_first, long after_last)
+	{
+		std::vector<bool> trusty_matrix;
+		std::vector<char> depth_matrix;
+		std::vector<std::vector<long>> dubious_min_nodes;
+		std::vector<std::vector<long>> dubious_max_nodes;
+		std::vector<std::vector<long>> next_dubious_min_nodes;
+		std::vector<std::vector<long>> next_dubious_max_nodes;
+
+		initialize(before_first, after_last,
+				trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, next_dubious_min_nodes, next_dubious_max_nodes);
 
 		long dubious_node;
 		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
@@ -144,23 +193,23 @@ namespace InterlacedDoubleBinaryHeap
 		while (true)
 		{
 			bool change_attempted = false;
-			for depth = dubious_min_nodes.size() - 1 downto 0
+			for (long depth = dubious_min_nodes.size() - 1; depth >= 0; depth -= 1)
 			{
 				if (dubious_min_nodes[depth].size() > 0 || dubious_max_nodes[depth].size() > 0)
 				{
 					change_attempted = true;
 					while (dubious_min_nodes[depth].size() < dubious_max_nodes[depth].size())
 					{
-						MaxHeap::heapify(some iterator)
+						//MaxHeap::heapify(some iterator)
 					}
 					while (dubious_max_nodes[depth].size() < dubious_min_nodes[depth].size())
 					{
-						MinHeap::heapify(some iterator)
+						//MinHeap::heapify(some iterator)
 					}
 					while (dubious_min_nodes[depth].size() > 0)
 					{
-						MinHeap::heapify(some iterator)
-						MaxHeap::heapify(some iterator)
+						//MinHeap::heapify(some iterator)
+						//MaxHeap::heapify(some iterator)
 					}
 				}
 			}
@@ -169,7 +218,7 @@ namespace InterlacedDoubleBinaryHeap
 				break;
 			}
 		}
-
+		/*
 		while (max_right_line_of_explicit_trust < after_last)
 		{
 			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_explicit_trust);
@@ -180,15 +229,21 @@ namespace InterlacedDoubleBinaryHeap
 			min_left_line_of_explicit_trust -= 1;
 			get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_explicit_trust, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, max_right_line_of_explicit_trust);
 		}
-
+		*/
 		std::cout << std::endl;
-		for (long index : dubious_min_nodes)
+		for (std::vector<long> subarray : dubious_min_nodes)
 		{
-			std::cout << index << " ";
+			for (long index : subarray)
+			{
+				std::cout << index << " ";
+			}
 		}
-		for (long index : dubious_max_nodes)
+		for (std::vector<long> subarray : dubious_max_nodes)
 		{
-			std::cout << index << " ";
+			for (long index : subarray)
+			{
+				std::cout << index << " ";
+			}
 		}
 		std::cout << std::endl;
 	}

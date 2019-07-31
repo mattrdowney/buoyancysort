@@ -1,63 +1,8 @@
 ﻿  main.cpp
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(235): error C2664: 'void InterlacedDoubleBinaryHeap::get_dubious_min_heap_elements<Type>(Type *,long,long,std::set<long,std::less<_Kty>,std::allocator<_Kty>> &,long,long,long,long,long)': cannot convert argument 4 from 'std::vector<std::vector<long,std::allocator<_Kty>>,std::allocator<_Ty>>' to 'std::set<long,std::less<_Kty>,std::allocator<_Kty>> &'
-          with
-          [
-              Type=int,
-              _Kty=long
-          ]
-          and
-          [
-              _Kty=long,
-              _Ty=std::vector<long,std::allocator<long>>
-          ]
-          and
-          [
-              _Kty=long
-          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(187): warning C4101: 'dubious_node': unreferenced local variable
   c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(26): note: see reference to function template instantiation 'void InterlacedDoubleBinaryHeap::build<int>(Type *,long,long)' being compiled
           with
           [
               Type=int
           ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(239): error C2664: 'void InterlacedDoubleBinaryHeap::get_dubious_max_heap_elements<Type>(Type *,long,long,std::set<long,std::less<_Kty>,std::allocator<_Kty>> &,long,long,long,long,long)': cannot convert argument 4 from 'std::vector<std::vector<long,std::allocator<_Kty>>,std::allocator<_Ty>>' to 'std::set<long,std::less<_Kty>,std::allocator<_Kty>> &'
-          with
-          [
-              Type=int,
-              _Kty=long
-          ]
-          and
-          [
-              _Kty=long,
-              _Ty=std::vector<long,std::allocator<long>>
-          ]
-          and
-          [
-              _Kty=long
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(243): error C2440: 'initializing': cannot convert from 'std::vector<long,std::allocator<_Kty>>' to 'long'
-          with
-          [
-              _Kty=long
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(243): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(247): error C2440: 'initializing': cannot convert from 'std::vector<long,std::allocator<_Kty>>' to 'long'
-          with
-          [
-              _Kty=long
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(247): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\interlaced-double-binary-heap.h(253): error C2664: 'void InterlacedDoubleBinaryHeap::rebuild<Type>(Type *,long,long,std::set<long,std::less<_Kty>,std::allocator<_Kty>> &,std::set<_Kty,std::less<_Kty>,std::allocator<_Kty>> &)': cannot convert argument 4 from 'std::vector<std::vector<long,std::allocator<_Kty>>,std::allocator<_Ty>>' to 'std::set<long,std::less<_Kty>,std::allocator<_Kty>> &'
-          with
-          [
-              Type=int,
-              _Kty=long
-          ]
-          and
-          [
-              _Kty=long,
-              _Ty=std::vector<long,std::allocator<long>>
-          ]
-          and
-          [
-              _Kty=long
-          ]
+  buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe
