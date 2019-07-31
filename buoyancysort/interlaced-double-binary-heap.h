@@ -99,107 +99,18 @@ namespace InterlacedDoubleBinaryHeap
 		dubious_max_nodes = all_dubious_nodes;
 	}
 
-	enum class AdjustType { Undecided, Min, Max };
-
-	template <typename Type>
-	void rebuild(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes, std::set<long> &dubious_max_nodes)
-	{
-		Print::print(data, before_first, after_last);
-
-		enhance_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes);
-		enhance_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes);
-
-		std::set<long> next_dubious_min_nodes{ before_first + 1 }; // sentinel nodes, which simplify logic (in my opinion)
-		std::set<long> next_dubious_max_nodes{ after_last - 1 };
-
-		std::set<long>::reverse_iterator min_iterator = dubious_min_nodes.rbegin();
-		std::set<long>::iterator max_iterator = dubious_max_nodes.begin();
-
-		long max_right_line_of_trust = MaxHeap::parent(*max_iterator, after_last); // when on a line of trust, a node is still trusted
-		long max_left_line_of_trust = MaxHeap::parent(before_first + 1, after_last) - 1;
-		long min_left_line_of_trust = MinHeap::parent(*min_iterator, before_first);
-		long min_right_line_of_trust = MinHeap::parent(after_last - 1, before_first) + 1;
-
-		// for depth = dubious_min_nodes.size()-1 downto 0
-		//	   while (dubious_min_nodes[depth].size() < dubious_max_nodes[depth].size())
-		//        MaxHeap::heapify(some iterator)
-		//	   while (dubious_max_nodes[depth].size() < dubious_min_nodes[depth].size())
-		//	      MinHeap::heapify(some iterator)
-		//     while (dubious_min_nodes[depth].size() > 0)
-		//        MinHeap::heapify(some iterator)
-		//        MaxHeap::heapify(some iterator)
-		//        
-
-		while (min_iterator != dubious_min_nodes.rend() || max_iterator != dubious_max_nodes.end())
-		{
-			AdjustType mode = AdjustType::Undecided;
-
-			// TODO: std::set has O(k) performance here but I don't care yet.
-			if (min_iterator != dubious_min_nodes.rend())
-			{
-				mode = AdjustType::Min;
-			}
-
-			if (max_iterator != dubious_max_nodes.end())
-			{
-				if (mode == AdjustType::Undecided)
-				{
-					mode = AdjustType::Max;
-				}
-				else
-				{
-					long max_distance = (*max_iterator - before_first);
-					long min_distance = (after_last - *min_iterator);
-					mode = (max_distance < min_distance ? AdjustType::Max : AdjustType::Min);
-				}
-			}
-
-			if (mode == AdjustType::Min)
-			{
-				long adjust_index = *min_iterator;
-				std::cout << std::endl << "Min: " << adjust_index << std::endl;
-				min_iterator++;
-				if (min_iterator != dubious_min_nodes.rend())
-				{
-					min_left_line_of_trust = *min_iterator;
-				}
-				long dubious_node = MinHeap::heapify(data, before_first, after_last, adjust_index);
-				get_dubious_max_heap_elements(data, before_first, after_last, next_dubious_max_nodes, dubious_node, dubious_node, min_right_line_of_trust, max_left_line_of_trust, max_right_line_of_trust);
-			}
-			else // if (mode == AdjustType.Max)
-			{
-				long adjust_index = *max_iterator;
-				std::cout << std::endl << "Max: " << adjust_index << std::endl;
-				max_iterator++;
-				if (max_iterator != dubious_max_nodes.end())
-				{
-					max_right_line_of_trust = *max_iterator;
-				}
-				long dubious_node = MaxHeap::heapify(data, before_first, after_last, adjust_index);
-				get_dubious_min_heap_elements(data, before_first, after_last, next_dubious_min_nodes, dubious_node, min_left_line_of_trust, min_right_line_of_trust, max_left_line_of_trust, dubious_node);
-			}
-		}
-
-		if (next_dubious_min_nodes.size() > 0 || next_dubious_max_nodes.size() > 0)
-		{
-			rebuild(data, before_first, after_last, next_dubious_min_nodes, next_dubious_max_nodes);
-		}
-	}
-
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{
-		// TODO: A lot of this boilerplate will be repeated later. How can I get around that?
 		long bitset_size = after_last - before_first + 1;
 		long heap_depth;
-		std::vector<bool> dubious_min_matrix(bitset_size); // To index into this array, always subtract before_first.
-		std::vector<bool> dubious_max_matrix(bitset_size); // Cannot use a c-style array unfortunately -- for clarity of static size
+		std::vector<bool> trusty_matrix(bitset_size); // To index into this array, always subtract before_first (contains min and max definitions -- since bottom half rounded up is implicitly trusted).
 		std::vector<char> depth_matrix(bitset_size); // NOTE: Theoretically, this *could* fail with certain char/long definitions (sort of undefined behavior)
 		long array_index = 0;
 		long memset_index_begin = 1;
 		long memset_index_end = memset_index_begin + 1;
 
-		// Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(n))) I think),
+		// Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(N))) I think),
 		// I have to cache the powers_of_two that are used in dubious_min/max_nodes.
 		while (memset_index_begin <= after_last)
 		{
@@ -221,23 +132,44 @@ namespace InterlacedDoubleBinaryHeap
 		std::cout << std::endl;
 		std::cout << depth_matrix.size();
 
-		
 		std::vector<std::vector<long>> dubious_min_nodes(heap_depth+1);
 		std::vector<std::vector<long>> dubious_max_nodes(heap_depth+1);
-
-		// Set indices 0, 1, n-2, n-1 to dubious (as sentinel nodes) -- and insert "1", "n-1" into dubious nodes.
-		dubious_min_nodes[0].push_back(before_first + 1);
-		dubious_min_matrix[0] = true;
-		dubious_min_matrix[1] = true;
-		dubious_max_nodes[0].push_back(after_last - 1);
-		dubious_max_matrix[dubious_max_matrix.size() - 1] = true;
-		dubious_max_matrix[dubious_max_matrix.size() - 2] = true;
 
 		long dubious_node;
 		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
 		long max_left_line_of_implicit_trust = max_right_line_of_explicit_trust - 1;
 		long min_left_line_of_explicit_trust = MinHeap::parent(after_last - 1, before_first);
 		long min_right_line_of_implicit_trust = min_left_line_of_explicit_trust + 1;
+
+		while (true)
+		{
+			bool change_attempted = false;
+			for depth = dubious_min_nodes.size() - 1 downto 0
+			{
+				if (dubious_min_nodes[depth].size() > 0 || dubious_max_nodes[depth].size() > 0)
+				{
+					change_attempted = true;
+					while (dubious_min_nodes[depth].size() < dubious_max_nodes[depth].size())
+					{
+						MaxHeap::heapify(some iterator)
+					}
+					while (dubious_max_nodes[depth].size() < dubious_min_nodes[depth].size())
+					{
+						MinHeap::heapify(some iterator)
+					}
+					while (dubious_min_nodes[depth].size() > 0)
+					{
+						MinHeap::heapify(some iterator)
+						MaxHeap::heapify(some iterator)
+					}
+				}
+			}
+			if (!change_attempted)
+			{
+				break;
+			}
+		}
+
 		while (max_right_line_of_explicit_trust < after_last)
 		{
 			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_explicit_trust);
@@ -259,8 +191,6 @@ namespace InterlacedDoubleBinaryHeap
 			std::cout << index << " ";
 		}
 		std::cout << std::endl;
-
-		rebuild(data, before_first, after_last, dubious_min_nodes, dubious_max_nodes);
 	}
 
 	// use min_heapify() and max_heapify() in an alternating fasion (as subroutines).
