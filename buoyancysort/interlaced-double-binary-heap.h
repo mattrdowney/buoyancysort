@@ -9,9 +9,6 @@
 #include "min-heap.h"
 #include "max-heap.h"
 #include "power-of-two.h"
-// So many programmers would probably lose it if they saw these header files.
-// Even if I don't want to use a .tpp file for template metaprogramming, I could still make some subroutines Type agnostic.
-// The function signatures are also worthy of parody at this point.
 
 namespace InterlacedDoubleBinaryHeap
 {
@@ -171,6 +168,24 @@ namespace InterlacedDoubleBinaryHeap
 		std::cout << std::endl;
 	}
 
+	bool trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
+	{
+		if (node >= min_right_line_of_implicit_trust)
+		{
+			return true;
+		}
+		return trusty_matrix[node - before_first];
+	}
+
+	bool trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust)
+	{
+		if (node <= max_left_line_of_implicit_trust)
+		{
+			return true;
+		}
+		return trusty_matrix[node - before_first];
+	}
+
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{
@@ -184,11 +199,8 @@ namespace InterlacedDoubleBinaryHeap
 		initialize(before_first, after_last,
 				trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, next_dubious_min_nodes, next_dubious_max_nodes);
 
-		long dubious_node;
-		long max_right_line_of_explicit_trust = MaxHeap::parent(before_first + 1, after_last); // when on a line of trust, a node is still trusted
-		long max_left_line_of_implicit_trust = max_right_line_of_explicit_trust - 1;
-		long min_left_line_of_explicit_trust = MinHeap::parent(after_last - 1, before_first);
-		long min_right_line_of_implicit_trust = min_left_line_of_explicit_trust + 1;
+		long max_left_line_of_implicit_trust = MaxHeap::parent(before_first + 1, after_last) - 1; // when on a line of trust, a node is still trusted
+		long min_right_line_of_implicit_trust = MinHeap::parent(after_last - 1, before_first) + 1; // a heap on the bottom half (i.e. no children) is implicitly trusted
 
 		while (true)
 		{
