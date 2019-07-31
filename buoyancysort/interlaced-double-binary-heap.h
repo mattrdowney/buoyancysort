@@ -120,6 +120,16 @@ namespace InterlacedDoubleBinaryHeap
 		long min_left_line_of_trust = MinHeap::parent(*min_iterator, before_first);
 		long min_right_line_of_trust = MinHeap::parent(after_last - 1, before_first) + 1;
 
+		// for depth = dubious_min_nodes.size()-1 downto 0
+		//	   while (dubious_min_nodes[depth].size() < dubious_max_nodes[depth].size())
+		//        MaxHeap::heapify(some iterator)
+		//	   while (dubious_max_nodes[depth].size() < dubious_min_nodes[depth].size())
+		//	      MinHeap::heapify(some iterator)
+		//     while (dubious_min_nodes[depth].size() > 0)
+		//        MinHeap::heapify(some iterator)
+		//        MaxHeap::heapify(some iterator)
+		//        
+
 		while (min_iterator != dubious_min_nodes.rend() || max_iterator != dubious_max_nodes.end())
 		{
 			AdjustType mode = AdjustType::Undecided;
