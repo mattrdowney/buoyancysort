@@ -257,18 +257,18 @@ namespace InterlacedDoubleBinaryHeap
 					while (min_iterator < max_iterator)
 					{
 						max_iterator -= 1;
-						max_heapify(data, before_first, after_last, max_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, dubious_min_nodes[depth][max_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					while (min_iterator > max_iterator)
 					{
 						min_iterator -= 1;
-						min_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						min_heapify(data, before_first, after_last, dubious_min_nodes[depth][min_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					while (min_iterator > 0)
 					{
 						min_iterator -= 1; // also `max_iterator -= 1;`
-						min_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-						max_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust); // NOTE: min_iterator is intentional
+						min_heapify(data, before_first, after_last, dubious_min_nodes[depth][min_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, dubious_min_nodes[depth][min_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust); // NOTE: min_iterator is intentional
 					}
 					dubious_min_nodes[depth].clear();
 					dubious_max_nodes[depth].clear();
