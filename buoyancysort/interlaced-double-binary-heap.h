@@ -10,6 +10,7 @@
 #include "max-heap.h"
 #include "power-of-two.h"
 
+// NOTE: "dubious" and "trusty" are references to Dijkstra's smoothsort.
 namespace InterlacedDoubleBinaryHeap
 {
 	template <typename Type>
@@ -24,76 +25,6 @@ namespace InterlacedDoubleBinaryHeap
 			max_heapify_from += 1;
 			min_heapify_from -= 1;
 		}
-	}
-
-	template <typename Type>
-	void get_dubious_min_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes, long dubious_node, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
-	{
-		if (dubious_node < max_right_line_of_trust)
-		{
-			while (dubious_node < max_right_line_of_trust)
-			{
-				if (min_left_line_of_trust < dubious_node && dubious_node < min_right_line_of_trust)
-				{
-					dubious_min_nodes.insert(dubious_node);
-				}
-				dubious_node = MaxHeap::parent(dubious_node, after_last);
-			}
-			if (min_left_line_of_trust < dubious_node && dubious_node < min_right_line_of_trust)
-			{
-				dubious_min_nodes.insert(dubious_node);
-			}
-		}
-	}
-
-	template <typename Type>
-	void get_dubious_max_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_max_nodes, long dubious_node, long min_left_line_of_trust, long min_right_line_of_trust, long max_left_line_of_trust, long max_right_line_of_trust)
-	{
-		if (dubious_node > min_left_line_of_trust)
-		{
-			while (dubious_node > min_left_line_of_trust)
-			{
-				if (max_left_line_of_trust < dubious_node && dubious_node < max_right_line_of_trust)
-				{
-					dubious_max_nodes.insert(dubious_node);
-				}
-				dubious_node = MinHeap::parent(dubious_node, before_first); // I feel like this is a logical fallacy (it's coupled to how the parenting system works). If I didn't use before_first and after_last this would fail hard.
-			}
-			if (max_left_line_of_trust < dubious_node && dubious_node < max_right_line_of_trust)
-			{
-				dubious_max_nodes.insert(dubious_node);
-			}
-		}
-	}
-
-	template <typename Type>
-	void enhance_dubious_min_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_min_nodes)
-	{
-		std::set<long> all_dubious_nodes;
-		for (long dubious_node : dubious_min_nodes)
-		{
-			while (dubious_node > before_first)
-			{
-				all_dubious_nodes.insert(dubious_node);
-				dubious_node = MinHeap::parent(dubious_node, before_first);
-			}
-		}
-		dubious_min_nodes = all_dubious_nodes;
-	}
-
-	template <typename Type>
-	void enhance_dubious_max_heap_elements(Type *data, long before_first, long after_last, std::set<long> &dubious_max_nodes)
-	{
-		std::set<long> all_dubious_nodes;
-		for (long dubious_node : dubious_max_nodes)
-		{
-			while (dubious_node < after_last)
-			{
-				all_dubious_nodes.insert(dubious_node);
-				dubious_node = MaxHeap::parent(dubious_node, after_last);
-			}
-		}
-		dubious_max_nodes = all_dubious_nodes;
 	}
 
 	void initialize(long before_first, long after_last,
@@ -112,14 +43,6 @@ namespace InterlacedDoubleBinaryHeap
 		long array_index = 0;
 		long memset_index_begin = 1;
 		long memset_index_end = memset_index_begin + 1;
-
-		// the future topple() function no longer has a sentinel node because of this choice =/
-		trusty_matrix[0] = true;
-		trusty_matrix[bitset_size-1] = true;
-		if ((bitset_size % 2) == 1)
-		{
-			trusty_matrix[bitset_size/2] = true;
-		}
 
 		// Because of the nature of next_power_of_two() (time complexity ~O(lg(lg(N))) I think),
 		// I have to cache the powers_of_two that are used in dubious_min/max_nodes.
@@ -219,6 +142,62 @@ namespace InterlacedDoubleBinaryHeap
 	}
 
 	template <typename Type>
+	void min_heapify(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+		long dubious_node = MinHeap::heapify(data, before_first, after_last, root);
+		if (test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		{
+			trusty_matrix[root] = true;
+		}
+		else
+		{
+			next_dubious_min_nodes[depth_matrix[root - before_first]].push_back(root);
+		}
+		while (dubious_node > root)
+		{
+			if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
+			{
+				long dubious_cursor = dubious_node;
+				do
+				{
+					next_dubious_max_nodes[depth_matrix[after_last - dubious_cursor]].push_back(dubious_cursor);
+					trusty_matrix[dubious_node] = false;
+					dubious_cursor = MaxHeap::parent(dubious_cursor, after_last);
+				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust));
+			}
+			dubious_node = MinHeap::parent(dubious_node, before_first);
+		}
+	}
+
+	template <typename Type>
+	void max_heapify(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+		long dubious_node = MaxHeap::heapify(data, before_first, after_last, root);
+		if (test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
+		{
+			trusty_matrix[root] = true;
+		}
+		else
+		{
+			next_dubious_max_nodes[depth_matrix[after_last - root]].push_back(root);
+		}
+		while (dubious_node < root)
+		{
+			if (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_node, min_right_line_of_implicit_trust))
+			{
+				long dubious_cursor = dubious_node;
+				do
+				{
+					next_dubious_min_nodes[depth_matrix[dubious_cursor - before_first]].push_back(dubious_cursor);
+					trusty_matrix[dubious_node] = false;
+					dubious_cursor = MinHeap::parent(dubious_cursor, before_first);
+				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust));
+			}
+			dubious_node = MaxHeap::parent(dubious_node, after_last);
+		}
+	}
+
+	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{
 		std::vector<bool> trusty_matrix;
@@ -236,67 +215,60 @@ namespace InterlacedDoubleBinaryHeap
 
 		while (true)
 		{
+			Print::print(data, before_first, after_last);
+
+			std::cout << std::endl;
+			for (std::vector<long> subarray : dubious_min_nodes)
+			{
+				for (long index : subarray)
+				{
+					std::cout << index << " ";
+				}
+			}
+			std::cout << std::endl;
+			for (std::vector<long> subarray : dubious_max_nodes)
+			{
+				for (long index : subarray)
+				{
+					std::cout << index << " ";
+				}
+			}
+			std::cout << std::endl;
+
 			bool change_attempted = false;
 			for (long depth = dubious_min_nodes.size() - 1; depth >= 0; depth -= 1)
 			{
 				if (dubious_min_nodes[depth].size() > 0 || dubious_max_nodes[depth].size() > 0)
 				{
 					change_attempted = true;
-					while (dubious_min_nodes[depth].size() < dubious_max_nodes[depth].size())
+					int min_iterator = dubious_min_nodes[depth].size();
+					int max_iterator = dubious_max_nodes[depth].size();
+					while (min_iterator < max_iterator)
 					{
-						//MaxHeap::heapify(some iterator)
+						max_iterator -= 1;
+						max_heapify(data, before_first, after_last, max_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
-					while (dubious_max_nodes[depth].size() < dubious_min_nodes[depth].size())
+					while (min_iterator > max_iterator)
 					{
-						//MinHeap::heapify(some iterator)
+						min_iterator -= 1;
+						min_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
-					while (dubious_min_nodes[depth].size() > 0)
+					while (min_iterator > 0)
 					{
-						//MinHeap::heapify(some iterator)
-						//MaxHeap::heapify(some iterator)
+						min_iterator -= 1; // also `max_iterator -= 1;`
+						min_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
+					dubious_min_nodes[depth].clear();
+					dubious_max_nodes[depth].clear();
 				}
 			}
 			if (!change_attempted)
 			{
 				break;
 			}
+			dubious_min_nodes.swap(next_dubious_min_nodes);
+			dubious_max_nodes.swap(next_dubious_max_nodes);
 		}
-		/*
-		while (max_right_line_of_explicit_trust < after_last)
-		{
-			dubious_node = MaxHeap::heapify(data, before_first, after_last, max_right_line_of_explicit_trust);
-			max_right_line_of_explicit_trust += 1;
-			get_dubious_min_heap_elements(data, before_first, after_last, dubious_min_nodes, dubious_node, min_left_line_of_explicit_trust, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, max_right_line_of_explicit_trust);
-
-			dubious_node = MinHeap::heapify(data, before_first, after_last, min_left_line_of_explicit_trust);
-			min_left_line_of_explicit_trust -= 1;
-			get_dubious_max_heap_elements(data, before_first, after_last, dubious_max_nodes, dubious_node, min_left_line_of_explicit_trust, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, max_right_line_of_explicit_trust);
-		}
-		*/
-		std::cout << std::endl;
-		for (std::vector<long> subarray : dubious_min_nodes)
-		{
-			for (long index : subarray)
-			{
-				std::cout << index << " ";
-			}
-		}
-		for (std::vector<long> subarray : dubious_max_nodes)
-		{
-			for (long index : subarray)
-			{
-				std::cout << index << " ";
-			}
-		}
-		std::cout << std::endl;
 	}
-
-	// use min_heapify() and max_heapify() in an alternating fasion (as subroutines).
-	// when the return isn't the index, swaps were made and you are given a descendent child.
-	// Find the list of decendents all the way up until the ancestor.
-	// Add that list of decendents to a std::ordered_set<std::size_t> of dubious_nodes
-	// At least when those nodes are past the "lines of trust".
-	// TODO: RESEARCH: how do "lines of trust" work? When are they invalidated? When are they still valid/"trusty"?
-	// NOTE: "dubious" and "trusty" are references to Dijkstra's smoothsort.
 }
