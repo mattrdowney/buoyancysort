@@ -203,7 +203,7 @@ namespace InterlacedDoubleBinaryHeap
 					while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust))
 					{
 						next_dubious_min_nodes[depth_matrix[after_last - topple_parent_cursor]].push_back(topple_parent_cursor);
-						set_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
+						set_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
 						topple_child_cursor = topple_parent_cursor;
 						topple_parent_cursor = MaxHeap::parent(topple_parent_cursor, after_last);
 					}
