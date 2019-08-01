@@ -146,8 +146,8 @@ namespace InterlacedDoubleBinaryHeap
 	{
 		long left_child = MaxHeap::left_child(node, after_last);
 		long right_child = left_child + 1;
-		return cached_trust_min_node(before_first, after_last, trusty_matrix, left_child, max_left_line_of_implicit_trust) &&
-			cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, max_left_line_of_implicit_trust);
+		return cached_trust_max_node(before_first, after_last, trusty_matrix, left_child, max_left_line_of_implicit_trust) &&
+			cached_trust_max_node(before_first, after_last, trusty_matrix, right_child, max_left_line_of_implicit_trust);
 	}
 
 	template <typename Type>
