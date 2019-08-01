@@ -142,6 +142,7 @@ namespace InterlacedDoubleBinaryHeap
 	{
 		long right_child = MinHeap::right_child(node, before_first);
 		long left_child = right_child - 1;
+		// FIXME: make this actually test if the parent is smaller
 		return cached_trust_min_node(before_first, after_last, trusty_matrix, left_child, min_right_line_of_implicit_trust) &&
 				cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust);
 	}
@@ -172,6 +173,7 @@ namespace InterlacedDoubleBinaryHeap
 	{
 		long left_child = MaxHeap::left_child(node, after_last);
 		long right_child = left_child + 1;
+		// FIXME: make this actually test if the parent is larger
 		return cached_trust_max_node(before_first, after_last, trusty_matrix, left_child, max_left_line_of_implicit_trust) &&
 			cached_trust_max_node(before_first, after_last, trusty_matrix, right_child, max_left_line_of_implicit_trust);
 	}
@@ -190,16 +192,17 @@ namespace InterlacedDoubleBinaryHeap
 		}
 		while (dubious_node > root)
 		{
-			if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
+			// FIXME: switch this to test as well to see if the order was actually disrupted (before toppling a structure over nothing)
+			if (dubious_node > max_left_line_of_implicit_trust &&
+					cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
 			{
-				// I knew this naming convention was bad at the time, and it produced a bug XD
-				long dubious_cursor = dubious_node;
+				long topple_cursor = dubious_node;
 				do
 				{
-					next_dubious_max_nodes[depth_matrix[after_last - dubious_cursor]].push_back(dubious_cursor);
-					set_trust_max_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust, false);
-					dubious_cursor = MaxHeap::parent(dubious_cursor, after_last);
-				} while (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust));
+					next_dubious_max_nodes[depth_matrix[after_last - topple_cursor]].push_back(topple_cursor);
+					set_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust, false);
+					topple_cursor = MaxHeap::parent(topple_cursor, after_last);
+				} while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust));
 			}
 			dubious_node = MinHeap::parent(dubious_node, before_first);
 		}
@@ -219,15 +222,17 @@ namespace InterlacedDoubleBinaryHeap
 		}
 		while (dubious_node < root)
 		{
-			if (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_node, min_right_line_of_implicit_trust))
+			// FIXME: switch this to test as well to see if the order was actually disrupted (before toppling a structure over nothing)
+			if (dubious_node < min_right_line_of_implicit_trust &&
+					cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_node, min_right_line_of_implicit_trust))
 			{
-				long dubious_cursor = dubious_node;
+				long topple_cursor = dubious_node;
 				do
 				{
-					next_dubious_min_nodes[depth_matrix[dubious_cursor - before_first]].push_back(dubious_cursor);
-					set_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust, false);
-					dubious_cursor = MinHeap::parent(dubious_cursor, before_first);
-				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust));
+					next_dubious_min_nodes[depth_matrix[topple_cursor - before_first]].push_back(topple_cursor);
+					set_trust_min_node(before_first, after_last, trusty_matrix, topple_cursor, min_right_line_of_implicit_trust, false);
+					topple_cursor = MinHeap::parent(topple_cursor, before_first);
+				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, topple_cursor, min_right_line_of_implicit_trust));
 			}
 			dubious_node = MaxHeap::parent(dubious_node, after_last);
 		}
