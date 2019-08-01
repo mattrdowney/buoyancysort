@@ -33,8 +33,13 @@ namespace InterlacedDoubleBinaryHeap
 			std::vector<std::vector<long>> &dubious_min_nodes,
 			std::vector<std::vector<long>> &dubious_max_nodes,
 			std::vector<std::vector<long>> &next_dubious_min_nodes,
-			std::vector<std::vector<long>> &next_dubious_max_nodes)
+			std::vector<std::vector<long>> &next_dubious_max_nodes,
+			long min_right_line_of_implicit_trust,
+			long max_left_line_of_implicit_trust)
 	{
+		max_left_line_of_implicit_trust = MaxHeap::parent(before_first + 1, after_last) - 1; // when on a line of trust, a node is still trusted
+		min_right_line_of_implicit_trust = MinHeap::parent(after_last - 1, before_first) + 1; // a heap on the bottom half (i.e. no children) is implicitly trusted
+
 		long bitset_size = after_last - before_first + 1;
 		long heap_depth;
 		trusty_matrix.resize(bitset_size); // To index into this array, always subtract before_first (contains min and max definitions -- since bottom half rounded up is implicitly trusted).
@@ -61,6 +66,10 @@ namespace InterlacedDoubleBinaryHeap
 			dubious_max_nodes[heap_depth].reserve(length);
 			for (int forward_index = offset; forward_index < end; forward_index += 1)
 			{
+				if (before_first + forward_index >= min_right_line_of_implicit_trust)
+				{
+					break;
+				}
 				dubious_min_nodes[heap_depth].push_back(before_first + forward_index);
 				dubious_max_nodes[heap_depth].push_back(after_last - forward_index);
 			}
@@ -147,7 +156,7 @@ namespace InterlacedDoubleBinaryHeap
 		long dubious_node = MinHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
 		{
-			trusty_matrix[root] = true;
+			trusty_matrix[root - before_first] = true;
 		}
 		else
 		{
@@ -161,7 +170,7 @@ namespace InterlacedDoubleBinaryHeap
 				do
 				{
 					next_dubious_max_nodes[depth_matrix[after_last - dubious_cursor]].push_back(dubious_cursor);
-					trusty_matrix[dubious_node] = false;
+					trusty_matrix[dubious_node - before_first] = false;
 					dubious_cursor = MaxHeap::parent(dubious_cursor, after_last);
 				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust));
 			}
@@ -175,7 +184,7 @@ namespace InterlacedDoubleBinaryHeap
 		long dubious_node = MaxHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
 		{
-			trusty_matrix[root] = true;
+			trusty_matrix[root - before_first] = true;
 		}
 		else
 		{
@@ -189,7 +198,7 @@ namespace InterlacedDoubleBinaryHeap
 				do
 				{
 					next_dubious_min_nodes[depth_matrix[dubious_cursor - before_first]].push_back(dubious_cursor);
-					trusty_matrix[dubious_node] = false;
+					trusty_matrix[dubious_node - before_first] = false;
 					dubious_cursor = MinHeap::parent(dubious_cursor, before_first);
 				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust));
 			}
@@ -206,12 +215,14 @@ namespace InterlacedDoubleBinaryHeap
 		std::vector<std::vector<long>> dubious_max_nodes;
 		std::vector<std::vector<long>> next_dubious_min_nodes;
 		std::vector<std::vector<long>> next_dubious_max_nodes;
+		long min_right_line_of_implicit_trust = 0; // a heap's bottom half (i.e. the elements with no children) is implicitly trusted
+		long max_left_line_of_implicit_trust = 0; // when on a line of trust (equal to), a node is still trusted
 
 		initialize(before_first, after_last,
-				trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, next_dubious_min_nodes, next_dubious_max_nodes);
-
-		long max_left_line_of_implicit_trust = MaxHeap::parent(before_first + 1, after_last) - 1; // when on a line of trust, a node is still trusted
-		long min_right_line_of_implicit_trust = MinHeap::parent(after_last - 1, before_first) + 1; // a heap on the bottom half (i.e. no children) is implicitly trusted
+				trusty_matrix, depth_matrix,
+				dubious_min_nodes, dubious_max_nodes,
+				next_dubious_min_nodes, next_dubious_max_nodes,
+				min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 
 		while (true)
 		{
@@ -257,7 +268,7 @@ namespace InterlacedDoubleBinaryHeap
 					{
 						min_iterator -= 1; // also `max_iterator -= 1;`
 						min_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-						max_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, min_iterator, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust); // NOTE: min_iterator is intentional
 					}
 					dubious_min_nodes[depth].clear();
 					dubious_max_nodes[depth].clear();
