@@ -34,8 +34,8 @@ namespace InterlacedDoubleBinaryHeap
 			std::vector<std::vector<long>> &dubious_max_nodes,
 			std::vector<std::vector<long>> &next_dubious_min_nodes,
 			std::vector<std::vector<long>> &next_dubious_max_nodes,
-			long min_right_line_of_implicit_trust,
-			long max_left_line_of_implicit_trust)
+			long &min_right_line_of_implicit_trust,
+			long &max_left_line_of_implicit_trust)
 	{
 		max_left_line_of_implicit_trust = MaxHeap::parent(before_first + 1, after_last) - 1; // when on a line of trust, a node is still trusted
 		min_right_line_of_implicit_trust = MinHeap::parent(after_last - 1, before_first) + 1; // a heap on the bottom half (i.e. no children) is implicitly trusted
@@ -125,6 +125,19 @@ namespace InterlacedDoubleBinaryHeap
 		return trusty_matrix[node - before_first];
 	}
 
+	void set_trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust, bool state)
+	{
+		if (node >= min_right_line_of_implicit_trust)
+		{
+			if (state == false)
+			{
+				std::cout << std::endl << "Critical error: set_trust_min_node" << std::endl;
+			}
+			return;
+		}
+		trusty_matrix[node - before_first] = state;
+	}
+
 	bool test_trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
 	{
 		long right_child = MinHeap::right_child(node, before_first);
@@ -142,6 +155,19 @@ namespace InterlacedDoubleBinaryHeap
 		return trusty_matrix[node - before_first];
 	}
 
+	void set_trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust, bool state)
+	{
+		if (node <= max_left_line_of_implicit_trust)
+		{
+			if (state == false)
+			{
+				std::cout << std::endl << "Critical error: set_trust_max_node" << std::endl;
+			}
+			return;
+		}
+		trusty_matrix[node - before_first] = state;
+	}
+
 	bool test_trust_max_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long max_left_line_of_implicit_trust)
 	{
 		long left_child = MaxHeap::left_child(node, after_last);
@@ -156,7 +182,7 @@ namespace InterlacedDoubleBinaryHeap
 		long dubious_node = MinHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
 		{
-			trusty_matrix[root - before_first] = true;
+			set_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust, true);
 		}
 		else
 		{
@@ -166,11 +192,12 @@ namespace InterlacedDoubleBinaryHeap
 		{
 			if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
 			{
+				// I knew this naming convention was bad at the time, and it produced a bug XD
 				long dubious_cursor = dubious_node;
 				do
 				{
 					next_dubious_max_nodes[depth_matrix[after_last - dubious_cursor]].push_back(dubious_cursor);
-					trusty_matrix[dubious_node - before_first] = false;
+					set_trust_max_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust, false);
 					dubious_cursor = MaxHeap::parent(dubious_cursor, after_last);
 				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, max_left_line_of_implicit_trust));
 			}
@@ -184,7 +211,7 @@ namespace InterlacedDoubleBinaryHeap
 		long dubious_node = MaxHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
 		{
-			trusty_matrix[root - before_first] = true;
+			set_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust, true);
 		}
 		else
 		{
@@ -198,7 +225,7 @@ namespace InterlacedDoubleBinaryHeap
 				do
 				{
 					next_dubious_min_nodes[depth_matrix[dubious_cursor - before_first]].push_back(dubious_cursor);
-					trusty_matrix[dubious_node - before_first] = false;
+					set_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust, false);
 					dubious_cursor = MinHeap::parent(dubious_cursor, before_first);
 				} while (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_cursor, min_right_line_of_implicit_trust));
 			}
