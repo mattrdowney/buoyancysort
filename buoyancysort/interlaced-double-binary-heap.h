@@ -198,13 +198,15 @@ namespace InterlacedDoubleBinaryHeap
 			{
 				long topple_child_cursor = dubious_node;
 				long topple_parent_cursor = MaxHeap::parent(topple_child_cursor, after_last);
-				while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust) &&
-					data[topple_child_cursor] > data[topple_parent_cursor])
+				if (data[topple_child_cursor] > data[topple_parent_cursor])
 				{
-					next_dubious_min_nodes[depth_matrix[after_last - topple_parent_cursor]].push_back(topple_parent_cursor);
-					set_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
-					topple_child_cursor = topple_parent_cursor;
-					topple_parent_cursor = MaxHeap::parent(topple_parent_cursor, after_last);
+					while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust))
+					{
+						next_dubious_min_nodes[depth_matrix[after_last - topple_parent_cursor]].push_back(topple_parent_cursor);
+						set_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
+						topple_child_cursor = topple_parent_cursor;
+						topple_parent_cursor = MaxHeap::parent(topple_parent_cursor, after_last);
+					}
 				}
 			}
 			dubious_node = MinHeap::parent(dubious_node, before_first);
@@ -230,13 +232,15 @@ namespace InterlacedDoubleBinaryHeap
 			{
 				long topple_child_cursor = dubious_node;
 				long topple_parent_cursor = MinHeap::parent(topple_child_cursor, before_first);
-				while (cached_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, min_right_line_of_implicit_trust) &&
-						data[topple_parent_cursor] > data[topple_child_cursor])
+				if (data[topple_parent_cursor] > data[topple_child_cursor])
 				{
-					next_dubious_min_nodes[depth_matrix[topple_parent_cursor - before_first]].push_back(topple_parent_cursor);
-					set_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, min_right_line_of_implicit_trust, false);
-					topple_child_cursor = topple_parent_cursor;
-					topple_parent_cursor = MinHeap::parent(topple_parent_cursor, before_first);
+					while (cached_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, min_right_line_of_implicit_trust))
+					{
+						next_dubious_min_nodes[depth_matrix[topple_parent_cursor - before_first]].push_back(topple_parent_cursor);
+						set_trust_min_node(before_first, after_last, trusty_matrix, topple_parent_cursor, min_right_line_of_implicit_trust, false);
+						topple_child_cursor = topple_parent_cursor;
+						topple_parent_cursor = MinHeap::parent(topple_parent_cursor, before_first);
+					}
 				}
 			}
 			dubious_node = MaxHeap::parent(dubious_node, after_last);
@@ -294,7 +298,7 @@ namespace InterlacedDoubleBinaryHeap
 					while (min_iterator < max_iterator)
 					{
 						max_iterator -= 1;
-						max_heapify(data, before_first, after_last, dubious_min_nodes[depth][max_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, dubious_max_nodes[depth][max_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					while (min_iterator > max_iterator)
 					{
@@ -306,7 +310,7 @@ namespace InterlacedDoubleBinaryHeap
 						min_iterator -= 1;
 						max_iterator -= 1;
 						min_heapify(data, before_first, after_last, dubious_min_nodes[depth][min_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-						max_heapify(data, before_first, after_last, dubious_min_nodes[depth][max_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						max_heapify(data, before_first, after_last, dubious_max_nodes[depth][max_iterator], trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					dubious_min_nodes[depth].clear();
 					dubious_max_nodes[depth].clear();
