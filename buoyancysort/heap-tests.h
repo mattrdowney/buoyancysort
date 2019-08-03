@@ -1,12 +1,81 @@
 #pragma once
 
 #include <assert.h>
+#include <iostream>
 #include "min-heap.h"
 #include "max-heap.h"
 #include "median-heap.h"
 
 namespace HeapTests // The amount of namespaces is basically parody at this point
 {
+	template <typename Type>
+	void test_min_heap(Type *data, long before_first, long after_last, long parent)
+	{
+		long left_child = MinHeap::left_child(parent, before_first);
+		if (left_child < after_last)
+		{
+			if (data[parent] > data[left_child])
+			{
+				std::cout << "[ " << data[parent] << " (@" << parent << ") > " << data[left_child] << " (@" << left_child << ") ], ";
+			}
+			test_min_heap(data, before_first, after_last, left_child);
+		}
+		long right_child = MinHeap::right_child(parent, before_first);
+		if (right_child < after_last)
+		{
+			if (data[parent] > data[right_child])
+			{
+				std::cout << "[ " << data[parent] << " (@" << parent << ") > " << data[right_child] << " (@" << right_child << ") ], ";
+			}
+			test_min_heap(data, before_first, after_last, right_child);
+		}
+	}
+
+	template <typename Type>
+	void test_min_heap(Type *data, long before_first, long after_last)
+	{
+		std::cout << std::endl;
+		if (before_first + 1 < after_last)
+		{
+			test_min_heap(data, before_first, after_last, before_first + 1);
+		}
+		std::cout << std::endl;
+	}
+
+	template <typename Type>
+	void test_max_heap(Type *data, long before_first, long after_last, long parent)
+	{
+		long right_child = MaxHeap::right_child(parent, after_last);
+		if (before_first < right_child)
+		{
+			if (data[right_child] > data[parent])
+			{
+				std::cout << "[ " << data[right_child] << " (@" << right_child << ") > " << data[parent] << " (@" << parent << ") ], ";
+			}
+			test_max_heap(data, before_first, after_last, right_child);
+		}
+		long left_child = MaxHeap::left_child(parent, after_last);
+		if (before_first < left_child)
+		{
+			if (data[left_child] > data[parent])
+			{
+				std::cout << "[ " << data[left_child] << " (@" << left_child << ") > " << data[parent] << " (@" << parent << ") ], ";
+			}
+			test_max_heap(data, before_first, after_last, left_child);
+		}
+	}
+
+	template <typename Type>
+	void test_max_heap(Type *data, long before_first, long after_last)
+	{
+		std::cout << std::endl;
+		if (before_first < after_last - 1)
+		{
+			test_min_heap(data, before_first, after_last, after_last - 1);
+		}
+		std::cout << std::endl;
+	}
+
 	void heap_tests()
 	{
 	//	// Parent, unshifted

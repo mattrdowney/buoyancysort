@@ -14,7 +14,7 @@ namespace Buoyancysort
 	template <typename Type>
 	void sort(Type *data, std::size_t first, std::size_t after_last, std::size_t chunk_size)
 	{
-		InterlacedDoubleBinaryHeap::lazy_build(data, first, after_last);
+		InterlacedDoubleBinaryHeap::build(data, first, after_last);
 		// once you reach a O(N/lglgN) fraction of the original array
 		if (after_last - first + 1 >= chunk_size)
 		{
