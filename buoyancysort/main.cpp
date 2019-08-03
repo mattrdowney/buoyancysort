@@ -14,7 +14,7 @@
 int main()
 {
 	HeapTests::heap_tests();
-	const int size = 64;
+	const int size = 10000;
 	int data[size];
 	for (int i = 0; i < size; i += 1)
 	{

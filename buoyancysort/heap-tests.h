@@ -71,7 +71,7 @@ namespace HeapTests // The amount of namespaces is basically parody at this poin
 		std::cout << std::endl;
 		if (before_first < after_last - 1)
 		{
-			test_min_heap(data, before_first, after_last, after_last - 1);
+			test_max_heap(data, before_first, after_last, after_last - 1);
 		}
 		std::cout << std::endl;
 	}
