@@ -182,7 +182,6 @@ namespace InterlacedDoubleBinaryHeap
 	template <typename Type>
 	void min_heapify(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		// swap siblings and topple right_child if necessary
 		long dubious_node = MinHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
 		{
@@ -194,7 +193,6 @@ namespace InterlacedDoubleBinaryHeap
 		}
 		while (dubious_node > root)
 		{
-			// FIXME: switch this to test as well to see if the order was actually disrupted (before toppling a structure over nothing)
 			if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
 			{
 				long topple_child_cursor = dubious_node;
@@ -217,7 +215,6 @@ namespace InterlacedDoubleBinaryHeap
 	template <typename Type>
 	void max_heapify(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		// swap siblings and topple left_child if necessary
 		long dubious_node = MaxHeap::heapify(data, before_first, after_last, root);
 		if (test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
 		{
@@ -229,7 +226,6 @@ namespace InterlacedDoubleBinaryHeap
 		}
 		while (dubious_node < root)
 		{
-			// FIXME: switch this to test as well to see if the order was actually disrupted (before toppling a structure over nothing)
 			if (cached_trust_min_node(before_first, after_last, trusty_matrix, dubious_node, min_right_line_of_implicit_trust))
 			{
 				long topple_child_cursor = dubious_node;

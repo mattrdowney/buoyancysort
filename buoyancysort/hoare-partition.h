@@ -5,10 +5,11 @@
 namespace HoarePartition
 {
 	template <typename Type>
-	std::size_t partition(Type *data, std::size_t first, std::size_t after_last, std::size_t pivot_index)
+	std::size_t partition(Type *data, long before_first, long after_last, long pivot_index)
 	{
 		// I would use std::partition(), but I can't count comparisons.
-		std::size_t last = after_last - 1;
+		long first = before_first + 1;
+		long last = after_last - 1;
 		Type pivot = data[pivot_index];
 		while (true)
 		{

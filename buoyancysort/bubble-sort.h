@@ -6,9 +6,9 @@
 namespace BubbleSort
 {
 	template <typename Type>
-	void rightward_pass(Type *data, std::size_t first, std::size_t after_last)
+	void rightward_pass(Type *data, long before_first, long after_last)
 	{
-		std::size_t cursor = first + 1;
+		long cursor = before_first + 2;
 		while (cursor < after_last)
 		{
 			// inversion detected
@@ -21,17 +21,17 @@ namespace BubbleSort
 	}
 
 	template <typename Type>
-	void leftward_pass(Type *data, std::size_t first, std::size_t after_last)
+	void leftward_pass(Type *data, long before_first, long after_last)
 	{
-		std::size_t cursor = 1;
-		while (first + cursor < after_last)
+		long cursor = after_last - 2;
+		while (before_first < cursor)
 		{
 			// inversion detected
-			if (data[(after_last - 1) - cursor] > data[(after_last - 1) - cursor + 1])
+			if (data[cursor] > data[cursor + 1])
 			{
-				std::swap(data[(after_last - 1) - cursor], data[(after_last - 1) - cursor + 1]);
+				std::swap(data[cursor], data[cursor + 1]);
 			}
-			cursor += 1;
+			cursor -= 1;
 		}
 	}
 }
