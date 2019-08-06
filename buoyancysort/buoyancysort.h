@@ -58,17 +58,18 @@ namespace Buoyancysort
 		//        pivot = Hoare-Partition(1...n) with the "Insertion-Sort"ed value at ~8/16n (from prior step) as the partition line
 		//        left = pivot
 
-		Buoyancysort::sort(data, new_before_first, pivot - 1, chunk_size);
-		Buoyancysort::sort(data, pivot + 1, new_after_last, chunk_size);
+		Buoyancysort::sort(data, new_before_first, pivot, chunk_size);
+		Buoyancysort::sort(data, pivot, new_after_last, chunk_size);
 	}
 
 	template <typename Type>
-	void sort(Type *data, long count)
+	void sort(Type *data, long before_first, long after_last)
 	{
+		long count = after_last - (before_first + 1);
 		const long minimum_chunk_size = 5;
 		long asymptotic_chunk_size = (long)(count / Heuristics::log_log_n(count));
 		long unclamped_chunk_size = std::max(minimum_chunk_size, asymptotic_chunk_size);
 		long chunk_size = std::min(count, unclamped_chunk_size);
-		sort<Type>(data, -1, count, chunk_size); // NOTE: count = after_last; -1 is before_first
+		sort<Type>(data, before_first, after_last, chunk_size);
 	}
 }

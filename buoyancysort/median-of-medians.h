@@ -11,11 +11,11 @@ namespace MedianOfMedians
 	/// <param name="Type">The type of data being sorted.</param>
 	/// <param name="tuple_size">The max number of elements sorted (e.g. 5) in each group/tuple.</param>
 	/// <param name="data">A pointer to a contiguous array of data.</param>
-	/// <param name="first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element at the start of the range to be partitioned.</param>
+	/// <param name="before_first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-before the start of the range to be partitioned.</param>
 	/// <param name="after_last">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-past the end of the range to be partitioned.</param>
 	/// <returns>An index into the <see cref="MedianOfMedians::partition(data)"> representing the "median of medians", which approximates the true median.</returns>
-	template <typename Type, int tuple_size>
-	std::size_t median_of_medians(Type *data, std::size_t first, std::size_t after_last)
+	template <typename Type, long tuple_size>
+	long median_of_medians(Type *data, long before_first, long after_last)
 	{
 
 	}
@@ -30,7 +30,7 @@ namespace MedianOfMedians
 	/// <param name="before_first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element at the start of the range to be partitioned.</param>
 	/// <param name="after_last">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-past the end of the range to be partitioned.</param>
 	/// <returns>An index into the <see cref="MedianOfMedians::partition(data)"> representing an approximation of the "median of medians" (which itself is an approximation of the median).</returns>
-	template <typename Type, int run_size>
+	template <typename Type, long run_size>
 	long medianplex3(Type *data, long before_first, long after_last)
 	{
 		// if n <= e.g. 13 then INSERTION-SORT and return median
@@ -42,6 +42,7 @@ namespace MedianOfMedians
 		}
 		else
 		{
+			// TODO: OPTIMIZE: since this can only happen on first iteration
 			bool even_size = (size % 2 == 0); // you have to be careful with size 0
 			if (even_size)
 			{
@@ -61,9 +62,8 @@ namespace MedianOfMedians
 		// if n % 6 == 3 then <n/3><n/3><n/3>
 		// if n % 6 == 5 then <n/3><n/3+2><n/3>
 		// if n % 6 == 1 then <n/3+1><n/3-1><n/3+1>
-
 		long remainder = size % 6;
-		long one_third = before_first + size/3;
+		long one_third = (before_first+1) + size/3;
 		long two_thirds = one_third + size/3;
 		if (remainder == 5)
 		{
@@ -105,7 +105,7 @@ namespace MedianOfMedians
 	/// <param name="first">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element at the start of the range to be partitioned.</param>
 	/// <param name="after_last">An index into the <see cref="MedianOfMedians::partition(data)"> representing the element one-past the end of the range to be partitioned.</param>
 	/// <returns>An index into the <see cref="MedianOfMedians::partition(data)"> representing an approximation of the "median of medians" (which itself is an approximation of the median).</returns>
-	template <typename Type, int run_size>
+	template <typename Type, long run_size>
 	long medianplex5(Type *data, long before_first, long after_last)
 	{
 		// if n <= e.g. 13 then INSERTION-SORT and return median
@@ -140,7 +140,7 @@ namespace MedianOfMedians
 		// if n % 10 == 3 then <n/5+1><n/5+1><n/5-1><n/5+1><n/5+1> // you can sort of see how numbers cascade into higher dimensions
 
 		long remainder = size % 10;
-		long one_fifth = before_first + size / 5;
+		long one_fifth = (before_first + 1) + size / 5;
 		long two_fifths = one_fifth + size / 5;
 		long three_fifths = two_fifths + size / 5;
 		long four_fifths = three_fifths + size / 5;

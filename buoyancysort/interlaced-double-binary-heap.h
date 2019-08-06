@@ -245,6 +245,7 @@ namespace InterlacedDoubleBinaryHeap
 		}
 	}
 
+	/// STATUS: believed to be final. No changes pending.
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{

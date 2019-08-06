@@ -15,7 +15,7 @@ namespace InsertionSort
 	{
 		for (long cursor = before_first + 2; cursor < after_last; cursor += 1)
 		{
-			InsertionSort::insert_from_right(data, before_first + 1, cursor);
+			InsertionSort::insert_from_right(data, before_first, cursor);
 		}
 	}
 
@@ -59,6 +59,7 @@ namespace InsertionSort
 		const double starting_inversion_budget = 6; // log_2(64)==6
 		double budget_allowance = starting_inversion_budget;
 		long budget_milestone = 64;
+		long budget_marker = 1;
 		double inversion_budget_exceeded = 0;
 		long unsorted_index = after_last - 2;
 		while (unsorted_index > before_first)
@@ -66,11 +67,12 @@ namespace InsertionSort
 			inversion_budget_exceeded -= InsertionSort::insert_from_left(data, unsorted_index, after_last);
 			inversion_budget_exceeded += budget_allowance;
 			unsorted_index -= 1;
+			budget_marker += 1;
 			if (inversion_budget_exceeded < 0)
 			{
 				break;
 			}
-			if (unsorted_index >= budget_milestone)
+			if (budget_marker >= budget_milestone)
 			{
 				// amortize the budget across the next n elements encountered (64, 128, 256...)
 				budget_allowance = ((budget_milestone * 2) * budget_heuristic_function(budget_milestone * 2) - (budget_milestone) * budget_heuristic_function(budget_milestone)) / budget_milestone;
@@ -94,6 +96,7 @@ namespace InsertionSort
 		const double starting_inversion_budget = 6; // log_2(64)==6
 		double budget_allowance = starting_inversion_budget;
 		long budget_milestone = 64;
+		long budget_marker = 1;
 		double inversion_budget_exceeded = 0;
 		long unsorted_index = before_first + 2;
 		while (unsorted_index < after_last)
@@ -101,11 +104,12 @@ namespace InsertionSort
 			inversion_budget_exceeded -= InsertionSort::insert_from_right(data, before_first, unsorted_index);
 			inversion_budget_exceeded += budget_allowance;
 			unsorted_index += 1;
+			budget_marker += 1;
 			if (inversion_budget_exceeded < 0)
 			{
 				break;
 			}
-			if (unsorted_index >= budget_milestone)
+			if (budget_marker >= budget_milestone)
 			{
 				// amortize the budget across the next n elements encountered (64, 128, 256...)
 				budget_allowance = ((budget_milestone * 2) * budget_heuristic_function(budget_milestone * 2) - (budget_milestone) * budget_heuristic_function(budget_milestone)) / budget_milestone;
