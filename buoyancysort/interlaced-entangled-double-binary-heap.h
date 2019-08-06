@@ -43,42 +43,11 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		if (data[left_child] > data[right_child])
 		{
 			std::swap(data[left_child], data[right_child]);
-			if (cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust))
-			{
-				long left_child_of_right_child = MinHeap::left_child(right_child, before_first);
-				long right_child_of_right_child = left_child_of_right_child + 1;
-				// Avoid a subtle bug when no children exist (or only one)
-				bool invalid_left = (left_child_of_right_child < after_last && data[right_child] > data[left_child_of_right_child]);
-				bool invalid_right = (right_child_of_right_child < after_last && data[right_child] > data[right_child_of_right_child]);
-				if (invalid_left || invalid_right)
-				{
-					InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust, false);
-					dubious_min_nodes[depth_matrix[right_child - before_first]].push_back(right_child);
-					// TODO: topple all parent nodes
-				}
-			}
-			// look at two corresponding elements in max heap and consider toppling them
-			/*
-			while (dubious_node > root)
-			{
-				if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
-				{
-					long topple_child_cursor = dubious_node;
-					long topple_parent_cursor = MaxHeap::parent(topple_child_cursor, after_last);
-					if (data[topple_child_cursor] > data[topple_parent_cursor])
-					{
-						while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust))
-						{
-							next_dubious_max_nodes[depth_matrix[after_last - topple_parent_cursor]].push_back(topple_parent_cursor);
-							set_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
-							topple_child_cursor = topple_parent_cursor;
-							topple_parent_cursor = MaxHeap::parent(topple_parent_cursor, after_last);
-						}
-					}
-				}
-				dubious_node = MinHeap::parent(dubious_node, before_first);
-			}
-			*/
+			verify_min_stability(data, before_first, after_last, right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			// if max node 1's parent is valid (not root)
+				// verify_max_stability(data, before_first, after_last, *blah*, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			// if max node 2's parent isn't redundant (~50% chance)
+				// verify_max_stability(data, before_first, after_last, *blah*, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 		}
 	}
 
