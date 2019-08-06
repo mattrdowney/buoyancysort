@@ -9,6 +9,30 @@
 namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's still interesting to develop
 {
 	template <typename Type>
+	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+		if (cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		{
+			long left_child = MinHeap::left_child(root, before_first);
+			long right_child = left_child + 1;
+			// Avoid a subtle bug when no children exist (or only one)
+			bool invalid_left = (left_child < after_last && data[root] > data[left_child]);
+			bool invalid_right = (right_child < after_last && data[root] > data[right_child]);
+			if (invalid_left || invalid_right)
+			{
+				InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust, false);
+				dubious_min_nodes[depth_matrix[root - before_first]].push_back(root);
+				// TODO: topple all parent nodes
+			}
+		}
+	}
+
+	template <typename Type>
+	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+	}
+
+	template <typename Type>
 	void sort_min_siblings(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
 		// compare/sort siblings  (invalidating both sides of heap where necessary)
@@ -18,11 +42,22 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		long right_child = left_child + 1;
 		if (data[left_child] > data[right_child])
 		{
-			if (!InterlacedDoubleBinaryHeap::actually_test_most_basic_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust))
+			std::swap(data[left_child], data[right_child]);
+			if (cached_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust))
 			{
-				InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust, false);
-				dubious_min_nodes[depth_matrix[right_child - before_first]].push_back(right_child);
+				long left_child_of_right_child = MinHeap::left_child(right_child, before_first);
+				long right_child_of_right_child = left_child_of_right_child + 1;
+				// Avoid a subtle bug when no children exist (or only one)
+				bool invalid_left = (left_child_of_right_child < after_last && data[right_child] > data[left_child_of_right_child]);
+				bool invalid_right = (right_child_of_right_child < after_last && data[right_child] > data[right_child_of_right_child]);
+				if (invalid_left || invalid_right)
+				{
+					InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust, false);
+					dubious_min_nodes[depth_matrix[right_child - before_first]].push_back(right_child);
+					// TODO: topple all parent nodes
+				}
 			}
+			// look at two corresponding elements in max heap and consider toppling them
 			/*
 			while (dubious_node > root)
 			{
