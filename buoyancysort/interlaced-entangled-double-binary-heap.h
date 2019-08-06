@@ -8,6 +8,54 @@
 // NOTE: "dubious" and "trusty" are references to Dijkstra's smoothsort.
 namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's still interesting to develop
 {
+	template <typename Type>
+	void sort_min_siblings(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+		// compare/sort siblings  (invalidating both sides of heap where necessary)
+		// remember to update: 1) trusty_matrix (both sides), 2) dubious_min/max_nodes
+
+		long left_child = MinHeap::left_child(root, before_first);
+		long right_child = left_child + 1;
+		if (data[left_child] > data[right_child])
+		{
+			if (!InterlacedDoubleBinaryHeap::actually_test_most_basic_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust))
+			{
+				InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, right_child, min_right_line_of_implicit_trust, false);
+				dubious_min_nodes[depth_matrix[right_child - before_first]].push_back(right_child);
+			}
+			/*
+			while (dubious_node > root)
+			{
+				if (cached_trust_max_node(before_first, after_last, trusty_matrix, dubious_node, max_left_line_of_implicit_trust))
+				{
+					long topple_child_cursor = dubious_node;
+					long topple_parent_cursor = MaxHeap::parent(topple_child_cursor, after_last);
+					if (data[topple_child_cursor] > data[topple_parent_cursor])
+					{
+						while (cached_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust))
+						{
+							next_dubious_max_nodes[depth_matrix[after_last - topple_parent_cursor]].push_back(topple_parent_cursor);
+							set_trust_max_node(before_first, after_last, trusty_matrix, topple_parent_cursor, max_left_line_of_implicit_trust, false);
+							topple_child_cursor = topple_parent_cursor;
+							topple_parent_cursor = MaxHeap::parent(topple_parent_cursor, after_last);
+						}
+					}
+				}
+				dubious_node = MinHeap::parent(dubious_node, before_first);
+			}
+			*/
+		}
+	}
+
+	template <typename Type>
+	void sort_max_siblings(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	{
+		// compare/sort siblings  (invalidating both sides of heap where necessary)
+		// remember to update: 1) trusty_matrix (both sides), 2) dubious_min/max_nodes
+
+
+	}
+
 	/// STATUS: 100% believed to be final and not a copy-paste error. -9999 changes pending.
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
@@ -50,27 +98,24 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 					while (min_iterator < max_iterator)
 					{
 						max_iterator -= 1;
-						//sort_max_siblings()
+						sort_max_siblings(data, before_first, after_last, dubious_max_siblings[depth][max_iterator], trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					while (min_iterator > max_iterator)
 					{
 						min_iterator -= 1;
-						//sort_min_siblings()
+						sort_min_siblings(data, before_first, after_last, dubious_min_siblings[depth][min_iterator], trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					while (min_iterator > 0)
 					{
 						min_iterator -= 1;
 						max_iterator -= 1;
-						//sort_min_siblings()
-						//sort_max_siblings()
+						sort_min_siblings(data, before_first, after_last, dubious_min_siblings[depth][min_iterator], trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+						sort_max_siblings(data, before_first, after_last, dubious_max_siblings[depth][max_iterator], trusty_matrix, depth_matrix, dubious_min_nodes, dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 					}
 					dubious_min_siblings[depth].clear();
 					dubious_max_siblings[depth].clear();
 				}
 			}
-
-			// compare/sort siblings  (invalidating both sides of heap where necessary)
-			// remember to update: 1) trusty_matrix (both sides), 2) dubious_min/max_nodes, 3) [at the end] dubious_min/max_siblings
 
 			// copy dubious_min/max_nodes into dubious_min/max_siblings (attempt to avoid a memory leak)
 			for (long depth = 0; depth < dubious_min_siblings.size(); depth += 1)
