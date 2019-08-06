@@ -83,6 +83,9 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		std::vector<std::vector<long>> dubious_min_siblings(dubious_min_nodes); // Attempting deep copy, which is important because this...
 		std::vector<std::vector<long>> dubious_max_siblings(dubious_max_nodes); // ... is a vector<vector>(the inner vectors are .clear()'ed)
 
+		// TODO: remove the one node without a sibling on each side (if it exists)
+		// this is a cheap O(1) -- VERIFY: would this actually mean less work in sort()? You probably can still re-add the node later (I should probably play it safe)
+
 		while (true)
 		{
 			InterlacedDoubleBinaryHeap::build(data, before_first, after_last,
