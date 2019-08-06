@@ -155,6 +155,7 @@
     <ClInclude Include="hoare-partition.h" />
     <ClInclude Include="insertion-sort.h" />
     <ClInclude Include="interlaced-double-binary-heap.h" />
+    <ClInclude Include="interlaced-entangled-double-binary-heap.h" />
     <ClInclude Include="max-heap.h" />
     <ClInclude Include="median-heap.h" />
     <ClInclude Include="median-of-medians.h" />

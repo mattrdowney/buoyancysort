@@ -63,6 +63,9 @@
     <ClInclude Include="print.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="interlaced-entangled-double-binary-heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

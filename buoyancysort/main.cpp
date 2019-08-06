@@ -23,7 +23,7 @@ int main()
 	}
 
 	Print::print((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
-	/*
+	
 	HeapTests::test_min_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	HeapTests::test_max_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
@@ -33,18 +33,7 @@ int main()
 
 	HeapTests::test_min_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	HeapTests::test_max_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
-	*/
-
-	HeapTests::test_min_heap<int>((int*)data, -1 + 10, (std::size_t)(sizeof(data) / sizeof(data[0])) - 10);
-	HeapTests::test_max_heap<int>((int*)data, -1 + 10, (std::size_t)(sizeof(data) / sizeof(data[0])) - 10);
-
-	InterlacedDoubleBinaryHeap::build<int>((int*)data, -1 + 10, (std::size_t)(sizeof(data) / sizeof(data[0])) - 10);
-
-	Print::print((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
-
-	HeapTests::test_min_heap<int>((int*)data, -1 + 10, (std::size_t)(sizeof(data) / sizeof(data[0])) - 10);
-	HeapTests::test_max_heap<int>((int*)data, -1 + 10, (std::size_t)(sizeof(data) / sizeof(data[0])) - 10);
-
+	
 	char word;
 	std::cin >> word;
 	return 0;

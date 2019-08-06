@@ -247,23 +247,16 @@ namespace InterlacedDoubleBinaryHeap
 
 	/// STATUS: believed to be final. No changes pending.
 	template <typename Type>
-	void build(Type *data, long before_first, long after_last)
+	void build(Type *data, long before_first, long after_last,
+		std::vector<bool> &trusty_matrix,
+		std::vector<char> &depth_matrix,
+		std::vector<std::vector<long>> &dubious_min_nodes,
+		std::vector<std::vector<long>> &dubious_max_nodes,
+		std::vector<std::vector<long>> &next_dubious_min_nodes,
+		std::vector<std::vector<long>> &next_dubious_max_nodes,
+		long &min_right_line_of_implicit_trust,
+		long &max_left_line_of_implicit_trust)
 	{
-		std::vector<bool> trusty_matrix;
-		std::vector<char> depth_matrix;
-		std::vector<std::vector<long>> dubious_min_nodes;
-		std::vector<std::vector<long>> dubious_max_nodes;
-		std::vector<std::vector<long>> next_dubious_min_nodes;
-		std::vector<std::vector<long>> next_dubious_max_nodes;
-		long min_right_line_of_implicit_trust = 0; // a heap's bottom half (i.e. the elements with no children) is implicitly trusted
-		long max_left_line_of_implicit_trust = 0; // when on a line of trust (equal to), a node is still trusted
-
-		initialize(before_first, after_last,
-				trusty_matrix, depth_matrix,
-				dubious_min_nodes, dubious_max_nodes,
-				next_dubious_min_nodes, next_dubious_max_nodes,
-				min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-
 		while (true)
 		{
 			Print::print(data, before_first, after_last);
@@ -324,5 +317,31 @@ namespace InterlacedDoubleBinaryHeap
 			dubious_min_nodes.swap(next_dubious_min_nodes);
 			dubious_max_nodes.swap(next_dubious_max_nodes);
 		}
+	}
+
+	/// STATUS: believed to be final. No changes pending.
+	template <typename Type>
+	void build(Type *data, long before_first, long after_last)
+	{
+		std::vector<bool> trusty_matrix;
+		std::vector<char> depth_matrix;
+		std::vector<std::vector<long>> dubious_min_nodes;
+		std::vector<std::vector<long>> dubious_max_nodes;
+		std::vector<std::vector<long>> next_dubious_min_nodes;
+		std::vector<std::vector<long>> next_dubious_max_nodes;
+		long min_right_line_of_implicit_trust = 0; // a heap's bottom half (i.e. the elements with no children) is implicitly trusted
+		long max_left_line_of_implicit_trust = 0; // when on a line of trust (equal to), a node is still trusted
+
+		initialize(before_first, after_last,
+				trusty_matrix, depth_matrix,
+				dubious_min_nodes, dubious_max_nodes,
+				next_dubious_min_nodes, next_dubious_max_nodes,
+				min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+
+		build(data, before_first, after_last,
+				trusty_matrix, depth_matrix,
+				dubious_min_nodes, dubious_max_nodes,
+				next_dubious_min_nodes, next_dubious_max_nodes,
+				min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 	}
 }
