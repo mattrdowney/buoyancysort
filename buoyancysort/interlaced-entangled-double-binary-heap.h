@@ -59,29 +59,53 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 	template <typename Type>
 	void sort_min_siblings(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		// compare/sort siblings  (invalidating both sides of heap where necessary)
-		// remember to update: 1) trusty_matrix (both sides), 2) dubious_min/max_nodes
-
 		long left_child = MinHeap::left_child(root, before_first);
 		long right_child = left_child + 1;
-		if (data[left_child] > data[right_child])
+		if (right_child < after_last && data[left_child] > data[right_child])
 		{
 			std::swap(data[left_child], data[right_child]);
 			verify_min_stability(data, before_first, after_last, right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-			// if max node 1's parent is valid (not root)
-				// verify_max_stability(data, before_first, after_last, *blah*, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
-			// if max node 2's parent isn't redundant (~50% chance)
-				// verify_max_stability(data, before_first, after_last, *blah*, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			if (right_child != after_last - 1)
+			{
+				long max_parent_of_left_child = MaxHeap::parent(left_child, after_last);
+				long max_parent_of_right_child = MaxHeap::parent(right_child, after_last);
+				verify_max_stability(data, before_first, after_last, max_parent_of_left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+				if (max_parent_of_left_child != max_parent_of_right_child)
+				{
+					verify_max_stability(data, before_first, after_last, max_parent_of_right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+				}
+			}
+			else // verify true root (i.e. after_last - 1)
+			{
+				verify_max_stability(data, before_first, after_last, after_last-1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			}
 		}
 	}
 
 	template <typename Type>
 	void sort_max_siblings(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		// compare/sort siblings  (invalidating both sides of heap where necessary)
-		// remember to update: 1) trusty_matrix (both sides), 2) dubious_min/max_nodes
-
-
+		long right_child = MaxHeap::right_child(root, after_last);
+		long left_child = right_child - 1;
+		if (before_first < left_child && data[left_child] > data[right_child])
+		{
+			std::swap(data[left_child], data[right_child]);
+			verify_max_stability(data, before_first, after_last, left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			if (left_child != before_first + 1)
+			{
+				long min_parent_of_left_child = MinHeap::parent(left_child, before_first);
+				long min_parent_of_right_child = MinHeap::parent(right_child, before_first);
+				verify_min_stability(data, before_first, after_last, min_parent_of_left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+				if (min_parent_of_left_child != min_parent_of_right_child)
+				{
+					verify_min_stability(data, before_first, after_last, min_parent_of_right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+				}
+			}
+			else // verify true root (i.e. before_first + 1)
+			{
+				verify_min_stability(data, before_first, after_last, before_first + 1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			}
+		}
 	}
 
 	/// STATUS: 100% believed to be final and not a copy-paste error. -9999 changes pending.
