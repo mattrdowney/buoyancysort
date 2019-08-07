@@ -48,7 +48,7 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				long topple_cursor = root;
 				while (InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust))
 				{
-					next_dubious_min_nodes[depth_matrix[after_last - topple_cursor]].push_back(topple_cursor);
+					next_dubious_max_nodes[depth_matrix[after_last - topple_cursor]].push_back(topple_cursor);
 					InterlacedDoubleBinaryHeap::set_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust, false);
 					topple_cursor = MaxHeap::parent(topple_cursor, after_last);
 				}
@@ -80,6 +80,13 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				verify_max_stability(data, before_first, after_last, after_last-1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 			}
 		}
+		/*
+		if (InterlacedDoubleBinaryHeap::test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		{
+			next_dubious_min_nodes[depth_matrix[root - before_first]].push_back(root);
+			InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust, false);
+		}
+		*/
 	}
 
 	template <typename Type>
@@ -106,6 +113,13 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				verify_min_stability(data, before_first, after_last, before_first + 1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 			}
 		}
+		/*
+		if (InterlacedDoubleBinaryHeap::test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
+		{
+			next_dubious_max_nodes[depth_matrix[after_last - root]].push_back(root);
+			InterlacedDoubleBinaryHeap::set_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust, false);
+		}
+		*/
 	}
 
 	/// STATUS: 100% believed to be final and not a copy-paste error. -9999 changes pending.
