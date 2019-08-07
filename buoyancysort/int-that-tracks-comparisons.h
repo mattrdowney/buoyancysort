@@ -36,6 +36,11 @@ namespace IntThatTracksComparisons
 		return comparison_counter;
 	}
 
+	void reset_comparisons()
+	{
+		comparison_counter = 0;
+	}
+
 	bool operator== (const IntThatTracksComparisons &left, const IntThatTracksComparisons &right)
 	{
 		comparison_counter += 1;
