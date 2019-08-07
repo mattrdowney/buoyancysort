@@ -154,6 +154,7 @@
     <ClInclude Include="hierarchysort.h" />
     <ClInclude Include="hoare-partition.h" />
     <ClInclude Include="insertion-sort.h" />
+    <ClInclude Include="int-that-tracks-comparisons.h" />
     <ClInclude Include="interlaced-double-binary-heap.h" />
     <ClInclude Include="interlaced-entangled-double-binary-heap.h" />
     <ClInclude Include="max-heap.h" />
