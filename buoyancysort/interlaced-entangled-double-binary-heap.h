@@ -11,7 +11,7 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 	template <typename Type>
 	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		if (cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		if (InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
 		{
 			long left_child = MinHeap::left_child(root, before_first);
 			long right_child = left_child + 1;
@@ -20,9 +20,14 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 			bool invalid_right = (right_child < after_last && data[root] > data[right_child]);
 			if (invalid_left || invalid_right)
 			{
-				InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust, false);
-				dubious_min_nodes[depth_matrix[root - before_first]].push_back(root);
-				// TODO: topple all parent nodes
+				// topple the current root and all parent nodes
+				long topple_cursor = root;
+				while (InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, topple_cursor, min_right_line_of_implicit_trust))
+				{
+					next_dubious_min_nodes[depth_matrix[topple_cursor - before_first]].push_back(topple_cursor);
+					InterlacedDoubleBinaryHeap::set_trust_min_node(before_first, after_last, trusty_matrix, topple_cursor, min_right_line_of_implicit_trust, false);
+					topple_cursor = MinHeap::parent(topple_cursor, before_first);
+				}
 			}
 		}
 	}
@@ -30,6 +35,25 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 	template <typename Type>
 	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
+		if (InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
+		{
+			long right_child = MaxHeap::right_child(root, after_last);
+			long left_child = right_child - 1;
+			// Avoid a subtle bug when no children exist (or only one)
+			bool invalid_left = (before_first < left_child && data[left_child] > data[root]);
+			bool invalid_right = (before_first < right_child && data[right_child] > data[root]);
+			if (invalid_left || invalid_right)
+			{
+				// topple the current root and all parent nodes
+				long topple_cursor = root;
+				while (InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust))
+				{
+					next_dubious_min_nodes[depth_matrix[after_last - topple_cursor]].push_back(topple_cursor);
+					InterlacedDoubleBinaryHeap::set_trust_max_node(before_first, after_last, trusty_matrix, topple_cursor, max_left_line_of_implicit_trust, false);
+					topple_cursor = MaxHeap::parent(topple_cursor, after_last);
+				}
+			}
+		}
 	}
 
 	template <typename Type>
