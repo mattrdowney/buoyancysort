@@ -173,15 +173,15 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 			}
 
 			// copy dubious_min/max_nodes into dubious_min/max_siblings (attempt to avoid a memory leak)
-			for (long depth = 0; depth < dubious_min_siblings.size(); depth += 1)
+			for (std::size_t depth = 0; depth < dubious_min_siblings.size(); depth += 1)
 			{
-				for (long min_iterator = 0; min_iterator < dubious_min_nodes[depth].size(); min_iterator += 1)
+				for (std::size_t min_iterator = 0; min_iterator < dubious_min_nodes[depth].size(); min_iterator += 1)
 				{
-					dubious_min_siblings.push_back(dubious_min_nodes[depth][min_iterator]);
+					dubious_min_siblings[depth].push_back(dubious_min_nodes[depth][min_iterator]);
 				}
-				for (long max_iterator = 0; max_iterator < dubious_max_nodes[depth].size(); max_iterator += 1)
+				for (std::size_t max_iterator = 0; max_iterator < dubious_max_nodes[depth].size(); max_iterator += 1)
 				{
-					dubious_max_siblings.push_back(dubious_max_nodes[depth][max_iterator]);
+					dubious_max_siblings[depth].push_back(dubious_max_nodes[depth][max_iterator]);
 				}
 			}
 

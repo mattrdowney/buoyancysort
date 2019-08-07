@@ -9,6 +9,7 @@
 #include "hoare-partition.h"
 #include "median-of-medians.h"
 #include "interlaced-double-binary-heap.h"
+#include "interlaced-entangled-double-binary-heap.h"
 #include "print.h"
 
 int main()
@@ -27,7 +28,7 @@ int main()
 	HeapTests::test_min_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 	HeapTests::test_max_heap<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
-	InterlacedDoubleBinaryHeap::build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
+	InterlacedEntangledDoubleBinaryHeap::build<int>((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
 	Print::print((int*)data, -1, (std::size_t)(sizeof(data) / sizeof(data[0])));
 
