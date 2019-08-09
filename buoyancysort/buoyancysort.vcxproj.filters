@@ -75,6 +75,9 @@
     <ClInclude Include="sift.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="spindle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

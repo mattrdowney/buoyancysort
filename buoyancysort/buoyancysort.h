@@ -14,13 +14,25 @@ namespace Buoyancysort
 	template <typename Type>
 	void sort(Type *data, long before_first, long after_last, long chunk_size)
 	{
-		if ((after_last - (before_first + 1)) <= 1)
+		long size = (after_last - (before_first + 1));
+		if (size <= 1)
 		{
 			return;
 		}
+
+		Sift::leftward_sift(data, before_first, after_last);
+		Sift::rightward_sift(data, before_first + 1, after_last);
+		// The following lines guarantee that the "Binary Spindle" always has an even size, which is important for its "Alignment" property.
+		if ((size % 2) == 0)
+		{
+			before_first += 1;
+			size -= 1;
+		}
+		after_last -= 1;
+		size -= 1;
 		InterlacedDoubleBinaryHeap::build(data, before_first, after_last);
 		// once you reach a O(N/lglgN) fraction of the original array
-		if ((after_last - (before_first + 1)) <= chunk_size)
+		if (size <= chunk_size)
 		{
 			Hierarchysort::sort(data, before_first, after_last);
 			return;
@@ -35,12 +47,12 @@ namespace Buoyancysort
 
 		long first_detected_inversion = InsertionSort::lazy_rightward_sort(data, before_first, after_last, Heuristics::log_log_n);
 		long inversion_finder = std::min(MinHeap::right_child(first_detected_inversion - 1, before_first) + 1, after_last); // TODO: VERIFY: especially because of +0/+1 indexing differences (e.g. off-by-ones or unsigned underflow)
-		BubbleSort::leftward_pass(data, first_detected_inversion - 1, inversion_finder);
+		Sift::leftward_sift(data, first_detected_inversion - 1, inversion_finder); // CONSIDER: BubbleSort::leftward_pass() instead?
 		long new_before_first = InsertionSort::insert_from_right(data, before_first, first_detected_inversion); // omitting " - 1" is intentional
 		
 		long last_detected_inversion = InsertionSort::lazy_leftward_sort(data, new_before_first, after_last, Heuristics::log_log_n);
 		inversion_finder = std::max(MaxHeap::left_child(first_detected_inversion + 1, after_last) - 1, new_before_first); // TODO: VERIFY: especially because of +0/+1 indexing differences (e.g. off-by-ones or unsigned underflow)
-		BubbleSort::rightward_pass(data, inversion_finder, last_detected_inversion + 1);
+		Sift::rightward_sift(data, inversion_finder, last_detected_inversion + 1); // CONSIDER: BubbleSort::rightward_pass() instead?
 		long new_after_last = InsertionSort::insert_from_left(data, last_detected_inversion, after_last);
 
 		// Get approximation of "median of medians"

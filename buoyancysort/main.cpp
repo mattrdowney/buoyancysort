@@ -16,6 +16,7 @@
 #include "print.h"
 #include "reverse.h"
 #include "sift.h"
+#include "spindle.h"
 
 //typedef int current_type;
 typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
@@ -42,7 +43,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Sift::leftward_sift<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	Spindle::build<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
