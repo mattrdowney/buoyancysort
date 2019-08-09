@@ -24,7 +24,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	HeapTests::heap_tests();
-	const std::size_t size = 101;
+	const std::size_t size = 10000;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
 	for (std::size_t i = 0; i < size; i += 1)

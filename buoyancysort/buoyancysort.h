@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <assert.h>
 #include <math.h>
 #include <stddef.h>
 #include "bubble-sort.h"
@@ -30,7 +31,13 @@ namespace Buoyancysort
 		}
 		after_last -= 1;
 		size -= 1;
-		InterlacedDoubleBinaryHeap::build(data, before_first, after_last);
+		// size=0 might cause a critical failure
+		if (size <= 1)
+		{
+			return;
+		}
+		assert(((after_last - (before_first + 1)) % 2) == 0);
+		Spindle::build(data, before_first, after_last);
 		// once you reach a O(N/lglgN) fraction of the original array
 		if (size <= chunk_size)
 		{
