@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include "insertion-sort.h"
 #include "reverse.h"
 
 namespace Sift
@@ -14,7 +13,7 @@ namespace Sift
 	/// <param name="before_first">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-before the start of the range to be sifted.</param>
 	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sifted.</param>
 	template <typename Type>
-	void leftward_sift(Type *data, long before_first, long after_last) // Notably, this version of sift could be "worse", so I should keep that in mind.
+	void leftward_sift(Type *data, long before_first, long after_last) // Notably, this version of sift could be "worse", so I should keep that in mind. (e.g. 9 8 7 6 4 3 2 1 5 would have been sorted by the old algorithm but not the new one)
 	{
 		long minimum_cursor = after_last - 1;
 		while (before_first + 1 < minimum_cursor)

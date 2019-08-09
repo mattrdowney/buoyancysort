@@ -42,7 +42,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Sift::rightward_sift<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	Sift::leftward_sift<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
