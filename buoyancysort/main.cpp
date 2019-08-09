@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include <algorithm>
 #include <iostream>
+#include <random>
 #include "bubble-sort.h"
 #include "buoyancysort.h"
 #include "heap-tests.h"
@@ -29,6 +31,10 @@ int main()
 		data[i] = size - i;
 	}
 
+	std::random_device random_device;
+	std::mt19937 random_number_generator(random_device());
+	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+
 	Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 	
 	HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
@@ -36,7 +42,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Sift::leftward_sift<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	Sift::rightward_sift<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
