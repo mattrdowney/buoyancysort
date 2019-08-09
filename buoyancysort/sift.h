@@ -29,9 +29,7 @@ namespace Sift
 					{
 						sequence_cursor -= 1;
 					}
-					Reverse::reverse(data, sequence_cursor, minimum_cursor);
-					// You reverse the minimum_cursor element, so you have to insert it from the opposite side
-					InsertionSort::insert_from_left(data, sequence_cursor, minimum_cursor + 1);
+					Reverse::reverse(data, sequence_cursor, minimum_cursor-1);
 				}
 				else // <
 				{
@@ -40,8 +38,9 @@ namespace Sift
 					{
 						sequence_cursor -= 1;
 					}
-					InsertionSort::insert_from_right(data, sequence_cursor - 1, minimum_cursor);
 				}
+				// You reverse the minimum_cursor element, so you have to insert it from the opposite side
+				InsertionSort::insert_from_right(data, sequence_cursor - 1, minimum_cursor);
 				minimum_cursor = sequence_cursor;
 			}
 			else // only one remaining element that hasn't been compared to minimum // TODO: I think it would be simpler if I removed this case and recompared minimum_cursor
@@ -78,9 +77,7 @@ namespace Sift
 					{
 						sequence_cursor += 1;
 					}
-					Reverse::reverse(data, maximum_cursor, sequence_cursor);
-					// You reverse the minimum_cursor element, so you have to insert it from the opposite side
-					InsertionSort::insert_from_right(data, maximum_cursor - 1, sequence_cursor);
+					Reverse::reverse(data, maximum_cursor + 1, sequence_cursor);
 				}
 				else // <
 				{
@@ -89,8 +86,8 @@ namespace Sift
 					{
 						sequence_cursor += 1;
 					}
-					InsertionSort::insert_from_left(data, maximum_cursor, sequence_cursor + 1);
 				}
+				InsertionSort::insert_from_left(data, maximum_cursor, sequence_cursor + 1);
 				maximum_cursor = sequence_cursor;
 			}
 			else // only one remaining element that hasn't been compared to maximum
