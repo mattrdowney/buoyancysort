@@ -69,6 +69,12 @@
     <ClInclude Include="int-that-tracks-comparisons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="reverse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sift.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
