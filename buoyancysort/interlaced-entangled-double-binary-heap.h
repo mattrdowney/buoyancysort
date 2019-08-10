@@ -9,16 +9,20 @@
 namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's still interesting to develop
 {
 	template <typename Type>
-	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust, bool always = false)
 	{
-		if (root < min_right_line_of_implicit_trust && InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		if (root < min_right_line_of_implicit_trust && (always || InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust)))
 		{
 			long left_child = MinHeap::left_child(root, before_first);
 			long right_child = left_child + 1;
+			if (always == false)
+			{
+				verify_max_stability(data, before_first, after_last, MaxHeap::parent(left_child, after_last), trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
+			}
 			// Avoid a subtle bug when no children exist (or only one)
 			bool invalid_left = (left_child < after_last && data[root] > data[left_child]);
 			bool invalid_right = (right_child < after_last && data[root] > data[right_child]);
-			if (invalid_left || invalid_right)
+			if (always || invalid_left || invalid_right)
 			{
 				// topple the current root and all parent nodes
 				long topple_cursor = root;
@@ -33,16 +37,20 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 	}
 
 	template <typename Type>
-	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
+	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust, bool always = false)
 	{
-		if (root > max_left_line_of_implicit_trust && InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
+		if (root > max_left_line_of_implicit_trust && (always || InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust)))
 		{
 			long right_child = MaxHeap::right_child(root, after_last);
 			long left_child = right_child - 1;
+			if (always == false)
+			{
+				verify_min_stability(data, before_first, after_last, MinHeap::parent(right_child, before_first), trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
+			}
 			// Avoid a subtle bug when no children exist (or only one)
 			bool invalid_left = (before_first < left_child && data[left_child] > data[root]);
 			bool invalid_right = (before_first < right_child && data[right_child] > data[root]);
-			if (invalid_left || invalid_right)
+			if (always || invalid_left || invalid_right)
 			{
 				// topple the current root and all parent nodes
 				long topple_cursor = root;
