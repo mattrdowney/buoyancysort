@@ -179,5 +179,18 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				break;
 			}
 		}
+
+		// The fix isn't quite this easy
+		/*
+		// The implicitly trusted nodes may not fulfill the "Alignment" property, so sort them.
+		for (long left_sibling = before_first + 2; left_sibling + 1 < after_last; left_sibling += 2)
+		{
+			long right_sibling = left_sibling + 1;
+			if (data[left_sibling] > data[right_sibling])
+			{
+				std::swap(data[left_sibling], data[right_sibling]);
+			}
+		}
+		*/
 	}
 }
