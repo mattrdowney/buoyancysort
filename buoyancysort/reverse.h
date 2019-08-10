@@ -95,4 +95,6 @@ namespace Reverse
 	// Originally this was intended to be a dumb sort, but I might make it smarter
 	// Notable things that could be used 1) binary search 2) AB => BA by reverse(reverse(A)reverse(B))
 	// Thus, this would be very similar to TimSort in that you would get a bunch of "runs" and just merge them through reversals
+	// At the same time, if I decide to do this implementation it will be nearly identical to in-place merging (which history has shown I am bad at).
+	// The main goal here is to create a sorting algorithm that performs reasonably well on small sort sizes (<10k elements).
 }

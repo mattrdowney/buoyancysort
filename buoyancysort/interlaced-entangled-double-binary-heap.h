@@ -9,16 +9,16 @@
 namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's still interesting to develop
 {
 	template <typename Type>
-	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust, bool always = false)
+	void verify_min_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		if (always || InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
+		if (root < min_right_line_of_implicit_trust && InterlacedDoubleBinaryHeap::cached_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
 		{
 			long left_child = MinHeap::left_child(root, before_first);
 			long right_child = left_child + 1;
 			// Avoid a subtle bug when no children exist (or only one)
 			bool invalid_left = (left_child < after_last && data[root] > data[left_child]);
 			bool invalid_right = (right_child < after_last && data[root] > data[right_child]);
-			if (always || invalid_left || invalid_right)
+			if (invalid_left || invalid_right)
 			{
 				// topple the current root and all parent nodes
 				long topple_cursor = root;
@@ -33,16 +33,16 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 	}
 
 	template <typename Type>
-	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust, bool always = false)
+	void verify_max_stability(Type *data, long before_first, long after_last, long root, std::vector<bool> &trusty_matrix, std::vector<char> &depth_matrix, std::vector<std::vector<long>> &next_dubious_min_nodes, std::vector<std::vector<long>> &next_dubious_max_nodes, long min_right_line_of_implicit_trust, long max_left_line_of_implicit_trust)
 	{
-		if (always || InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
+		if (root > max_left_line_of_implicit_trust && InterlacedDoubleBinaryHeap::cached_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
 		{
 			long right_child = MaxHeap::right_child(root, after_last);
 			long left_child = right_child - 1;
 			// Avoid a subtle bug when no children exist (or only one)
 			bool invalid_left = (before_first < left_child && data[left_child] > data[root]);
 			bool invalid_right = (before_first < right_child && data[right_child] > data[root]);
-			if (always || invalid_left || invalid_right)
+			if (invalid_left || invalid_right)
 			{
 				// topple the current root and all parent nodes
 				long topple_cursor = root;
@@ -64,21 +64,8 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		if (right_child < after_last && data[left_child] > data[right_child])
 		{
 			std::swap(data[left_child], data[right_child]);
-			verify_min_stability(data, before_first, after_last, right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-			if (right_child != after_last - 1)
-			{
-				long max_parent_of_left_child = MaxHeap::parent(left_child, after_last);
-				long max_parent_of_right_child = MaxHeap::parent(right_child, after_last);
-				verify_max_stability(data, before_first, after_last, max_parent_of_left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-				if (max_parent_of_left_child != max_parent_of_right_child)
-				{
-					verify_max_stability(data, before_first, after_last, max_parent_of_right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-				}
-			}
-			else // verify true root (i.e. after_last - 1)
-			{
-				verify_max_stability(data, before_first, after_last, after_last-1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-			}
+			verify_min_stability(data, before_first, after_last, right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			verify_max_stability(data, before_first, after_last, left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 		}
 		/*
 		if (InterlacedDoubleBinaryHeap::test_trust_min_node(before_first, after_last, trusty_matrix, root, min_right_line_of_implicit_trust))
@@ -97,21 +84,8 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		if (before_first < left_child && data[left_child] > data[right_child])
 		{
 			std::swap(data[left_child], data[right_child]);
-			verify_max_stability(data, before_first, after_last, left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-			if (left_child != before_first + 1)
-			{
-				long min_parent_of_left_child = MinHeap::parent(left_child, before_first);
-				long min_parent_of_right_child = MinHeap::parent(right_child, before_first);
-				verify_min_stability(data, before_first, after_last, min_parent_of_left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-				if (min_parent_of_left_child != min_parent_of_right_child)
-				{
-					verify_min_stability(data, before_first, after_last, min_parent_of_right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-				}
-			}
-			else // verify true root (i.e. before_first + 1)
-			{
-				verify_min_stability(data, before_first, after_last, before_first + 1, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust, true);
-			}
+			verify_max_stability(data, before_first, after_last, left_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
+			verify_min_stability(data, before_first, after_last, right_child, trusty_matrix, depth_matrix, next_dubious_min_nodes, next_dubious_max_nodes, min_right_line_of_implicit_trust, max_left_line_of_implicit_trust);
 		}
 		/*
 		if (InterlacedDoubleBinaryHeap::test_trust_max_node(before_first, after_last, trusty_matrix, root, max_left_line_of_implicit_trust))
@@ -144,6 +118,7 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 
 		std::vector<std::vector<long>> dubious_min_siblings(dubious_min_nodes); // Attempting deep copy, which is important because this...
 		std::vector<std::vector<long>> dubious_max_siblings(dubious_max_nodes); // ... is a vector<vector>(the inner vectors are .clear()'ed)
+		// OPTIMIZE: (blah blah blah) they're "Aligned"; you're doing twice the work.
 
 		// TODO: remove the one node without a sibling on each side (if it exists)
 		// this is a cheap O(1) -- VERIFY: would this actually mean less work in sort()? You probably can still re-add the node later (I should probably play it safe)
