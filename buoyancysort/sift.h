@@ -100,4 +100,18 @@ namespace Sift
 			}
 		}
 	}
+
+	/// <summary>
+	/// Mutator - SiftSort values in the range (before_first, after_last). Since it only uses Reverse on decreasing ranges and otherwise uses InsertionSort, it is a stable algorithm.
+	/// </summary>
+	/// <param name="Type">The type of data being sorted.</param>
+	/// <param name="data">A pointer to a contiguous array of data.</param>
+	/// <param name="before_first">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-before the start of the range to be sifted.</param>
+	/// <param name="after_last">An index into the <see cref="InsertionSort::sort(data)"> representing the element one-past the end of the range to be sifted.</param>
+	template <typename Type>
+	void sort(Type *data, long before_first, long after_last)
+	{
+		// I would implement this like Cocktail Shaker Sort
+		// I would use similar optimizations (e.g. removing more than one sorted element at the ends on each pass)
+	}
 }
