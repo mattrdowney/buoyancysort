@@ -38,10 +38,10 @@ int main()
 	*/
 	Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 	
-	HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 
 	IntThatTracksComparisons::reset_comparisons();
 

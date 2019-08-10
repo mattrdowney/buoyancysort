@@ -5,6 +5,7 @@
 #include "min-heap.h"
 #include "max-heap.h"
 
+// NOTE: this might be slightly superlinear in the worst case. As the algorithm has progressed, the 100 versus 10000 cases have had slightly divergent runtimes. Is this actually a problem? Probably not because the data becomes more sorted over time with a sorted array taking a linear amount of time (duh). At the same time, the algorithm isn't quite done, so it's possible it'll go from 100->2'200, 10'000-> 25'000 to 100->2'200, 10'000-> 44'000 (also notable, I haven't really spent any time optimizing, since I just need a proof of concept).
 // NOTE: "dubious" and "trusty" are references to Dijkstra's smoothsort.
 namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's still interesting to develop
 {
@@ -104,7 +105,6 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		*/
 	}
 
-	/// STATUS: 100% believed to be final and not a copy-paste error. -9999 changes pending.
 	template <typename Type>
 	void build(Type *data, long before_first, long after_last)
 	{
@@ -127,9 +127,6 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 		std::vector<std::vector<long>> dubious_min_siblings(dubious_min_nodes); // Attempting deep copy, which is important because this...
 		std::vector<std::vector<long>> dubious_max_siblings(dubious_max_nodes); // ... is a vector<vector>(the inner vectors are .clear()'ed)
 		// OPTIMIZE: (blah blah blah) they're "Aligned"; you're doing twice the work.
-
-		// TODO: remove the one node without a sibling on each side (if it exists)
-		// this is a cheap O(1) -- VERIFY: would this actually mean less work in sort()? You probably can still re-add the node later (I should probably play it safe)
 
 		while (true)
 		{
@@ -182,28 +179,10 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				}
 			}
 
-			// Extend the definition of dubious_min/max_siblings to include "implicitly trusted" nodes.
-			// You can do this by going through the lowest "depths" and seeing if there are any children in that region
-			// I think as long as my implementation is only a little dumb, it should not change the time complexity beyond a constant factor
-			// (e.g. I have to check two leaf/child nodes, but that could only multiply the time complexity by 3 in the worst case.)
-
 			if (!change_attempted)
 			{
 				break;
 			}
 		}
-
-		// The fix isn't quite this easy
-		/*
-		// The implicitly trusted nodes may not fulfill the "Alignment" property, so sort them.
-		for (long left_sibling = before_first + 2; left_sibling + 1 < after_last; left_sibling += 2)
-		{
-			long right_sibling = left_sibling + 1;
-			if (data[left_sibling] > data[right_sibling])
-			{
-				std::swap(data[left_sibling], data[right_sibling]);
-			}
-		}
-		*/
 	}
 }
