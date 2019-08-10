@@ -174,6 +174,11 @@ namespace InterlacedEntangledDoubleBinaryHeap // even if this doesn't work, it's
 				}
 			}
 
+			// Extend the definition of dubious_min/max_siblings to include "implicitly trusted" nodes.
+			// You can do this by going through the lowest "depths" and seeing if there are any children in that region
+			// I think as long as my implementation is only a little dumb, it should not change the time complexity beyond a constant factor
+			// (e.g. I have to check two leaf/child nodes, but that could only multiply the time complexity by 3 in the worst case.)
+
 			if (!change_attempted)
 			{
 				break;
