@@ -164,6 +164,7 @@
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="reverse.h" />
+    <ClInclude Include="shell-sort.h" />
     <ClInclude Include="sift.h" />
     <ClInclude Include="spindle.h" />
     <ClInclude Include="stdafx.h" />

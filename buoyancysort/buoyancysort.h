@@ -10,15 +10,6 @@
 #include "interlaced-double-binary-heap.h"
 #include "median-of-medians.h"
 
-// An important question remains:
-// "What is buoyancysort's goal?"
-// I generally agree with a previous answer of mine,
-// That buoyancysort is meant to shatter the asymptotic time complexity of O(nlgn) [if that's even possible]
-// But, at the same time, buoyancysort is a reflection of how I like to think about sorting (and I can't disentangle that piece).
-// Ultimately, I am more interested in creating buoyancysort around how I want to sort data, rather than some grandiose sort.
-// A good example is the first_detected_inversion ... inversion_finder code:
-// The way I implement this, it will likely pose trouble to performance but it does improve the best-case performance
-// So, more than likely this code won't be anywhere near perfect (just like me)
 namespace Buoyancysort
 {
 	template <typename Type>
@@ -30,22 +21,6 @@ namespace Buoyancysort
 			return;
 		}
 
-		Sift::leftward_sift(data, before_first, after_last);
-		Sift::rightward_sift(data, before_first + 1, after_last);
-		// The following lines guarantee that the "Binary Spindle" always has an even size, which is important for its "Alignment" property.
-		if ((size % 2) == 0)
-		{
-			before_first += 1;
-			size -= 1;
-		}
-		after_last -= 1;
-		size -= 1;
-		// size=0 might cause a critical failure
-		if (size <= 1)
-		{
-			return;
-		}
-		assert(((after_last - (before_first + 1)) % 2) == 0);
 		Spindle::build(data, before_first, after_last);
 		// once you reach a O(N/lglgN) fraction of the original array
 		if (size <= chunk_size)
