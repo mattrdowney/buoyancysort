@@ -25,6 +25,27 @@ namespace ShellSort
 		}
 	}
 
+	// If you don't want to use the operating system's stack, then this would hypothetically be a good option.
+	template <typename Type>
+	void lazy_sort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
+	{
+		// Start with InsertionSort::lazy_leftward_sort(data, before_first, after_last, [](long n){return 2*n;});
+		// If done, return
+		// Otherwise lazily shell sort, the first iteration might be straightforward-ish, but the rest have substantial room for optimization (in this case, I'm actually interested in optimizing)
+		// Optimization: keep track of the leftmost "first unsorted" node
+		// Optimization: increase function (gap sequence number) when a threshold like 2n has been crossed.
+		//    NOTE: why is this important? You don't want to sort in e.g. O(nlglgn) when the same work could be done in O(k)
+		// Optimization: any time an insertion happens you can probably ignore the gap number and just count the number of insertions
+		// Optimization(?): you could consider having thresholds go forwards and backwards (gap sequence number can reduce as well depending on budget)
+		//    E.g. if items are sorted within a range of 64 places of their correct position and the gap sequence number of 65 continuously fails, then the number should reduce accordingly.
+		//    Similarly if the gap sequence number is 5 and it often shifts 10 places (50 among the 64) then the order should be increased accordingly.
+		// When you hit the end, you start from the "first unsorted" node and scan forwards with a gap sequence number of 1 again.
+		//    If you ever hit the end with a gap sequence of 1, then the series is sorted.
+		// A node is eligible to be a "first unsorted" node when it is inserted with a gap number other than 1 (because it could be imprecise).
+		// When you increase the gap sequence number, you have a guarantee you have travelled a substantial distance, so subtracting the difference between the next gap number and the current gap number should not go out of bounds (although you should still do boundary checking because it should fail occasionally).
+		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
+	}
+
 	std::vector<long> ciura_gap_sequence = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // NOTE: 1750 is an (un-official?) extension
 	// I think I was wrong about the square_root(5) part, I think the number I'm looking for might be slightly larger.
 

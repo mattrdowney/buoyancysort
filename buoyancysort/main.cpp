@@ -47,7 +47,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::ciura_gap_sequence);
+	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::ciura_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_prime_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence1);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence2);
@@ -55,7 +55,7 @@ int main()
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence2);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence3);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::two_and_a_quarter_silver_ratio_gap_sequence);
-	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence_with_memory);
+	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence_with_memory);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
