@@ -25,7 +25,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	HeapTests::heap_tests();
-	const std::size_t size = 42;
+	const std::size_t size = 2000;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
 	for (std::size_t i = 0; i < size; i += 1)
@@ -54,7 +54,8 @@ int main()
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence1);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence2);
 	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence3);
-	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::two_and_a_quarter_silver_ratio_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::two_and_a_quarter_silver_ratio_gap_sequence);
+	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence_with_memory);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 

@@ -44,4 +44,11 @@ namespace ShellSort
 	// I would need to do more testing to know, and this (generally) isn't worth thinking about, but I can't help being curious here.
 	// I feel like this principle would be a little better if it were dynamic while preserving the rest of the behavior
 	// (e.g. starting with ~N/sqrt([ratio]) and finding the next largest silver ratio, then decreasing by a factor of [ratio] and finding the next silver ratio on each iteration thereafter -- just be wary of infinite loops towards the end).
+
+	// NOTE: maybe the reason two_and_a_quarter works better than sqrt(5) is different:
+	// I'm assuming the ratio at n=i has no knowledge of the ratio at n=i-1, but that's something that it probably should have a knowledge of (otherwise the ratio would vary based on the other function).
+	// This means I should probably consider trying these other variants
+
+	std::vector<long> root_five_silver_ratio_gap_sequence_with_memory = { 2029, 904, 404, 173, 68, 29, 13, 5, 1 };
+	// This is my best version so far. Algorithm: n_i = next_silver_integer(floor(sqrt(5)*n_i-1))
 }
