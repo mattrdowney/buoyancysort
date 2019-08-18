@@ -47,29 +47,17 @@ namespace ShellSort
 	}
 
 	std::vector<long> ciura_gap_sequence = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // NOTE: 1750 is an (un-official?) extension
-	// I think I was wrong about the square_root(5) part, I think the number I'm looking for might be slightly larger.
 
-	std::vector<long> root_five_prime_gap_sequence = { 631, 281, 127, 59, 29, 13, 5, 3, 1 };
+	std::vector<long> root_five_silver_integer_with_memory_gap_sequence = { 117653, 52445, 23413, 10408, 4628, 2029, 904, 404, 173, 68, 29, 13, 5, 1 };
+	// This is my best version so far. Algorithm: N(i) = next_silver_integer(floor(sqrt(5)*N(i-1)))
+	// Performance on N=100'000 objects -- 714'668'030 comparisons (which is pretty good -- ~27588015.7 comparisons would be expected for N*lg(N)^2 (this is ~26x that number))
+	// I feel like this gap sequence has a performance of N*lg(N)^3 (although I could easily be wrong).
 
-	std::vector<long> root_five_silver_ratio_gap_sequence1 = { 1448, 629, 293, 125, 68, 29, 13, 5, 1 }; // this does ceil without epsilon // NOTE: misuse of the word "silver ratio"
-	std::vector<long> root_five_silver_ratio_gap_sequence2 = { 1448, 629, 293, 148, 68, 29, 13, 5, 1 }; // this does ceil with epsilon // closest to competing with ciura_gap_sequence (but still seems worse)
-
-	std::vector<long> root_five_gap_sequence1 = { 624, 278, 124, 54, 24, 10, 4, 1 };
-	std::vector<long> root_five_gap_sequence2 = { 625, 279, 125, 55, 25, 11, 5, 1 };
-	std::vector<long> root_five_gap_sequence3 = { 625, 280, 125, 56, 12, 5, 3, 1 };
-
-	std::vector<long> two_and_a_quarter_silver_ratio_gap_sequence = { 1525, 680, 293, 148, 68, 29, 13, 5, 1 };
-	// I like this sequence; it seems to beat ciura_gap_sequence when you set the max gap sequence values (i.e. the largest) to be identical (which I consider a fair-er fight)
-	// The 2.25 value might still be an underestimate, or maybe the ratio isn't static over time (I'm not going to guess which theory is correct)
-	// E.g. if you take the Wikipedia example (different random order of https://en.wikipedia.org/wiki/Shellsort#/media/File:Sorting_shellsort_anim.gif 's size-42 array) with or without a fair-er fight (i.e. replacing 29 with 23) my version slightly out-performs either way.
-	// I would need to do more testing to know, and this (generally) isn't worth thinking about, but I can't help being curious here.
-	// I feel like this principle would be a little better if it were dynamic while preserving the rest of the behavior
-	// (e.g. starting with ~N/sqrt([ratio]) and finding the next largest silver ratio, then decreasing by a factor of [ratio] and finding the next silver ratio on each iteration thereafter -- just be wary of infinite loops towards the end).
-
-	// NOTE: maybe the reason two_and_a_quarter works better than sqrt(5) is different:
-	// I'm assuming the ratio at n=i has no knowledge of the ratio at n=i-1, but that's something that it probably should have a knowledge of (otherwise the ratio would vary based on the other function).
-	// This means I should probably consider trying these other variants
-
-	std::vector<long> root_five_silver_ratio_gap_sequence_with_memory = { 2029, 904, 404, 173, 68, 29, 13, 5, 1 };
-	// This is my best version so far. Algorithm: n_i = next_silver_integer(floor(sqrt(5)*n_i-1))
+	// I know this gap sequence is supposedly N*lg(N)^2, but I'd still like to test it myself. Unfortunately, I don't feel like figuring out more 3-smooth numbers (can't find any more online).
+	std::vector<long> pratt_three_smooth_gap_sequence = // hopefully there are no typos
+	{
+		3888, 3456, 3072, 2916, 2592, 2304, 2187, 2048, 1944, 1728, 1536, 1458, 1296, 1152, 1024, 972, 864,
+		768, 729, 648, 576, 512, 486, 432, 384, 324, 288, 256, 243, 216, 192, 162, 144, 128, 108, 96, 81, 72, 64, 54, 48, 36, 32, 27,
+		24, 18, 16, 12, 9, 8, 6, 4, 3, 2, 1
+	};
 }

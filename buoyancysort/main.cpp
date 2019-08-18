@@ -25,7 +25,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	HeapTests::heap_tests();
-	const std::size_t size = 2000;
+	const std::size_t size = 10000;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
 	for (std::size_t i = 0; i < size; i += 1)
@@ -35,10 +35,10 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(0);
+	random_number_generator.seed(1);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
@@ -47,24 +47,18 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::ciura_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_prime_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence1);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence2);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence1);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence2);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_gap_sequence3);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::two_and_a_quarter_silver_ratio_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_ratio_gap_sequence_with_memory);
-
+	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::ciura_gap_sequence);
+	ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::root_five_silver_integer_with_memory_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])), ShellSort::pratt_three_smooth_gap_sequence);
+	
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
-	Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 
-	HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
 	
 	std::cout << comparisons << std::endl;
 
