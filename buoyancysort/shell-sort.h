@@ -75,6 +75,7 @@ namespace ShellSort
 	// The thing that interests me the most here is that the performance seems to start at O(N*lg(N)^2) and devolve to O(N*lg(N)^3).
 
 	std::vector<long> intuition_based_testing_gap_sequence3 = { 509, 253, 125, 61, 29, 13, 5, 3, 1 }; // powers of 2 minus 3
+	// This works well against tokuda_gap_sequence
 
 	std::vector<long> tokuda_gap_sequence =
 	{
@@ -82,5 +83,9 @@ namespace ShellSort
 		345152, 153401, 68178, 30301, 13467, 5985, 2660, 1182, 525, 233, 103, 46, 20, 9, 4, 1
 	};
 
-	std::vector<long> two_and_a_quarter_silver_integer_with_memory_gap_sequence = { 11453, 5045, 2213, 965, 404, 173, 68, 29, 11, 5, 1 };
+	std::vector<long> two_and_a_quarter_silver_integer_with_memory_gap_sequence = { 11453, 5045, 2213, 965, 404, 173, 68, 29, 13, 5, 1 };
+
+	std::vector<long> two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence = { 11467, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1 };
+	// This works well against ciura_gap_sequence
+
 }
