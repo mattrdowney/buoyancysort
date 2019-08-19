@@ -39,30 +39,29 @@ int main()
 	random_number_generator.seed(0);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	//Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//Print::print((current_type*)data, -1, size);
 	
-	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size);
+	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size);
+	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size);
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size);
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Spindle::build<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	Spindle::build<current_type>((current_type*)data, -1, size);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
-	Print::print((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	Print::print((current_type*)data, -1, size);
 
-	HeapTests::test_min_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, (sizeof(data) / sizeof(data[0])));
+	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size);
+	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size);
+	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size);
+	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size);
 	
 	std::cout << comparisons << std::endl;
 	float cost_per_element = ((float)comparisons) / size;
-	float log2_N = std::log2(size);
-	std::cout << (std::log2(cost_per_element)/std::log2(log2_N)) << std::endl;
+	std::cout << cost_per_element << std::endl;
 
 	char word;
 	std::cin >> word;
