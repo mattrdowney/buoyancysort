@@ -49,7 +49,8 @@ namespace ShellSort
 	std::vector<long> ciura_gap_sequence = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // NOTE: 1750 is an (un-official?) extension
 
 	std::vector<long> root_five_silver_integer_with_memory_gap_sequence = { 117653, 52445, 23413, 10408, 4628, 2029, 904, 404, 173, 68, 29, 13, 5, 1 };
-	// This is my best version so far. Algorithm: N(i) = next_silver_integer(floor(sqrt(5)*N(i-1)))
+	// This is my best version so far. Algorithm: N(i) = (ceil(sqrt(floor(N(i-1)*sqrt(5))-4)))^2+4
+	// In abstract it multiplies by sqrt(5) and gets the next number of the form n^2 + 4 (a "silver integer" from a silver ratio)
 	// Performance on N=100'000 objects -- 714'668'030 comparisons (which is pretty good -- ~27588015.7 comparisons would be expected for N*lg(N)^2 (this is ~26x that number))
 	// I feel like this gap sequence has a performance of N*lg(N)^3 (although I could easily be wrong).
 
@@ -60,4 +61,26 @@ namespace ShellSort
 		768, 729, 648, 576, 512, 486, 432, 384, 324, 288, 256, 243, 216, 192, 162, 144, 128, 108, 96, 81, 72, 64, 54, 48, 36, 32, 27,
 		24, 18, 16, 12, 9, 8, 6, 4, 3, 2, 1
 	};
+
+	std::vector<long> fibonacci_silver_integer_gap_sequence = { 2029, 1229, 733, 445, 260, 148, 85, 53, 29, 13, 5, 1 };
+
+	std::vector<long> root_five_primes_with_memory_gap_sequence = { 8923, 3989, 1777, 787, 347, 151, 67, 29, 11, 5, 1 };
+
+	std::vector<long> root_five_silver_integer_with_memory_prioritize_primes_gap_sequence = { 733, 365, 173, 68, 29, 13, 5, 1 };
+
+	std::vector<long> intuition_based_testing_gap_sequence1 = { 732, 327, 146, 65, 29, 13, 5, 1 }; // only focusing on sqrt(5) factor after 29
+	std::vector<long> intuition_based_testing_gap_sequence2 = { 965, 409, 173, 71, 29, 13, 5, 1 }; // alternating between primes and "silver integers" after 29
+	// This algorithm (which on ~half of all iterations finds the next prime) seems to do a little better.
+
+	// The thing that interests me the most here is that the performance seems to start at O(N*lg(N)^2) and devolve to O(N*lg(N)^3).
+
+	std::vector<long> intuition_based_testing_gap_sequence3 = { 509, 253, 125, 61, 29, 13, 5, 3, 1 }; // powers of 2 minus 3
+
+	std::vector<long> tokuda_gap_sequence =
+	{
+		1147718700, 510097200, 226709866, 100759940, 44782196, 19903198, 8845866, 3931496, 1747331, 776591,
+		345152, 153401, 68178, 30301, 13467, 5985, 2660, 1182, 525, 233, 103, 46, 20, 9, 4, 1
+	};
+
+	std::vector<long> two_and_a_quarter_silver_integer_with_memory_gap_sequence = { 11453, 5045, 2213, 965, 404, 173, 68, 29, 11, 5, 1 };
 }
