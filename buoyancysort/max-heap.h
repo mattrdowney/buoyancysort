@@ -9,21 +9,21 @@ namespace MaxHeap
 	template <typename Type>
 	Type parent(Type child, Type center, long tuple_size = 2)
 	{
-		return (child - center + 2) / tuple_size + center - 1;
+		return (child - center + 1) / tuple_size + center;
 	}
 
 	/// -1/0 - based
 	template <typename Type>
 	Type left_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center - 1;
+		return (parent - center) * tuple_size + center - tuple_size;
 	}
 
 	/// -1/0 - based
 	template <typename Type>
 	Type right_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return left_child(parent, center, tuple_size) + (tuple_size - 1);
+		return (parent - center) * tuple_size + center - 1;
 	}
 
 	// WARNING: A signed type is neccessary here.
@@ -34,19 +34,10 @@ namespace MaxHeap
 		if (before_first < right) // OPTIMIZATION: early return
 		{
 			long largest = root;
-			if (data[right] > data[largest]) // OPTIMIZATION: right is larger than (or equal to) left in sorted order
-			{
-				largest = right;
-			}
 			long left = std::max(left_child(root, after_last, tuple_size), before_first + 1);
-			for (long sibling = right - 1; sibling > left; sibling -= 2) // amusing "OPTIMIZATION": compare pairs of siblings to ~ halve the number of comparisons; you can create a comparison tree (but that requires extra overhead).
+			for (long child = right; child >= left; child -= 1) // OPTIMIZATION: right is larger than (or equal to) left in sorted order
 			{
-				long largest_sibling = (data[sibling - 1] > data[sibling] ? sibling - 1 : sibling);
-				largest = (data[largest] > data[largest_sibling] ? largest : largest_sibling);
-			}
-			if ((tuple_size % 2) == 0) // You have an extra sibling that has to be compared with a little extra overhead.
-			{
-				largest = (data[largest] > data[left] ? largest : left);
+				largest = (data[largest] >= data[child] ? largest : child);
 			}
 			if (largest != root)
 			{

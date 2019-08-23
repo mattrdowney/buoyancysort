@@ -8,21 +8,23 @@ namespace MinHeap
 	template <typename Type>
 	Type parent(Type child, Type center, long tuple_size = 2)
 	{
-		return (child - center - 2) / tuple_size + center + 1;
+		return (child - center - 1) / tuple_size + center;
 	}
 
 	/// 0/+1 - based
 	template <typename Type>
 	Type left_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return right_child(parent, center, tuple_size) - (tuple_size - 1);
+		return (parent - center) * tuple_size + center + 1;
 	}
+
+	//1 [2-6] [7-11] [12-16] [17-21] [22-26]
 
 	/// 0/+1 - based
 	template <typename Type>
 	Type right_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center + 1;
+		return (parent - center) * tuple_size + center + tuple_size;
 	}
 
 	// WARNING: A signed type is neccessary here.
@@ -33,19 +35,10 @@ namespace MinHeap
 		if (left < after_last) // OPTIMIZATION: early return
 		{
 			long smallest = root;
-			if (data[left] < data[smallest]) // OPTIMIZATION: left is smaller than (or equal to) right in sorted order
-			{
-				smallest = left;
-			}
 			long right = std::min(right_child(root, before_first, tuple_size), after_last - 1);
-			for (long sibling = left + 1; sibling < right; sibling += 2) // amusing "OPTIMIZATION": compare pairs of siblings to ~ halve the number of comparisons; you can create a comparison tree (but that requires extra overhead).
+			for (long child = left; child <= right; child += 1) // OPTIMIZATION: left is smaller than (or equal to) right in sorted order
 			{
-				long smallest_sibling = (data[sibling - 1] < data[sibling] ? sibling - 1 : sibling);
-				smallest = (data[smallest] < data[smallest_sibling] ? smallest : smallest_sibling);
-			}
-			if ((tuple_size % 2) == 0) // You have an extra sibling that has to be compared with a little extra overhead.
-			{
-				smallest = (data[smallest] < data[right] ? smallest : right);
+				smallest = (data[smallest] <= data[child] ? smallest : child);
 			}
 			if (smallest != root)
 			{
