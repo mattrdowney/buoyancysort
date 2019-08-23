@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <stddef.h>
 
 namespace MaxHeap
@@ -27,9 +28,9 @@ namespace MaxHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	long heapify(Type *data, long before_first, long after_last, long root)
+	long heapify(Type *data, long before_first, long after_last, long root, long tuple_size = 2)
 	{
-		long right = right_child(root, after_last); // NOTE: signed type required or underflow can happen
+		long right = right_child(root, after_last, tuple_size); // NOTE: signed type required or underflow can happen
 		if (before_first < right) // OPTIMIZATION: early return
 		{
 			long largest = root;
@@ -37,10 +38,15 @@ namespace MaxHeap
 			{
 				largest = right;
 			}
-			long left = right - 1;
-			if (before_first < left && data[left] > data[largest])
+			long left = std::max(left_child(root, after_last, tuple_size), before_first + 1);
+			for (long sibling = right - 1; sibling > left; sibling -= 2) // amusing "OPTIMIZATION": compare pairs of siblings to ~ halve the number of comparisons; you can create a comparison tree (but that requires extra overhead).
 			{
-				largest = left;
+				long largest_sibling = (data[sibling - 1] > data[sibling] ? sibling - 1 : sibling);
+				largest = (data[largest] > data[largest_sibling] ? largest : largest_sibling);
+			}
+			if ((tuple_size % 2) == 0) // You have an extra sibling that has to be compared with a little extra overhead.
+			{
+				largest = (data[largest] > data[left] ? largest : left);
 			}
 			if (largest != root)
 			{
@@ -53,12 +59,12 @@ namespace MaxHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build(Type *data, long before_first, long after_last)
+	void build(Type *data, long before_first, long after_last, long tuple_size = 2)
 	{
-		long max_heapify_from = parent(before_first+1, after_last);
+		long max_heapify_from = parent(before_first+1, after_last, tuple_size);
 		while (max_heapify_from < after_last)
 		{
-			heapify(data, before_first, after_last, max_heapify_from);
+			heapify(data, before_first, after_last, max_heapify_from, tuple_size);
 			max_heapify_from += 1;
 		}
 	}

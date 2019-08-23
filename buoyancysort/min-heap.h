@@ -27,20 +27,25 @@ namespace MinHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	long heapify(Type *data, long before_first, long after_last, long root)
+	long heapify(Type *data, long before_first, long after_last, long root, long tuple_size = 2)
 	{
 		long left = left_child(root, before_first);
 		if (left < after_last) // OPTIMIZATION: early return
 		{
 			long smallest = root;
-			if (data[smallest] > data[left]) // OPTIMIZATION: left is smaller than (or equal to) right in sorted order
+			if (data[left] < data[smallest]) // OPTIMIZATION: left is smaller than (or equal to) right in sorted order
 			{
 				smallest = left;
 			}
-			long right = left + 1;
-			if (right < after_last && data[smallest] > data[right])
+			long right = std::min(right_child(root, before_first, tuple_size), after_last - 1);
+			for (long sibling = left + 1; sibling < right; sibling += 2) // amusing "OPTIMIZATION": compare pairs of siblings to ~ halve the number of comparisons; you can create a comparison tree (but that requires extra overhead).
 			{
-				smallest = right;
+				long smallest_sibling = (data[sibling - 1] < data[sibling] ? sibling - 1 : sibling);
+				smallest = (data[smallest] < data[smallest_sibling] ? smallest : smallest_sibling);
+			}
+			if ((tuple_size % 2) == 0) // You have an extra sibling that has to be compared with a little extra overhead.
+			{
+				smallest = (data[smallest] < data[right] ? smallest : right);
 			}
 			if (smallest != root)
 			{
@@ -53,12 +58,12 @@ namespace MinHeap
 
 	// WARNING: A signed type is neccessary here.
 	template <typename Type>
-	void build(Type *data, long before_first, long after_last)
+	void build(Type *data, long before_first, long after_last, long tuple_size = 2)
 	{
-		long min_heapify_from = parent(after_last-1, before_first);
+		long min_heapify_from = parent(after_last-1, before_first, tuple_size);
 		while (min_heapify_from > before_first)
 		{
-			heapify(data, before_first, after_last, min_heapify_from);
+			heapify(data, before_first, after_last, min_heapify_from, tuple_size);
 			min_heapify_from -= 1;
 		}
 	}

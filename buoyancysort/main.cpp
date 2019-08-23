@@ -26,7 +26,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	HeapTests::heap_tests();
-	const std::size_t size = 20000;
+	const std::size_t size = 30;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
 	for (std::size_t i = 0; i < size; i += 1)
@@ -42,22 +42,22 @@ int main()
 	Print::print((current_type*)data, -1, size);
 	
 	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, 5);
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
+	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
 	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, 5);
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Spindle::build<current_type>((current_type*)data, -1, size);
+	MinHeap::build<current_type>((current_type*)data, -1, size, 5);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
 	Print::print((current_type*)data, -1, size);
 
 	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, 5);
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
+	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
 	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, 5);
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
 	
 	std::cout << comparisons << std::endl;
 	float cost_per_element = ((float)comparisons) / size;
