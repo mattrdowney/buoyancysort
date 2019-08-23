@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <assert.h>
 #include <iostream>
 #include "min-heap.h"
@@ -9,131 +10,106 @@
 namespace HeapTests // The amount of namespaces is basically parody at this point
 {
 	template <typename Type>
-	void test_min_heap(Type *data, long before_first, long after_last, long parent)
+	void test_min_heap(Type *data, long before_first, long after_last, long parent, long tuple_size)
 	{
-		long left_child = MinHeap::left_child(parent, before_first);
-		if (left_child < after_last)
+		long left_child = MinHeap::left_child(parent, before_first, tuple_size);
+		long right_child = std::min(MinHeap::right_child(parent, before_first, tuple_size), after_last - 1);
+		for (int child = left_child; child <= right_child; child += 1)
 		{
-			if (data[parent] > data[left_child])
+			if (data[parent] > data[child])
 			{
-				std::cout << "[ " << data[parent] << " (@" << parent << ") > " << data[left_child] << " (@" << left_child << ") ], ";
+				std::cout << "[ " << data[parent] << " (@" << parent << ") > " << data[child] << " (@" << child << ") ], ";
 			}
-			test_min_heap(data, before_first, after_last, left_child);
-		}
-		long right_child = MinHeap::right_child(parent, before_first);
-		if (right_child < after_last)
-		{
-			if (data[parent] > data[right_child])
-			{
-				std::cout << "[ " << data[parent] << " (@" << parent << ") > " << data[right_child] << " (@" << right_child << ") ], ";
-			}
-			test_min_heap(data, before_first, after_last, right_child);
+			test_min_heap(data, before_first, after_last, child, tuple_size);
 		}
 	}
 
 	template <typename Type>
-	void test_min_heap(Type *data, long before_first, long after_last)
+	void test_min_heap(Type *data, long before_first, long after_last, long tuple_size)
 	{
 		std::cout << std::endl;
 		if (before_first + 1 < after_last)
 		{
-			test_min_heap(data, before_first, after_last, before_first + 1);
+			test_min_heap(data, before_first, after_last, before_first + 1, tuple_size);
 		}
 		std::cout << std::endl;
 	}
 
 	template <typename Type>
-	void test_min_heap_alignment(Type *data, long before_first, long after_last, long parent)
+	void test_min_heap_alignment(Type *data, long before_first, long after_last, long parent, long tuple_size)
 	{
-		long left_child = MinHeap::left_child(parent, before_first);
-		if (left_child < after_last)
+		long left_child = MinHeap::left_child(parent, before_first, tuple_size);
+		long right_child = std::min(MinHeap::right_child(parent, before_first, tuple_size), after_last - 1);
+		for (int child = left_child; child <= right_child; child += 1)
 		{
-			test_min_heap_alignment(data, before_first, after_last, left_child);
-		}
-		long right_child = MinHeap::right_child(parent, before_first);
-		if (right_child < after_last)
-		{
-			if (data[left_child] > data[right_child])
+			if (child != right_child && data[child] > data[child + 1])
 			{
-				std::cout << "[ " << data[left_child] << " (@" << left_child << ") > " << data[right_child] << " (@" << right_child << ") ], ";
+				std::cout << "[ " << data[child] << " (@" << child << ") > " << data[child + 1] << " (@" << (child + 1) << ") ], ";
 			}
-			test_min_heap_alignment(data, before_first, after_last, right_child);
+			test_min_heap_alignment(data, before_first, after_last, child, tuple_size);
 		}
 	}
 
 	template <typename Type>
-	void test_min_heap_alignment(Type *data, long before_first, long after_last)
+	void test_min_heap_alignment(Type *data, long before_first, long after_last, long tuple_size)
 	{
 		std::cout << std::endl;
 		if (before_first + 1 < after_last)
 		{
-			test_min_heap_alignment(data, before_first, after_last, before_first + 1);
+			test_min_heap_alignment(data, before_first, after_last, before_first + 1, tuple_size);
 		}
 		std::cout << std::endl;
 	}
 
 	template <typename Type>
-	void test_max_heap(Type *data, long before_first, long after_last, long parent)
+	void test_max_heap(Type *data, long before_first, long after_last, long parent, long tuple_size)
 	{
-		long right_child = MaxHeap::right_child(parent, after_last);
-		if (before_first < right_child)
+		long left_child = std::max(MaxHeap::left_child(parent, after_last, tuple_size), before_first + 1);
+		long right_child = MaxHeap::right_child(parent, after_last, tuple_size);
+		for (long child = right_child; child >= left_child && child > before_first; child -= 1)
 		{
-			if (data[right_child] > data[parent])
+			if (data[child] > data[parent])
 			{
-				std::cout << "[ " << data[right_child] << " (@" << right_child << ") > " << data[parent] << " (@" << parent << ") ], ";
+				std::cout << "[ " << data[child] << " (@" << child << ") > " << data[parent] << " (@" << parent << ") ], ";
 			}
-			test_max_heap(data, before_first, after_last, right_child);
-		}
-		long left_child = MaxHeap::left_child(parent, after_last);
-		if (before_first < left_child)
-		{
-			if (data[left_child] > data[parent])
-			{
-				std::cout << "[ " << data[left_child] << " (@" << left_child << ") > " << data[parent] << " (@" << parent << ") ], ";
-			}
-			test_max_heap(data, before_first, after_last, left_child);
+			test_max_heap(data, before_first, after_last, child, tuple_size);
 		}
 	}
 
 	template <typename Type>
-	void test_max_heap(Type *data, long before_first, long after_last)
+	void test_max_heap(Type *data, long before_first, long after_last, long tuple_size)
 	{
 		std::cout << std::endl;
 		if (before_first < after_last - 1)
 		{
-			test_max_heap(data, before_first, after_last, after_last - 1);
+			test_max_heap(data, before_first, after_last, after_last - 1, tuple_size);
 		}
 		std::cout << std::endl;
 	}
 
 	// In theory max heap alignment is the same as min heap alignment but extra tests are generally good
 	template <typename Type>
-	void test_max_heap_alignment(Type *data, long before_first, long after_last, long parent)
+	void test_max_heap_alignment(Type *data, long before_first, long after_last, long parent, long tuple_size)
 	{
-		long right_child = MaxHeap::right_child(parent, after_last);
-		if (before_first < right_child)
+		long left_child = std::max(MaxHeap::left_child(parent, after_last, tuple_size), before_first + 1);
+		long right_child = MaxHeap::right_child(parent, after_last, tuple_size);
+		for (int child = right_child; child >= left_child; child -= 1)
 		{
-			test_max_heap_alignment(data, before_first, after_last, right_child);
-		}
-
-		long left_child = MaxHeap::left_child(parent, after_last);
-		if (before_first < left_child)
-		{
-			if (data[left_child] > data[right_child])
+			if (child != left_child && data[child - 1] > data[child])
 			{
-				std::cout << "[ " << data[left_child] << " (@" << left_child << ") > " << data[right_child] << " (@" << right_child << ") ], ";
+				std::cout << "[ " << data[child - 1] << " (@" << (child - 1) << ") > " << data[child] << " (@" << child << ") ], ";
 			}
-			test_max_heap_alignment(data, before_first, after_last, left_child);
+			test_max_heap_alignment(data, before_first, after_last, child, tuple_size);
 		}
 	}
 
 	template <typename Type>
-	void test_max_heap_alignment(Type *data, long before_first, long after_last)
+	void test_max_heap_alignment(Type *data, long before_first, long after_last, long tuple_size)
 	{
 		std::cout << std::endl;
 		if (before_first < after_last - 1)
 		{
-			test_max_heap_alignment(data, before_first, after_last, after_last - 1);
+			test_max_heap_alignment(data, before_first, after_last, after_last - 1, tuple_size);
 		}
 		std::cout << std::endl;
 	}

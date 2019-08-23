@@ -39,12 +39,12 @@ int main()
 	random_number_generator.seed(0);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	//Print::print((current_type*)data, -1, size);
+	Print::print((current_type*)data, -1, size);
 	
-	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size);
-	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size);
-	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size);
-	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size);
+	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
 
 	IntThatTracksComparisons::reset_comparisons();
 
@@ -54,10 +54,10 @@ int main()
 
 	Print::print((current_type*)data, -1, size);
 
-	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size);
-	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size);
-	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size);
-	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size);
+	HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, 5);
+	HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, 5);
 	
 	std::cout << comparisons << std::endl;
 	float cost_per_element = ((float)comparisons) / size;

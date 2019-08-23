@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <stddef.h>
 
-namespace ZipperSort
+namespace Fusionsort
 {
 	template <typename Type>
 	void sort(Type *data, long before_first, long after_last)

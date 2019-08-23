@@ -81,7 +81,7 @@
     <ClInclude Include="shell-sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="zipper-sort.h">
+    <ClInclude Include="fusionsort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
