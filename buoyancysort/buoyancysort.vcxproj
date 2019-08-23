@@ -161,6 +161,8 @@
     <ClInclude Include="median-heap.h" />
     <ClInclude Include="median-of-medians.h" />
     <ClInclude Include="min-heap.h" />
+    <ClInclude Include="ordered-max-heap.h" />
+    <ClInclude Include="ordered-min-heap.h" />
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="reverse.h" />

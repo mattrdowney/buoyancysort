@@ -61,19 +61,19 @@ namespace IntThatTracksComparisons
 
 	bool operator!= (const IntThatTracksComparisons &left, const IntThatTracksComparisons &right)
 	{
-		comparison_counter += 1;
+		//comparison_counter += 1; // TODO: VERIFY // amusing bug
 		return !(left == right);
 	}
 
 	bool operator> (const IntThatTracksComparisons &left, const IntThatTracksComparisons &right)
 	{
-		comparison_counter += 1;
+		//comparison_counter += 1; // TODO: VERIFY // amusing bug
 		return !(left <= right);
 	}
 
 	bool operator>= (const IntThatTracksComparisons &left, const IntThatTracksComparisons &right)
 	{
-		comparison_counter += 1;
+		//comparison_counter += 1; // TODO: VERIFY // amusing bug
 		return !(left < right);
 	}
 
