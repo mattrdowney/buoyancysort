@@ -23,7 +23,8 @@ namespace OrderedMinHeap
 
 		long array_index = 0;
 		long memset_index_begin = 1; // FIXME: This isn't quite right...
-		long memset_index_end = tuple_size;
+		long memset_index_size = 1;
+		long memset_index_end = 2;
 
 		// Because of the nature of next_power_of_k() (time complexity ~O(lg(lg(N))) I think),
 		// I have to cache the powers_of_k that are used in dubious_min/max_nodes.
@@ -47,8 +48,9 @@ namespace OrderedMinHeap
 			}
 			dubious_min_nodes[heap_depth].shrink_to_fit();
 			array_index += 1;
-			memset_index_begin *= tuple_size;
-			memset_index_end *= tuple_size;
+			memset_index_begin = memset_index_end;
+			memset_index_size *= tuple_size;
+			memset_index_end = memset_index_begin + memset_index_size;
 		}
 	}
 
