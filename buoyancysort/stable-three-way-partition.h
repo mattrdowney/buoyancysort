@@ -1,5 +1,9 @@
 #pragma once
 
+// The laziest way I can imagine implementing this:
+// iterate [left, right] and get all elements ==pivot and partition them separately to the front or back of array.
+// Do a Semi-Stable-Partition on the remainder of the array.
+// Do the Reverse(Reverse(A)Reverse(B)) strategy to get a three-way partition.
 namespace StableThreeWayPartition
 {
 	template <typename Type>

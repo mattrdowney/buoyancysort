@@ -9,6 +9,7 @@ namespace SemiStablePartition
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
 		// Ignore trivially-partitioned elements
+		// In the context of Buoyancysort/"Spindles" this is a great optimization
 		while (data[left] < pivot_value) // This is only safe if the pivot exists, since it becomes a sentinel
 		{
 			left += 1;
@@ -18,22 +19,19 @@ namespace SemiStablePartition
 			right -= 1;
 		}
 		long size = right - left + 1;
-		long less = 0;
 		long greater = 0;
+		// FIXME: cache-coherency between this step and the next step
+		// This step is super cheap (and it's not always required for 100% of elements)
 		for (int counter = left; counter <= right; counter += 1)
 		{
-			if (data[counter] < pivot_value)
-			{
-				less += 1;
-			}
-			if (data[counter] > pivot_value)
+			if (data[counter] > pivot_value) // The compiler should remove the branch prediction here.
 			{
 				greater += 1;
 			}
 		}
-		long equal = size - less - greater;
+		long less_than_or_equal = size - greater;
 		long left_cursor = left;
-		long right_cursor = left + less + equal; // In theory (and almost surely in practice) this can infinite loop (when greater == 0)
+		long right_cursor = right - greater + 1; // In theory (and almost surely in practice) this can infinite loop (when greater == 0)
 		while (right_cursor <= right)
 		{
 			while (left_cursor <= right && data[left_cursor] <= pivot_value)
