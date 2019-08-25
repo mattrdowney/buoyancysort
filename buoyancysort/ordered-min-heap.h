@@ -114,6 +114,7 @@ namespace OrderedMinHeap
 					{
 						min_iterator -= 1;
 						MinHeap::heapify(data, before_first, after_last, dubious_min_nodes[depth][min_iterator], tuple_size);
+						// If you actually want an ordered heap, you have to topple nodes here
 					}
 					dubious_min_nodes[depth].clear();
 				}

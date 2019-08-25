@@ -90,6 +90,12 @@
     <ClInclude Include="ordered-max-heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="semi-stable-partition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stable-three-way-partition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

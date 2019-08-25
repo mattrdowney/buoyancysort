@@ -166,9 +166,11 @@
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="reverse.h" />
+    <ClInclude Include="semi-stable-partition.h" />
     <ClInclude Include="shell-sort.h" />
     <ClInclude Include="sift.h" />
     <ClInclude Include="spindle.h" />
+    <ClInclude Include="stable-three-way-partition.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="fusionsort.h" />
