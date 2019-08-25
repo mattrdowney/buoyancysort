@@ -79,44 +79,6 @@ namespace InterlacedDoubleBinaryHeap
 			memset_index_begin *= 2;
 			memset_index_end *= 2;
 		}
-
-		/*
-		std::cout << depth_matrix.size();
-		std::cout << std::endl;
-		std::cout << std::endl;
-		for (bool trust : trusty_matrix)
-		{
-			std::cout << ((int)trust) << " ";
-		}
-		std::cout << std::endl;
-
-		std::cout << std::endl;
-		for (char parent : depth_matrix)
-		{
-			std::cout << ((int)parent) << " ";
-		}
-		std::cout << std::endl;
-
-		std::cout << std::endl;
-		for (std::vector<long> subarray : dubious_min_nodes)
-		{
-			for (long index : subarray)
-			{
-				std::cout << index << " ";
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-		for (std::vector<long> subarray : dubious_max_nodes)
-		{
-			for (long index : subarray)
-			{
-				std::cout << index << " ";
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-		*/
 	}
 
 	bool cached_trust_min_node(long before_first, long after_last, std::vector<bool> &trusty_matrix, long node, long min_right_line_of_implicit_trust)
@@ -261,30 +223,6 @@ namespace InterlacedDoubleBinaryHeap
 	{
 		while (true)
 		{
-			/*
-			Print::print(data, before_first, after_last);
-
-			std::cout << std::endl;
-			for (std::vector<long> subarray : dubious_min_nodes)
-			{
-				for (long index : subarray)
-				{
-					std::cout << index << " ";
-				}
-				std::cout << std::endl;
-			}
-			std::cout << std::endl;
-			for (std::vector<long> subarray : dubious_max_nodes)
-			{
-				for (long index : subarray)
-				{
-					std::cout << index << " ";
-				}
-				std::cout << std::endl;
-			}
-			std::cout << std::endl;
-			*/
-
 			bool change_attempted = false;
 			for (long depth = dubious_min_nodes.size() - 1; depth >= 0; depth -= 1)
 			{
