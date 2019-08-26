@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClInclude Include="bubble-sort.h" />
     <ClInclude Include="buoyancysort.h" />
+    <ClInclude Include="fractal-max-heap.h" />
+    <ClInclude Include="fractal-min-heap.h" />
     <ClInclude Include="heap-tests.h" />
     <ClInclude Include="heuristics.h" />
     <ClInclude Include="hierarchysort.h" />

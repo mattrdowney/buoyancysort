@@ -9,21 +9,21 @@ namespace MaxHeap
 	template <typename Type>
 	Type parent(Type child, Type center, long tuple_size = 2)
 	{
-		return (child - center + 1) / tuple_size + center;
+		return (child - center) / tuple_size + center;
 	}
 
 	/// -1/0 - based
 	template <typename Type>
 	Type left_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center - tuple_size;
+		return (parent - center) * tuple_size + center - (tuple_size - 1);
 	}
 
 	/// -1/0 - based
 	template <typename Type>
 	Type right_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center - 1;
+		return (parent - center) * tuple_size + center;
 	}
 
 	// WARNING: A signed type is neccessary here.

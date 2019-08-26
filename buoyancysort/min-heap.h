@@ -8,14 +8,14 @@ namespace MinHeap
 	template <typename Type>
 	Type parent(Type child, Type center, long tuple_size = 2)
 	{
-		return (child - center - 1) / tuple_size + center;
+		return (child - center) / tuple_size + center;
 	}
 
 	/// 0/+1 - based
 	template <typename Type>
 	Type left_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center + 1;
+		return (parent - center) * tuple_size + center;
 	}
 
 	//1 [2-6] [7-11] [12-16] [17-21] [22-26]
@@ -24,7 +24,7 @@ namespace MinHeap
 	template <typename Type>
 	Type right_child(Type parent, Type center, long tuple_size = 2)
 	{
-		return (parent - center) * tuple_size + center + tuple_size;
+		return (parent - center) * tuple_size + center + (tuple_size - 1);
 	}
 
 	// WARNING: A signed type is neccessary here.
