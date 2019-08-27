@@ -52,9 +52,10 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::tokuda_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::sqrt_31_over_6_prime_after_silver_integer_with_memory_gap_sequence);
+	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::pratt_three_smooth_gap_sequence);
 	//SemiStablePartition::partition<current_type>((current_type*)data, -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();

@@ -71,4 +71,23 @@ namespace ShellSort
 		19079429, 8392619, 3690251, 1623091, 714029, 313612, 137653, 60521, 26573,
 		11677, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1
 	};
+
+	// Amusing... this wins asymptotically, even in a "fair fight", despite having a ratio of 2.5
+	// Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*2.50)-4)))^2+4]
+	// I'm starting to think the 2.2-2.3 number mentioned on Wikipedia was due to bad research or something.
+	// Or maybe it just works well on small arrays but doesn't exhibit good asymptotic performance?
+	// It's not like a ton of research went into ShellSort, but it still feels like there's something I'm missing.
+	std::vector<long> test =
+	{
+		30293, 12107 /*11677*/, 4783, 1861, 733, 293, 107, 41, 13, 5, 1
+	};
+
+	// And Euler's number i.e. 2.718281828... does better yet
+	std::vector<long> test2 =
+	{
+		21323, 7753, 2819, 1031, 367, 127, 41, 13, 5, 1
+	};
+
+	// One of the more important parts of an asymptotically good gap sequence is keeping as few numbers in the sequence as possible,
+	// so while this strategy will fall apart eventually, it makes sense that it works pretty well.
 }
