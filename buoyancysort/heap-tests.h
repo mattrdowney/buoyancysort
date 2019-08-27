@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
+#include <random>
+#include "fractal-max-heap.h"
+#include "fractal-min-heap.h"
 #include "min-heap.h"
 #include "max-heap.h"
 #include "median-heap.h"
@@ -116,94 +119,77 @@ namespace HeapTests // The amount of namespaces is basically parody at this poin
 
 	void heap_tests()
 	{
-	//	// Parent, unshifted
-	//	assert(Heap::parent(-4,  0) == -2);
-	//	assert(Heap::parent(-3,  0) == -1);
-	//	assert(Heap::parent(-2,  0) == -1);
-	//	assert(Heap::parent(-1,  0) ==  0);
-	//	assert(Heap::parent( 0,  0) ==  0);
-	//	assert(Heap::parent(+1,  0) ==  0);
-	//	assert(Heap::parent(+2,  0) == +1);
-	//	assert(Heap::parent(+3,  0) == +1);
-	//	assert(Heap::parent(+4,  0) == +2);
+		// 2-ary heap tests
+		// Parent, unshifted
+		assert(MinHeap::parent( 0, -1) == -1);
+		assert(MinHeap::parent(+1, -1) ==  0);
+		assert(MinHeap::parent(+2, -1) ==  0);
+		assert(MinHeap::parent(+3, -1) == +1);
 
-	//	// Parent, shifted
-	//	assert(Heap::parent( 0, +4) == +2);
-	//	assert(Heap::parent(+1, +4) == +3);
-	//	assert(Heap::parent(+2, +4) == +3);
-	//	assert(Heap::parent(+3, +4) == +4);
-	//	assert(Heap::parent(+4, +4) == +4);
-	//	assert(Heap::parent(+5, +4) == +4);
-	//	assert(Heap::parent(+6, +4) == +5);
-	//	assert(Heap::parent(+7, +4) == +5);
-	//	assert(Heap::parent(+8, +4) == +6);
+		// Parent, shifted
+		assert(MaxHeap::parent( 0, +4) == +2);
+		assert(MaxHeap::parent(+1, +4) == +3);
+		assert(MaxHeap::parent(+2, +4) == +3);
+		assert(MaxHeap::parent(+3, +4) == +4);
 
-	//	// Left child, unshifted
-	//	assert(Heap::left_child(-4,  0) == -9);
-	//	assert(Heap::left_child(-3,  0) == -7);
-	//	assert(Heap::left_child(-2,  0) == -5);
-	//	assert(Heap::left_child(-1,  0) == -3);
-	//	assert(Heap::left_child( 0,  0) == -1);
-	//	assert(Heap::left_child(+1,  0) == +2);
-	//	assert(Heap::left_child(+2,  0) == +4);
-	//	assert(Heap::left_child(+3,  0) == +6);
-	//	assert(Heap::left_child(+4,  0) == +8);
+		// Left child, unshifted
+		assert(MinHeap::left_child( 0, -1) == +1);
+		assert(MinHeap::left_child(+1, -1) == +3);
+		assert(MinHeap::left_child(+2, -1) == +5);
+		assert(MinHeap::left_child(+3, -1) == +7);
 
-	//	// Left child, shifted
-	//	assert(Heap::left_child( 0, +4) == -5);
-	//	assert(Heap::left_child(+1, +4) == -3);
-	//	assert(Heap::left_child(+2, +4) == -1);
-	//	assert(Heap::left_child(+3, +4) == +1);
-	//	assert(Heap::left_child(+4, +4) == +3);
-	//	assert(Heap::left_child(+5, +4) == +6);
-	//	assert(Heap::left_child(+6, +4) == +8);
-	//	assert(Heap::left_child(+7, +4) == +10);
-	//	assert(Heap::left_child(+8, +4) == +12);
+		// Left child, shifted
+		assert(MaxHeap::left_child( 0, +4) == -5);
+		assert(MaxHeap::left_child(+1, +4) == -3);
+		assert(MaxHeap::left_child(+2, +4) == -1);
+		assert(MaxHeap::left_child(+3, +4) == +1);
 
-	//	// Right child, unshifted
-	//	assert(Heap::right_child(-4,  0) == -8);
-	//	assert(Heap::right_child(-3,  0) == -6);
-	//	assert(Heap::right_child(-2,  0) == -4);
-	//	assert(Heap::right_child(-1,  0) == -2);
-	//	assert(Heap::right_child( 0,  0) == +1);
-	//	assert(Heap::right_child(+1,  0) == +3);
-	//	assert(Heap::right_child(+2,  0) == +5);
-	//	assert(Heap::right_child(+3,  0) == +7);
-	//	assert(Heap::right_child(+4,  0) == +9);
+		// Right child, unshifted
+		assert(MinHeap::right_child( 0, -1) == +2);
+		assert(MinHeap::right_child(+1, -1) == +4);
+		assert(MinHeap::right_child(+2, -1) == +6);
+		assert(MinHeap::right_child(+3, -1) == +8);
 
-	//	// Right child, shifted
-	//	assert(Heap::right_child( 0, +4) == -4);
-	//	assert(Heap::right_child(+1, +4) == -2);
-	//	assert(Heap::right_child(+2, +4) ==  0);
-	//	assert(Heap::right_child(+3, +4) == +2);
-	//	assert(Heap::right_child(+4, +4) == +5);
-	//	assert(Heap::right_child(+5, +4) == +7);
-	//	assert(Heap::right_child(+6, +4) == +9);
-	//	assert(Heap::right_child(+7, +4) == +11);
-	//	assert(Heap::right_child(+8, +4) == +13);
+		// Right child, shifted
+		assert(MaxHeap::right_child( 0, +4) == -4);
+		assert(MaxHeap::right_child(+1, +4) == -2);
+		assert(MaxHeap::right_child(+2, +4) ==  0);
+		assert(MaxHeap::right_child(+3, +4) == +2);
 
-	//	// Sibling, unshifted
-	//	assert(Heap::sibling(-4, 0) == -5);
-	//	assert(Heap::sibling(-3, 0) == -2);
-	//	assert(Heap::sibling(-2, 0) == -3);
-	//	assert(Heap::sibling(-1, 0) == +1);
-	//	assert(Heap::sibling(0, 0) == 0);
-	//	assert(Heap::sibling(+1, 0) == -1);
-	//	assert(Heap::sibling(+2, 0) == +3);
-	//	assert(Heap::sibling(+3, 0) == +2);
-	//	assert(Heap::sibling(+4, 0) == +5);
+		// 3-ary heap tests
+		// Parent, unshifted
+		assert(MinHeap::parent(0, -1, 3) == -1);
+		assert(MinHeap::parent(+1, -1, 3) == 0);
+		assert(MinHeap::parent(+2, -1, 3) == 0);
+		assert(MinHeap::parent(+3, -1, 3) == 0);
 
-	//	// Sibling, shifted
-	//	assert(Heap::sibling(0, +4) == -1);
-	//	assert(Heap::sibling(+1, +4) == +2);
-	//	assert(Heap::sibling(+2, +4) == +1);
-	//	assert(Heap::sibling(+3, +4) == +5);
-	//	assert(Heap::sibling(+4, +4) == +4);
-	//	assert(Heap::sibling(+5, +4) == +3);
-	//	assert(Heap::sibling(+6, +4) == +7);
-	//	assert(Heap::sibling(+7, +4) == +6);
-	//	assert(Heap::sibling(+8, +4) == +9);
+		// Parent, shifted
+		assert(MaxHeap::parent(0, +4, 3) == +3);
+		assert(MaxHeap::parent(+1, +4, 3) == +3);
+		assert(MaxHeap::parent(+2, +4, 3) == +3);
+		assert(MaxHeap::parent(+3, +4, 3) == +4);
+
+
+		for (int test_case = 0; test_case < 1000; test_case += 1)
+		{
+			const long size = 10000;
+			std::uniform_real_distribution<double> uniform_double_generator(1.1, 5.9);
+			std::uniform_int_distribution<long> uniform_long_generator(0, size-1);
+			std::default_random_engine random_number_generator;
+			double random_tuple_size = uniform_double_generator(random_number_generator);
+			long random_heap_index = uniform_long_generator(random_number_generator);
+
+
+			long min_left = FractalMinHeap::left_child(random_heap_index, -1L, random_tuple_size);
+			long min_right = FractalMinHeap::right_child(random_heap_index, -1L, random_tuple_size);
+
+			long max_left = FractalMaxHeap::left_child(random_heap_index, size, random_tuple_size);
+			long max_right = FractalMaxHeap::right_child(random_heap_index, size, random_tuple_size);
+
+			assert(FractalMinHeap::parent(min_left, -1L, random_tuple_size) == random_heap_index);
+			assert(FractalMinHeap::parent(min_right, -1L, random_tuple_size) == random_heap_index);
+			assert(FractalMaxHeap::parent(max_left, -1L, random_tuple_size) == random_heap_index);
+			assert(FractalMaxHeap::parent(max_right, -1L, random_tuple_size) == random_heap_index);
+		}
 	}
-
-	
 }

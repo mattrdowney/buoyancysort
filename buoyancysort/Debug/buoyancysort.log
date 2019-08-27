@@ -1,2 +1,40 @@
 ﻿  main.cpp
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(20): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(183): note: see reference to function template instantiation 'Type FractalMinHeap::left_child<long>(Type,Type,double)' being compiled
+          with
+          [
+              Type=long
+          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(27): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(184): note: see reference to function template instantiation 'Type FractalMinHeap::right_child<long>(Type,Type,double)' being compiled
+          with
+          [
+              Type=long
+          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(21): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): note: see reference to function template instantiation 'Type FractalMaxHeap::left_child<long>(Type,Type,long)' being compiled
+          with
+          [
+              Type=long
+          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(28): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): note: see reference to function template instantiation 'Type FractalMaxHeap::right_child<long>(Type,Type,long)' being compiled
+          with
+          [
+              Type=long
+          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(13): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(189): note: see reference to function template instantiation 'Type FractalMinHeap::parent<long>(Type,Type,double)' being compiled
+          with
+          [
+              Type=long
+          ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(191): note: see reference to function template instantiation 'Type FractalMaxHeap::parent<long>(Type,Type,double)' being compiled
+          with
+          [
+              Type=long
+          ]
   buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe
