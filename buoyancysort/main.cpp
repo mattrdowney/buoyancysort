@@ -28,8 +28,8 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 
 int main()
 {
-	HeapTests::heap_tests();
-	const long size = 100;
+	//HeapTests::heap_tests();
+	const long size = 20000;
 	const long tuple_size = 2;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -38,12 +38,12 @@ int main()
 		data[i] = size - i;
 	}
 	
-	//std::random_device random_device;
-	//std::mt19937 random_number_generator(random_device());
-	//random_number_generator.seed(0);
-	//std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+	std::random_device random_device;
+	std::mt19937 random_number_generator(random_device());
+	random_number_generator.seed(0);
+	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	Print::print((current_type*)data, -1, size);
+	//Print::print((current_type*)data, -1, size);
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, tuple_size);
@@ -52,11 +52,14 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	SemiStablePartition::partition<current_type>((current_type*)data, -1, size, 50);
+	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::tokuda_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::sqrt_31_over_6_prime_after_silver_integer_with_memory_gap_sequence);
+	//SemiStablePartition::partition<current_type>((current_type*)data, -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
-	Print::print((current_type*)data, -1, size);
+	//Print::print((current_type*)data, -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, tuple_size);

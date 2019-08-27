@@ -6,6 +6,8 @@
 // FIXME: undefined behavior because floating-point math is imprecise and not fully specified
 namespace FractalMinHeap
 {
+	// Trying to extend the concept of a d-ary heap: https://en.wikipedia.org/wiki/D-ary_heap
+
 	/// 0/+1 - based
 	template <typename Type>
 	Type parent(Type child, Type center, double tuple_size)

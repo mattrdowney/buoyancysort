@@ -4,6 +4,8 @@
 
 namespace MinHeap
 {
+	// d-ary heap (tuple_size != 2): https://en.wikipedia.org/wiki/D-ary_heap
+
 	/// 0/+1 - based
 	template <typename Type>
 	Type parent(Type child, Type center, long tuple_size = 2)

@@ -64,4 +64,11 @@ namespace ShellSort
 	std::vector<long> two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence = { 11467, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1 };
 	// This is (basically) my best version so far. Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*2.25)-4)))^2+4]
 	// Seems to beat ciura_gap_sequence (and tokuda_gap_sequence within the ranges I have tested <= 20k)
+
+	// Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*sqrt(31/6))-4)))^2+4]
+	std::vector<long> sqrt_31_over_6_prime_after_silver_integer_with_memory_gap_sequence =
+	{
+		19079429, 8392619, 3690251, 1623091, 714029, 313612, 137653, 60521, 26573,
+		11677, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1
+	};
 }
