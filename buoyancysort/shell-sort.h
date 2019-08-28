@@ -6,10 +6,11 @@
 
 namespace ShellSort
 {
+	// TODO: I'm beginning to suspect I have a subtle bug that's being caught by the insertion sort at the end...
 	template <typename Type>
 	void sort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
 	{
-		for (long gap_index = gap_sequence.size() - 1; gap_index >= 0; gap_index -= 1)
+		for (long gap_index = gap_sequence.size() - 1; gap_index >= 0; gap_index -= 1) // FIXME: I am an idiot // Well, I might as well conform to how sequences usually work and just reprogram the data.
 		{
 			long gap = gap_sequence[gap_index];
 			for (long unsorted_cursor = (before_first+1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
@@ -46,40 +47,78 @@ namespace ShellSort
 		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
 	}
 
-	std::vector<long> ciura_gap_sequence = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // NOTE: 1750 is an (un-official?) extension
+	// This presumably uses local optimization (taking small subproblems and building off of them), so if you want to beat it you probably want to rely on global optimization
+	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
 
-	std::vector<long> pratt_three_smooth_gap_sequence = // hopefully there are no typos
+	std::vector<long> pratt_three_smooth_gap_sequence =
 	{
-		3888, 3456, 3072, 2916, 2592, 2304, 2187, 2048, 1944, 1728, 1536, 1458, 1296, 1152, 1024, 972, 864,
-		768, 729, 648, 576, 512, 486, 432, 384, 324, 288, 256, 243, 216, 192, 162, 144, 128, 108, 96, 81, 72, 64, 54, 48, 36, 32, 27,
-		24, 18, 16, 12, 9, 8, 6, 4, 3, 2, 1
+		1, 2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 27, 32, 36, 48, 54, 64, 72, 81, 96, 108, 128, 144, 162, 192, 216, 243,
+		256, 288, 324, 384, 432, 486, 512, 576, 648, 729, 768, 864, 972, 1024, 1152, 1296, 1458, 1536, 1728, 1944,
+		2048, 2187, 2304, 2592, 2916, 3072, 3456, 3888
 	};
 
 	std::vector<long> tokuda_gap_sequence =
 	{
-		1147718700, 510097200, 226709866, 100759940, 44782196, 19903198, 8845866, 3931496, 1747331, 776591,
-		345152, 153401, 68178, 30301, 13467, 5985, 2660, 1182, 525, 233, 103, 46, 20, 9, 4, 1
+		1, 4, 9, 20, 46, 103, 233, 525, 1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
+		3931496, 8845866, 19903198, 44782196, 100759940, 226709866, 510097200, 1147718700
+	};
+
+	std::vector<long> sedgewick_incerpi_sequence =
+	{
+		1, 3, 7, 21, 48, 112, 336, 861, 1968, 4592, 13776, 33936, 86961, 198768, 463792, 1391376, 3402672, 8382192,
+		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
 	std::vector<long> n_factorial =
 	{
-		40320, 5040, 720, 120, 24, 6, 2, 1 // In practical terms, you omit the 2 from the sequence (but I left it here to be pedantic)
+		1, 2, 6, 24, 120, 720, 5040, 40320
 	};
 
-	// Best algorithm so far: n^n (even when testing n! without the 2)
-	// You can think of this Wikipedia ShellSort quote: "The first pass, 5-sorting, performs insertion sort on five separate subarrays (a1, a6, a11), (a2, a7, a12), (a3, a8), (a4, a9), (a5, a10)..."
-	// And intuit why n^n and n! are good gap sequences for the algorithm.
-	// I considered n! a more intuitive gap sequence at first, but now I have a better idea of how n^n works.
-	// Remember: insertion sort has a cost of O(n^2).
-	// Also, there is a possibility growth functions larger than n^n could produce better results (especially asymptotically) I just need to find what they are (if they exist).
-	// With a gap sequence this simple, someone as dumb as me could probably derive the time complexity (given a million years XD)
-	
-	// I would also like to comment on a human bias around n^n, n!, k^n, and exponentials in general:
-	// A lot of people are blindly taught that these things are inefficient in all cases.
-	// But they can be used to create a slower-growing function thus improving asymptotic efficiency.
-	// Do not throw away a tool just because it is dangerous; just learn how to use it properly.
 	std::vector<long> n_to_the_power_of_n =
 	{
-		16777216, 823543, 46656, 3125, 256, 27, 4, 1
+		1, 4, 27, 256, 3125, 46656
+	};
+
+	std::vector<long> n_over_2_to_the_power_of_n_over_2 =
+	{
+		1, 4, 10, 27, 81, 256, 870, 3125, 11804, 46656
+	};
+
+	// This works okay
+	// std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
+	std::vector<long> n_over_3_halves_plus_euler_mascheroni_to_the_power_of_n_over_3_halves_plus_euler_mascheroni =
+	{
+		1, 4, 9, 22, 60, 181, 574, 1930
+	};
+
+	std::vector<long> n_over_sqrt_5_to_the_power_of_n_over_sqrt_5 =
+	{
+		1, 7, 15, 36, 96, 272, 812, 2534
+	};
+
+	//
+	std::vector<long> test =
+	{
+		1, 5, 13, 29, 68, 173
+	};
+
+	// old idea:
+	std::vector<long> test2 = // floor(sqrt(5)^n) - 1
+	{
+		1, 4, 10, 24, 54, 124, 278, 624
+	};
+
+	// std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
+	std::vector<long> test3 = // basically (n/2.09)^(n/2.09) -- does worse
+	{
+		1, 4, 9, 21, 58, 171, 538, 1791
+	};
+
+	// Best so far: Well this can beat ciura_gap_sequence for n=1000 seed=0
+	// Algorithm: ceil((n/2.05)^(n/2.05))
+	// And to think: I never would have found this if I weren't a dumbass. (Okay, that isn't necessarily true but being a dumbass definitely helped.)
+	std::vector<long> test4 =
+	{
+		1, 4, 9, 24, 67, 204, 662, 2276
 	};
 }
