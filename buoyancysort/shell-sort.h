@@ -61,45 +61,25 @@ namespace ShellSort
 		345152, 153401, 68178, 30301, 13467, 5985, 2660, 1182, 525, 233, 103, 46, 20, 9, 4, 1
 	};
 
-	std::vector<long> two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence = { 11467, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1 };
-	// This is (basically) my best version so far. Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*2.25)-4)))^2+4]
-	// Seems to beat ciura_gap_sequence (and tokuda_gap_sequence within the ranges I have tested <= 20k)
-
-	// Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*sqrt(31/6))-4)))^2+4]
-	std::vector<long> sqrt_31_over_6_prime_after_silver_integer_with_memory_gap_sequence =
-	{
-		19079429, 8392619, 3690251, 1623091, 714029, 313612, 137653, 60521, 26573,
-		11677, 5051, 2213, 967, 409, 173, 71, 29, 13, 5, 1
-	};
-
-	// Amusing... this wins asymptotically, even in a "fair fight", despite having a ratio of 2.5
-	// Algorithm: N(i) = next_prime_after[(ceil(sqrt(floor(N(i-1)*2.50)-4)))^2+4]
-	// I'm starting to think the 2.2-2.3 number mentioned on Wikipedia was due to bad research or something.
-	// Or maybe it just works well on small arrays but doesn't exhibit good asymptotic performance?
-	// It's not like a ton of research went into ShellSort, but it still feels like there's something I'm missing.
-	std::vector<long> test =
-	{
-		30293, 12107 /*11677*/, 4783, 1861, 733, 293, 107, 41, 13, 5, 1
-	};
-
-	// And Euler's number i.e. 2.718281828... does better yet
-	std::vector<long> test2 =
-	{
-		21323, 7753, 2819, 1031, 367, 127, 41, 13, 5, 1
-	};
-
-	// One of the more important parts of an asymptotically good gap sequence is keeping as few numbers in the sequence as possible,
-	// so while this strategy will fall apart eventually, it makes sense that it works pretty well.
-
-	// Oh no! It is as I feared
-	// You can think of this Wikipedia ShellSort quote: "The first pass, 5-sorting, performs insertion sort on five separate subarrays (a1, a6, a11), (a2, a7, a12), (a3, a8), (a4, a9), (a5, a10)..."
-	// And intuit why this is a good gap sequence for the algorithm.
-	// I am mad at myself for not trying this sooner and am going to search more to see if anyone else tried this (I couldn't find a reference to n! as a gap sequence for ShellSort before).
-	// I'm also going to go out on a limb and say the 3-smooth version is maybe O(n*lg(n)^3) *in the worst and expected case* [I was suspicious of this earlier].
-	// I need to think about all of this.
-	// With a gap sequence this simple, someone as dumb as me could probably derive the time complexity (given a million years XD)
 	std::vector<long> n_factorial =
 	{
 		40320, 5040, 720, 120, 24, 6, 2, 1 // In practical terms, you omit the 2 from the sequence (but I left it here to be pedantic)
+	};
+
+	// Best algorithm so far: n^n (even when testing n! without the 2)
+	// You can think of this Wikipedia ShellSort quote: "The first pass, 5-sorting, performs insertion sort on five separate subarrays (a1, a6, a11), (a2, a7, a12), (a3, a8), (a4, a9), (a5, a10)..."
+	// And intuit why n^n and n! are good gap sequences for the algorithm.
+	// I considered n! a more intuitive gap sequence at first, but now I have a better idea of how n^n works.
+	// Remember: insertion sort has a cost of O(n^2).
+	// Also, there is a possibility growth functions larger than n^n could produce better results (especially asymptotically) I just need to find what they are (if they exist).
+	// With a gap sequence this simple, someone as dumb as me could probably derive the time complexity (given a million years XD)
+	
+	// I would also like to comment on a human bias around n^n, n!, k^n, and exponentials in general:
+	// A lot of people are blindly taught that these things are inefficient in all cases.
+	// But they can be used to create a slower-growing function thus improving asymptotic efficiency.
+	// Do not throw away a tool just because it is dangerous; just learn how to use it properly.
+	std::vector<long> n_to_the_power_of_n =
+	{
+		16777216, 823543, 46656, 3125, 256, 27, 4, 1
 	};
 }
