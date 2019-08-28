@@ -90,4 +90,16 @@ namespace ShellSort
 
 	// One of the more important parts of an asymptotically good gap sequence is keeping as few numbers in the sequence as possible,
 	// so while this strategy will fall apart eventually, it makes sense that it works pretty well.
+
+	// Oh no! It is as I feared
+	// You can think of this Wikipedia ShellSort quote: "The first pass, 5-sorting, performs insertion sort on five separate subarrays (a1, a6, a11), (a2, a7, a12), (a3, a8), (a4, a9), (a5, a10)..."
+	// And intuit why this is a good gap sequence for the algorithm.
+	// I am mad at myself for not trying this sooner and am going to search more to see if anyone else tried this (I couldn't find a reference to n! as a gap sequence for ShellSort before).
+	// I'm also going to go out on a limb and say the 3-smooth version is maybe O(n*lg(n)^3) *in the worst and expected case* [I was suspicious of this earlier].
+	// I need to think about all of this.
+	// With a gap sequence this simple, someone as dumb as me could probably derive the time complexity (given a million years XD)
+	std::vector<long> n_factorial =
+	{
+		40320, 5040, 720, 120, 24, 6, 2, 1 // In practical terms, you omit the 2 from the sequence (but I left it here to be pedantic)
+	};
 }

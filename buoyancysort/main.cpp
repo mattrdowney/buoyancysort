@@ -29,7 +29,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 20000;
+	const long size = 42;
 	const long tuple_size = 2;
 	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -52,10 +52,11 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
+	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::ciura_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::two_and_a_quarter_prime_after_silver_integer_with_memory_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::sqrt_31_over_6_prime_after_silver_integer_with_memory_gap_sequence);
-	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::pratt_three_smooth_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::n_factorial);
 	//SemiStablePartition::partition<current_type>((current_type*)data, -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
