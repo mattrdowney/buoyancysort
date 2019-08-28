@@ -29,9 +29,9 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000;
+	const long size = 1000000;
 	const long tuple_size = 2;
-	current_type data[size]; // TODO: define IntThatTracksComparisons that overrides definitions of < >, <=, >=, ==, != and increments a static counter when they are called
+	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
 	for (std::size_t i = 0; i < size; i += 1)
 	{
@@ -40,37 +40,37 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(0);
+	random_number_generator.seed(2);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	//Print::print((current_type*)data, -1, size);
+	//Print::print((current_type*)data.data(), -1, size);
 	
-	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, tuple_size);
+	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::ciura_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::pratt_three_smooth_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::tokuda_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::sedgewick_incerpi_sequence);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::n_to_the_power_of_n); // well, maybe it works well compared to Pratt (hard to say); I definitely stumbled onto this by accident.
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::n_over_2_to_the_power_of_n_over_2);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::n_over_3_halves_plus_euler_mascheroni_to_the_power_of_n_over_3_halves_plus_euler_mascheroni);
-	//ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::n_over_sqrt_5_to_the_power_of_n_over_sqrt_5);
-	ShellSort::sort<current_type>((current_type*)data, -1, size, ShellSort::test4);
-	//SemiStablePartition::partition<current_type>((current_type*)data, -1, size, 50);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::pratt_three_smooth_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::sedgewick_incerpi_sequence);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_to_the_power_of_n); // well, maybe it works well compared to Pratt (hard to say); I definitely stumbled onto this by accident.
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_2_to_the_power_of_n_over_2);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_3_halves_plus_euler_mascheroni_to_the_power_of_n_over_3_halves_plus_euler_mascheroni);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_sqrt_5_to_the_power_of_n_over_sqrt_5);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::test4);
+	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
 	//Print::print((current_type*)data, -1, size);
 
-	//HeapTests::test_min_heap<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_max_heap<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data, -1, size, tuple_size);
-	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data, -1, size, tuple_size);
+	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
+	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	
 	std::cout << comparisons << std::endl;
 	float cost_per_element = ((float)comparisons) / size;

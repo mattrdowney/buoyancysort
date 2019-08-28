@@ -69,56 +69,32 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	std::vector<long> n_factorial =
-	{
-		1, 2, 6, 24, 120, 720, 5040, 40320
-	};
-
-	std::vector<long> n_to_the_power_of_n =
-	{
-		1, 4, 27, 256, 3125, 46656
-	};
-
-	std::vector<long> n_over_2_to_the_power_of_n_over_2 =
-	{
-		1, 4, 10, 27, 81, 256, 870, 3125, 11804, 46656
-	};
-
-	// This works okay
-	// std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
-	std::vector<long> n_over_3_halves_plus_euler_mascheroni_to_the_power_of_n_over_3_halves_plus_euler_mascheroni =
-	{
-		1, 4, 9, 22, 60, 181, 574, 1930
-	};
-
-	std::vector<long> n_over_sqrt_5_to_the_power_of_n_over_sqrt_5 =
-	{
-		1, 7, 15, 36, 96, 272, 812, 2534
-	};
-
-	//
-	std::vector<long> test =
-	{
-		1, 5, 13, 29, 68, 173
-	};
-
-	// old idea:
-	std::vector<long> test2 = // floor(sqrt(5)^n) - 1
-	{
-		1, 4, 10, 24, 54, 124, 278, 624
-	};
-
-	// std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
-	std::vector<long> test3 = // basically (n/2.09)^(n/2.09) -- does worse
-	{
-		1, 4, 9, 21, 58, 171, 538, 1791
-	};
-
 	// Best so far: Well this can beat ciura_gap_sequence for n=1000 seed=0
+	// This doesn't mean anything if it can't keep up with the asymptotic time complexity of other functions e.g. Tokuda
 	// Algorithm: ceil((n/2.05)^(n/2.05))
 	// And to think: I never would have found this if I weren't a dumbass. (Okay, that isn't necessarily true but being a dumbass definitely helped.)
 	std::vector<long> test4 =
 	{
-		1, 4, 9, 24, 67, 204, 662, 2276
+		1, 4, 9, 24, 67, 204, 662, 2276, 8225, 31065, 122196
+	};
+
+	std::vector<long> test5 = // ceil(n^(n/e))
+	{
+		1, 4, 8, 20, 53, 151, 455, 1444, 4774, 16375, 58091
+	};
+
+	std::vector<long> test6 = // ceil((n/2.04)^(n/2.04))
+	{
+		1, 5, 10, 24, 69, 213, 699, 2422, 8827, 33634, 133514
+	};
+
+	std::vector<long> test7 = // ceil((n/2.06)^(n/2.06))
+	{
+		1, 5, 9, 23, 64, 195, 628, 2142, 7671, 28718, 111951
+	};
+
+	std::vector<long> n_to_the_power_of_n = //n^n
+	{
+		1, 4, 27, 256, 3125, 46656, 823543
 	};
 }
