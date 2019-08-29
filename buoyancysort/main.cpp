@@ -53,14 +53,8 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::pratt_three_smooth_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::sedgewick_incerpi_sequence);
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_to_the_power_of_n); // well, maybe it works well compared to Pratt (hard to say); I definitely stumbled onto this by accident.
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_2_to_the_power_of_n_over_2);
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_3_halves_plus_euler_mascheroni_to_the_power_of_n_over_3_halves_plus_euler_mascheroni);
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::n_over_sqrt_5_to_the_power_of_n_over_sqrt_5);
-	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::test4);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::extrapolated_ciura_gap_sequence2);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();

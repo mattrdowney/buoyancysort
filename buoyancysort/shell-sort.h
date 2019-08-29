@@ -13,7 +13,7 @@ namespace ShellSort
 		for (long gap_index = gap_sequence.size() - 1; gap_index >= 0; gap_index -= 1) // FIXME: I am an idiot // Well, I might as well conform to how sequences usually work and just reprogram the data.
 		{
 			long gap = gap_sequence[gap_index];
-			for (long unsorted_cursor = (before_first+1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
+			for (long unsorted_cursor = (before_first + 1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
 			{
 				Type temp = data[unsorted_cursor];
 				long insertion_cursor;
@@ -69,32 +69,109 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	// Best so far: Well this can beat ciura_gap_sequence for n=1000 seed=0
-	// This doesn't mean anything if it can't keep up with the asymptotic time complexity of other functions e.g. Tokuda
-	// Algorithm: ceil((n/2.05)^(n/2.05))
-	// And to think: I never would have found this if I weren't a dumbass. (Okay, that isn't necessarily true but being a dumbass definitely helped.)
-	std::vector<long> test4 =
+	std::vector<long> primes_squared = // (and 1)
 	{
-		1, 4, 9, 24, 67, 204, 662, 2276, 8225, 31065, 122196
+		1, 4, 9, 25, 49, 121, 169, 289, 361, 529, 841, 961, 1369, 1681, 1849, 2209, 2809, 3481, 3721, 4489, 5041, 5329,
+		6241, 6889, 7921, 9409, 10201, 10609, 11449, 11881, 12769, 16129, 17161, 18769, 19321, 22201, 22801, 24649,
+		26569, 27889, 29929, 32041, 32761, 36481
 	};
 
-	std::vector<long> test5 = // ceil(n^(n/e))
+	std::vector<long> test1 = //T(n) = next_prime[ceil(T(n-1)*sqrt(31/6))]
 	{
-		1, 4, 8, 20, 53, 151, 455, 1444, 4774, 16375, 58091
+		//1, 4, 10, 23, 53+4, 130+2, 301, 685+16, 1594+106
+		1, 4, 10, 23, 53, 121, 276, 628
 	};
 
-	std::vector<long> test6 = // ceil((n/2.04)^(n/2.04))
+	//{ 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
+	// 1 
+	// 2*2
+	// 2*5
+	// 23
+	// 3*19 NOT 53 || 2*3*3*3 || 5*11  || 2*2*2*7
+	// 2*2*3*11 NOT 2*5*13 || 131
+	// 7*43
+	// 701 NOT 5*137 || ...
+	// 2*5*5*5*7 NOT 
+
+	// Value of T(n)^(1/(n-1))
+	// 4 -- n=1
+	// 3.16227766 -- n=2
+	// 2.84386698 -- n=3
+	// 2.74769621 -- n=4
+	// 2.65530728
+	// 2.58877566
+	// 2.54994695
+	// 2.54319556
+
+	// Differencing of prior values
+	// 0.83772234
+	// 0.31841068
+	// 0.09617077
+	// 0.09238893
+	// 0.06653162
+	// 0.03882871
+	// 0.00675139
+
+	//Differencing of prior values (x2)
+	// 0.51931166
+	// 0.22223991
+	// 0.00378184
+	// 0.02585731
+	// 0.02770291
+	// 0.03207732
+
+	//Differencing of prior values (x3)
+	// 0.29707175
+	// 0.21845807
+	// -0.02207547
+	// -0.0018456
+	// -0.00437441
+
+	//Differencing of prior values (x4)
+	// 0.07861368
+	// 0.24053354
+	// -0.02022987
+	// 0.00252881
+
+	//Differencing of prior values (x5)
+	// -0.16191986
+	// 0.26076341
+	// -0.02275868
+
+	//Differencing of prior values (x6)
+	//  -0.42268327
+	// 0.28352209
+
+	//Differencing of prior values (x7)
+	// -0.70620536
+
+	// Approximate via a polynomial of degree 1:
+	// Discrete derivative:
+	// 2.54994695 = a*7 + b,
+	// 2.54319556 = a*8 + b
+	// b = 2.597207, a = -0.006751404
+
+	// Thus my series continuation looks like:
+	// (a*n + b)^n, b = 2.597207, a = -0.006751404, n=8
+
+	// 1, 4, 10, 23, 57, 132, 301, 701, 1750 [, 4346, 10732, 26362, 64406, 156493, 378175, 908869]
+
+	// worse than Tokuda asymptotically but similar performance
+	std::vector<long> extrapolated_ciura_gap_sequence =
 	{
-		1, 5, 10, 24, 69, 213, 699, 2422, 8827, 33634, 133514
+		1, 4, 10, 23, 57, 132, 301, 701, 1750, 4346, 10732, 26362, 64406, 156493, 378175, 908869
 	};
 
-	std::vector<long> test7 = // ceil((n/2.06)^(n/2.06))
-	{
-		1, 5, 9, 23, 64, 195, 628, 2142, 7671, 28718, 111951
-	};
+	// Tokuda reference: 1, 4, 9, 20, 46, 103, 233, 525, 1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
+	//3931496, 8845866, 19903198, 44782196, 100759940, 226709866, 510097200, 1147718700
 
-	std::vector<long> n_to_the_power_of_n = //n^n
+	// (4^(1/lg(n)))*(2.5^(1-1/lg(n)))
+	// geometric mean between 4 and 2.5 with n=1 
+	// First attempt at formula: ((4^(1/(ln(n)/ln(k))))*(2.25^(1-1/(ln(n)/ln(k)))))^(n-k), n=15+k, k=1.55
+	// Thus this extrapolation yields:
+	std::vector<long> extrapolated_ciura_gap_sequence2 =
 	{
-		1, 4, 27, 256, 3125, 46656, 823543
+		1, 4, 10, 23, 57, 132, 301, 701, 1750, 3873, 9320, 22398, 53751, 128842, 308509, 738012
 	};
+	// This worked pretty well; hopefully it's a step in the right direction
 }
