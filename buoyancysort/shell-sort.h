@@ -48,7 +48,9 @@ namespace ShellSort
 	}
 
 	// This presumably uses local optimization (taking small subproblems and building off of them), so if you want to beat it you probably want to rely on global optimization
-	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
+	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,
+		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
+		1577 /*1750*/, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
 
 	std::vector<long> pratt_three_smooth_gap_sequence =
 	{
@@ -173,5 +175,20 @@ namespace ShellSort
 	{
 		1, 4, 10, 23, 57, 132, 301, 701, 1750, 3873, 9320, 22398, 53751, 128842, 308509, 738012
 	};
-	// This worked pretty well; hopefully it's a step in the right direction
+	// This worked pretty well; hopefully it's a step in the right direction -- until I beat the extrapolated Ciura sequence this isn't particularly interesting
+
+	std::vector<long> extrapolated_ciura_gap_sequence3 = // ((4^(1/(ln(n)/ln(k))))*(2.25^(1-1/(ln(n)/ln(k)))))^(n-k), n=15+k, k=1.5 // worse
+	{
+		1, 4, 10, 23, 57, 132, 301, 701, 1504, 3609, 8642, 20666, 49354, 117736, 280590, 668120
+	};
+
+	std::vector<long> three_smooth_subsequence1 = // * 2, * 2, * 3 (and repeat) version
+	{
+		1, 2, 4, 12, 24, 48, 144, 288, 576, 1728, 3456, 6912, 20736, 41472, 82944, 248832, 497664, 995328, 2985984
+	};
+
+	std::vector<long> three_smooth_subsequence2 = // procedural version
+	{
+		1, 2, 4, 12, 24, 48, 144, 288, 576, 1152, 3456, 6912, 13824, 27648, 82944, 165888, 331776, 995328, 1990656
+	};
 }
