@@ -71,102 +71,6 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	std::vector<long> primes_squared = // (and 1)
-	{
-		1, 4, 9, 25, 49, 121, 169, 289, 361, 529, 841, 961, 1369, 1681, 1849, 2209, 2809, 3481, 3721, 4489, 5041, 5329,
-		6241, 6889, 7921, 9409, 10201, 10609, 11449, 11881, 12769, 16129, 17161, 18769, 19321, 22201, 22801, 24649,
-		26569, 27889, 29929, 32041, 32761, 36481
-	};
-
-	std::vector<long> test1 = //T(n) = next_prime[ceil(T(n-1)*sqrt(31/6))]
-	{
-		//1, 4, 10, 23, 53+4, 130+2, 301, 685+16, 1594+106
-		1, 4, 10, 23, 53, 121, 276, 628
-	};
-
-	//{ 1, 4, 10, 23, 57, 132, 301, 701, 1750 };
-	// 1 
-	// 2*2
-	// 2*5
-	// 23
-	// 3*19 NOT 53 || 2*3*3*3 || 5*11  || 2*2*2*7
-	// 2*2*3*11 NOT 2*5*13 || 131
-	// 7*43
-	// 701 NOT 5*137 || ...
-	// 2*5*5*5*7 NOT 
-
-	// Value of T(n)^(1/(n-1))
-	// 4 -- n=1
-	// 3.16227766 -- n=2
-	// 2.84386698 -- n=3
-	// 2.74769621 -- n=4
-	// 2.65530728
-	// 2.58877566
-	// 2.54994695
-	// 2.54319556
-
-	// Differencing of prior values
-	// 0.83772234
-	// 0.31841068
-	// 0.09617077
-	// 0.09238893
-	// 0.06653162
-	// 0.03882871
-	// 0.00675139
-
-	//Differencing of prior values (x2)
-	// 0.51931166
-	// 0.22223991
-	// 0.00378184
-	// 0.02585731
-	// 0.02770291
-	// 0.03207732
-
-	//Differencing of prior values (x3)
-	// 0.29707175
-	// 0.21845807
-	// -0.02207547
-	// -0.0018456
-	// -0.00437441
-
-	//Differencing of prior values (x4)
-	// 0.07861368
-	// 0.24053354
-	// -0.02022987
-	// 0.00252881
-
-	//Differencing of prior values (x5)
-	// -0.16191986
-	// 0.26076341
-	// -0.02275868
-
-	//Differencing of prior values (x6)
-	//  -0.42268327
-	// 0.28352209
-
-	//Differencing of prior values (x7)
-	// -0.70620536
-
-	// Approximate via a polynomial of degree 1:
-	// Discrete derivative:
-	// 2.54994695 = a*7 + b,
-	// 2.54319556 = a*8 + b
-	// b = 2.597207, a = -0.006751404
-
-	// Thus my series continuation looks like:
-	// (a*n + b)^n, b = 2.597207, a = -0.006751404, n=8
-
-	// 1, 4, 10, 23, 57, 132, 301, 701, 1750 [, 4346, 10732, 26362, 64406, 156493, 378175, 908869]
-
-	// worse than Tokuda asymptotically but similar performance
-	std::vector<long> extrapolated_ciura_gap_sequence =
-	{
-		1, 4, 10, 23, 57, 132, 301, 701, 1750, 4346, 10732, 26362, 64406, 156493, 378175, 908869
-	};
-
-	// Tokuda reference: 1, 4, 9, 20, 46, 103, 233, 525, 1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
-	//3931496, 8845866, 19903198, 44782196, 100759940, 226709866, 510097200, 1147718700
-
 	// (4^(1/lg(n)))*(2.5^(1-1/lg(n)))
 	// geometric mean between 4 and 2.5 with n=1 
 	// First attempt at formula: ((4^(1/(ln(n)/ln(k))))*(2.25^(1-1/(ln(n)/ln(k)))))^(n-k), n=15+k, k=1.55
@@ -177,18 +81,104 @@ namespace ShellSort
 	};
 	// This worked pretty well; hopefully it's a step in the right direction -- until I beat the extrapolated Ciura sequence this isn't particularly interesting
 
-	std::vector<long> extrapolated_ciura_gap_sequence3 = // ((4^(1/(ln(n)/ln(k))))*(2.25^(1-1/(ln(n)/ln(k)))))^(n-k), n=15+k, k=1.5 // worse
+
+	std::vector<long> four_nine_smooth = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
 	{
-		1, 4, 10, 23, 57, 132, 301, 701, 1504, 3609, 8642, 20666, 49354, 117736, 280590, 668120
+		1, 4, 9, 16, 36, 64, 81, 144, 256, 324, 576, 729, 1024, 1296, 2304, 2916, 4096, 5184, 6561, 9216,
+		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
+		331776, 419904, 531441, 589824, 746496, 944784
 	};
 
-	std::vector<long> three_smooth_subsequence1 = // * 2, * 2, * 3 (and repeat) version
+	std::vector<long> test1 = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
 	{
-		1, 2, 4, 12, 24, 48, 144, 288, 576, 1728, 3456, 6912, 20736, 41472, 82944, 248832, 497664, 995328, 2985984
+		1, 4, 9, 16, 36, 64, 144, 256, 576, 1296, 2916, 4096, 5184, 6561, 9216,
+		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
+		331776, 419904, 531441, 589824, 746496, 944784
 	};
 
-	std::vector<long> three_smooth_subsequence2 = // procedural version
+	
+	// The problem with this strategy is it means all values are 2^{0,2}*3^k
+	// Try to multiply current number by 9/4
+	// If you cannot, take the previous number and multiply it by 4
+	std::vector<long> test2 =
 	{
-		1, 2, 4, 12, 24, 48, 144, 288, 576, 1152, 3456, 6912, 13824, 27648, 82944, 165888, 331776, 995328, 1990656
+		1, 4, 9, 16, 36, 81, 144, 256, 576, 1296, 2916, 4096, 5184, 6561, 9216,
+		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
+		331776, 419904, 531441, 589824, 746496, 944784
+	};
+
+	std::vector<long> test3 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
+	{
+		1, 4, 9, 23, 52, 118, 266, 599, 1348, 3034, 6827, 15361, 34563, 77767, 174976, 393697, 885819
+	};
+
+	std::vector<long> test4 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
+	{
+		1, 4, 9, 21, 48, 118, 266, 599, 1348, 3034, 6827, 15361, 34563, 77767, 174976, 393697, 885819
+	};
+
+	// n = 1, 4, 9, ceil((9*2.25^(k-3))), k=4+
+
+	std::vector<long> test5 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
+	{
+		1, 4, 9, 21, 46, 103, 231, 519, 1168, 2628, 5912, 13302, 29928
+	};
+
+	//v = ((4 ^ (1 / (ln(n) / ln(k))))*(2.25 ^ (1 - 1 / (ln(n) / ln(k))))) ^ (n - k + 1), n = 4 + k, k = 1.56
+	std::vector<long> test6 =
+	{
+		1, 4, 9, 21, 55, 133, 324, 787, 1912, 2628, 5912, 13302, 29928
+	};
+
+	// Basically Tokuda with a small change (instead of /5 it's /2.25/2.25)
+	std::vector<long> test7 = // ceil((10*2.25^(k-1) - 4)/2.25/2.25)
+	{
+		1, 4, 9, 20, 45, 102, 230, 519, 1167, 2627, 5911, 13301, 29927
+	};
+
+	// Basically Tokuda with a small change again
+	// The basic idea is to do a perfect split of the 9 down the middle, hence 9/2
+	std::vector<long> test8 = // ceil((9*2.25^(k-1) - 4)/(9/2)), k=5 [first index doesn't quite work but that's fine]
+	{
+		1, 4, 10, 22, 51, 115, 259, 583, 1313, 2955, 6650, 14963, 33668
+	};
+
+	// Basically Tokuda with a small change again.
+	// The basic idea is to pick a irrational ratio (no particular one -- so long as it is dissimilar from 2,3) somewhere in the (4,5) range.
+	std::vector<long> test9 = // ceil((9*2.25^(k-1) - 4)/sqrt(21)), k=5 [first index doesn't quite work but that's fine]
+	{
+		1, 4, 11, 24, 55, 125, 283, 637, 1433, 3226, 7258, 16331, 36745
+	};
+
+	// Basically Tokuda with a small change again.
+	std::vector<long> test10 = // ceil((9*2.25^(k-1) - 4)/sqrt(21)), k=5 [first index doesn't quite work but that's fine]
+	{
+		1, 4, 11, 26, 60, 137, 310, 699, 1575, 3545, 7979, 17955, 40400
+	};
+
+	// Basically Tokuda with a small change again.
+	std::vector<long> test11 = // ceil((9*2.25^(k-1) - 4)/4.95), k=5 [first index doesn't quite work but that's fine]
+	{
+		1, 4, 11, 20, 46, 105, 236, 530, 1194, 2687, 6046, 13603, 30607
+	};
+
+	//T(n) = (T(n-1) - floor(T(n-1)/2.25))*(T(n-1)/(T(n-1)-ceil(T(n-1)/2.25)))*2.25, n=4
+
+	// Tokuda had to try this, right?
+	std::vector<long> test12 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 5
+	{
+		1, 4, 11, 25, 57, 129, 291, 656, 1477, 3325, 7481, 16833, 37876
+	};
+
+	// Similar-ish
+	std::vector<long> test13 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 4.5
+	{
+		1, 4, 10, 22, 51, 115, 259, 583, 1313, 2955, 6650, 14963, 33668
+	};
+
+	// ceil((n - ceil(n/9))*(n/(n-ceil(n/9)))*2.25), n=9
+	std::vector<long> test14 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 4.5
+	{
+		1, 4, 9, 21, 48, 108, 243, 547, 1231, 2770, 6233, 14025, 31557
 	};
 }

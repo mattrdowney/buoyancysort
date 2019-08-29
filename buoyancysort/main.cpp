@@ -54,7 +54,7 @@ int main()
 
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::three_smooth_subsequence2);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::test14);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
