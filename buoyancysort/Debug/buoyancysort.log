@@ -37,4 +37,11 @@ c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14):
           [
               Type=long
           ]
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(19): warning C4101: 'a': unreferenced local variable
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(63): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
+          with
+          [
+              Type=current_type,
+              _Ty=long
+          ]
   buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe

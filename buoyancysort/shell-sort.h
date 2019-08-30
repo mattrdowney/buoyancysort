@@ -16,6 +16,7 @@ namespace ShellSort
 			long gap = gap_sequence[gap_index];
 			for (long unsorted_cursor = (before_first + 1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
 			{
+				int a;
 				Type temp = data[unsorted_cursor];
 				long insertion_cursor;
 				for (insertion_cursor = unsorted_cursor; insertion_cursor - (before_first + 1) >= gap && data[insertion_cursor - gap] > temp; insertion_cursor -= gap)
