@@ -71,114 +71,54 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	// (4^(1/lg(n)))*(2.5^(1-1/lg(n)))
-	// geometric mean between 4 and 2.5 with n=1 
-	// First attempt at formula: ((4^(1/(ln(n)/ln(k))))*(2.25^(1-1/(ln(n)/ln(k)))))^(n-k), n=15+k, k=1.55
-	// Thus this extrapolation yields:
-	std::vector<long> extrapolated_ciura_gap_sequence2 =
-	{
-		1, 4, 10, 23, 57, 132, 301, 701, 1750, 3873, 9320, 22398, 53751, 128842, 308509, 738012
-	};
-	// This worked pretty well; hopefully it's a step in the right direction -- until I beat the extrapolated Ciura sequence this isn't particularly interesting
-
-
-	std::vector<long> four_nine_smooth = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
+	// I'll probably refer to this as Pratt^2 (read: Pratt-squared).
+	std::vector<long> not_to_be_written_off = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
 	{
 		1, 4, 9, 16, 36, 64, 81, 144, 256, 324, 576, 729, 1024, 1296, 2304, 2916, 4096, 5184, 6561, 9216,
 		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
 		331776, 419904, 531441, 589824, 746496, 944784
 	};
+	// worst-case gap distance is (3/2)^2 or 9/4, this is convenient because the ratio of 2s to 3s asymptotically approaches 9/4.
+	// The number of 3-smooth numbers up to n is O(lg(n)^2), so it makes sense that squaring them turns what would normally be an O(n*lg(n)^2) algorithm into an something closer to an O(n*lg(n)) algorithm -- I would expect O( n * lg(n) * lg(lg(n)) ) which has to do with the cost of Insertion Sort.
+	// The hard part is proving any of this conjecture.
+	// Additionally, if you can prove that the sort is perfect asymptotically, you can hybridize it with e.g. Ciura's gap sequence.
+	// 1 Million elements: ratio of 2.33078495 ideal -- aside: lg(lg(1000000)) == 4.31698335
+	// 100 Thousand elements: ratio of 2.06523435 ideal -- aside: lg(lg(100000)) == 4.05394894
+	// 10 Thousand elements: ratio of 1.78367046 ideal -- aside: lg(lg(10000)) == 3.73202085
+	// 1 Thousand elements: ratio of 1.47705385 ideal -- aside: lg(lg(1000)) == 3.31698335
+	// 1 Hundred elements: ratio of 1.20562513 ideal -- aside: lg(lg(100)) == 2.73202085
+	// As an aside, I am really curious about Tokuda's algorithm and how it relates to all of this (it's a really impressive algorithm).
 
-	std::vector<long> test1 = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
+	std::vector<long> hybridized_not_to_be_written_off = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
 	{
-		1, 4, 9, 16, 36, 64, 144, 256, 576, 1296, 2916, 4096, 5184, 6561, 9216,
+		1, 4, 10, 23, 57, 132, 301, 701, 1296, 2304, 2916, 4096, 5184, 6561, 9216,
 		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
 		331776, 419904, 531441, 589824, 746496, 944784
-	};
+	}; // This barely changes performance (and I would need to verify it's correct).
 
-	
-	// The problem with this strategy is it means all values are 2^{0,2}*3^k
-	// Try to multiply current number by 9/4
-	// If you cannot, take the previous number and multiply it by 4
-	std::vector<long> test2 =
+	// oh hey, I was reading Pratt's original paper and he gave me a really useful insight, so I am going to test 9^i*25^j (because 5/3 is the largest prime ratio gap)
+	std::vector<long> pratt_3_by_5 = // http://oeis.org/A003593 (numbers where 3^i*5^j and i, j >= 0)
 	{
-		1, 4, 9, 16, 36, 81, 144, 256, 576, 1296, 2916, 4096, 5184, 6561, 9216,
-		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
-		331776, 419904, 531441, 589824, 746496, 944784
+		1, 3, 5, 9, 15, 25, 27, 45, 75, 81,
+		125, 135, 225, 243, 375, 405, 625, 675, 729, 1125,
+		1215, 1875, 2025, 2187, 3125, 3375, 3645, 5625, 6075, 6561,
+		9375, 10125, 10935, 15625, 16875, 18225, 19683, 28125, 30375, 32805,
+		46875, 50625, 54675, 59049
 	};
 
-	std::vector<long> test3 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
+	// That's exciting :D
+	std::vector<long> pratt_squared = // no oeis.org sequence =( (numbers where 9^i*25^j and i, j >= 0)
 	{
-		1, 4, 9, 23, 52, 118, 266, 599, 1348, 3034, 6827, 15361, 34563, 77767, 174976, 393697, 885819
+		1, 9, 25, 81, 225, 625, 729, 2025, 5625, 6561,
+		15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441, 1265625
+		// TODO: augment with the rest
 	};
 
-	std::vector<long> test4 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
+	std::vector<long> hybridized_pratt_squared = // no oeis.org sequence =( (numbers where 9^i*25^j and i, j >= 0)
 	{
-		1, 4, 9, 21, 48, 118, 266, 599, 1348, 3034, 6827, 15361, 34563, 77767, 174976, 393697, 885819
+		1, 4, 10, 23, 57, 132, 301, 701, 1750, 2025, 5625, 6561,
+		15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441, 1265625
+		// TODO: augment with the rest
 	};
-
-	// n = 1, 4, 9, ceil((9*2.25^(k-3))), k=4+
-
-	std::vector<long> test5 = // 1, 4, T(n)=ceil(T(n-1)*(3^2/2^2)+epsilon) -- worse than Tokuda and (of course) Ciura
-	{
-		1, 4, 9, 21, 46, 103, 231, 519, 1168, 2628, 5912, 13302, 29928
-	};
-
-	//v = ((4 ^ (1 / (ln(n) / ln(k))))*(2.25 ^ (1 - 1 / (ln(n) / ln(k))))) ^ (n - k + 1), n = 4 + k, k = 1.56
-	std::vector<long> test6 =
-	{
-		1, 4, 9, 21, 55, 133, 324, 787, 1912, 2628, 5912, 13302, 29928
-	};
-
-	// Basically Tokuda with a small change (instead of /5 it's /2.25/2.25)
-	std::vector<long> test7 = // ceil((10*2.25^(k-1) - 4)/2.25/2.25)
-	{
-		1, 4, 9, 20, 45, 102, 230, 519, 1167, 2627, 5911, 13301, 29927
-	};
-
-	// Basically Tokuda with a small change again
-	// The basic idea is to do a perfect split of the 9 down the middle, hence 9/2
-	std::vector<long> test8 = // ceil((9*2.25^(k-1) - 4)/(9/2)), k=5 [first index doesn't quite work but that's fine]
-	{
-		1, 4, 10, 22, 51, 115, 259, 583, 1313, 2955, 6650, 14963, 33668
-	};
-
-	// Basically Tokuda with a small change again.
-	// The basic idea is to pick a irrational ratio (no particular one -- so long as it is dissimilar from 2,3) somewhere in the (4,5) range.
-	std::vector<long> test9 = // ceil((9*2.25^(k-1) - 4)/sqrt(21)), k=5 [first index doesn't quite work but that's fine]
-	{
-		1, 4, 11, 24, 55, 125, 283, 637, 1433, 3226, 7258, 16331, 36745
-	};
-
-	// Basically Tokuda with a small change again.
-	std::vector<long> test10 = // ceil((9*2.25^(k-1) - 4)/sqrt(21)), k=5 [first index doesn't quite work but that's fine]
-	{
-		1, 4, 11, 26, 60, 137, 310, 699, 1575, 3545, 7979, 17955, 40400
-	};
-
-	// Basically Tokuda with a small change again.
-	std::vector<long> test11 = // ceil((9*2.25^(k-1) - 4)/4.95), k=5 [first index doesn't quite work but that's fine]
-	{
-		1, 4, 11, 20, 46, 105, 236, 530, 1194, 2687, 6046, 13603, 30607
-	};
-
-	//T(n) = (T(n-1) - floor(T(n-1)/2.25))*(T(n-1)/(T(n-1)-ceil(T(n-1)/2.25)))*2.25, n=4
-
-	// Tokuda had to try this, right?
-	std::vector<long> test12 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 5
-	{
-		1, 4, 11, 25, 57, 129, 291, 656, 1477, 3325, 7481, 16833, 37876
-	};
-
-	// Similar-ish
-	std::vector<long> test13 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 4.5
-	{
-		1, 4, 10, 22, 51, 115, 259, 583, 1313, 2955, 6650, 14963, 33668
-	};
-
-	// ceil((n - ceil(n/9))*(n/(n-ceil(n/9)))*2.25), n=9
-	std::vector<long> test14 = // ceil((9*2.25^(k-1) - x)/(9-x)), k=1, x= 4.5
-	{
-		1, 4, 9, 21, 48, 108, 243, 547, 1231, 2770, 6233, 14025, 31557
-	};
+	// It sort of goes without saying: I really like this
 }

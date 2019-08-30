@@ -29,7 +29,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 50000;
+	const long size = 1000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -54,7 +54,7 @@ int main()
 
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::test14);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::hybridized_pratt_squared);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, 50);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
