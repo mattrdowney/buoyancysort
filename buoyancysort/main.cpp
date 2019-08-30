@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include <random>
+#include <set>
 #include "bubble-sort.h"
 #include "buoyancysort.h"
 #include "heap-tests.h"
@@ -29,7 +30,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000;
+	const long size = 1000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -38,12 +39,12 @@ int main()
 		data[i] = size - i;
 	}
 	
-	//std::random_device random_device;
-	//std::mt19937 random_number_generator(random_device());
-	//random_number_generator.seed(2);
-	//std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+	std::random_device random_device;
+	std::mt19937 random_number_generator(random_device());
+	random_number_generator.seed(2);
+	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	Print::print((current_type*)data.data(), -1, size);
+	//Print::print((current_type*)data.data(), -1, size);
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
@@ -51,12 +52,21 @@ int main()
 	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 
 	IntThatTracksComparisons::reset_comparisons();
+	
+	// (Ignoring the fatal bug) this worked pretty well for a first attempt.
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_pratt_3_5_squared);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{2,3,5}, 20);
+	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
+	{
+		std::cout << *iterator << ' ';
+	}
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::generalized_pratt(std::set<long>{7,11}, 50)); // Better performance yet
 
-	SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
+	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
-	Print::print((current_type*)data.data(), -1, size);
+	//Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
