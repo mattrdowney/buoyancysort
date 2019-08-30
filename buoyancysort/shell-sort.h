@@ -47,10 +47,10 @@ namespace ShellSort
 		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
 	}
 
-	// This presumably uses local optimization (taking small subproblems and building off of them), so if you want to beat it you probably want to rely on global optimization
-	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,
+	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701, // FIXME: I should add 1750 (after testing that's better) for a fairer comparison
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
-		1577 /*1750*/, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
+		//1750 /*not legit*/, 3937, 8858, 19930, 44842, 100894, 227011, 510774, 1149241 };
+		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
 
 	std::vector<long> pratt_three_smooth_gap_sequence =
 	{
@@ -71,115 +71,21 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	// I'll probably refer to this as Pratt^2 (read: Pratt-squared).
-	std::vector<long> not_to_be_written_off = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
-	{
-		1, 4, 9, 16, 36, 64, 81, 144, 256, 324, 576, 729, 1024, 1296, 2304, 2916, 4096, 5184, 6561, 9216,
-		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
-		331776, 419904, 531441, 589824, 746496, 944784
-	};
-	// worst-case gap distance is (3/2)^2 or 9/4, this is convenient because the ratio of 2s to 3s asymptotically approaches 9/4.
-	// The number of 3-smooth numbers up to n is O(lg(n)^2), so it makes sense that squaring them turns what would normally be an O(n*lg(n)^2) algorithm into an something closer to an O(n*lg(n)) algorithm -- I would expect O( n * lg(n) * lg(lg(n)) ) which has to do with the cost of Insertion Sort.
-	// The hard part is proving any of this conjecture.
-	// Additionally, if you can prove that the sort is perfect asymptotically, you can hybridize it with e.g. Ciura's gap sequence.
-	// 1 Million elements: ratio of 2.33078495 ideal -- aside: lg(lg(1000000)) == 4.31698335
-	// 100 Thousand elements: ratio of 2.06523435 ideal -- aside: lg(lg(100000)) == 4.05394894
-	// 10 Thousand elements: ratio of 1.78367046 ideal -- aside: lg(lg(10000)) == 3.73202085
-	// 1 Thousand elements: ratio of 1.47705385 ideal -- aside: lg(lg(1000)) == 3.31698335
-	// 1 Hundred elements: ratio of 1.20562513 ideal -- aside: lg(lg(100)) == 2.73202085
-	// As an aside, I am really curious about Tokuda's algorithm and how it relates to all of this (it's a really impressive algorithm).
-
-	std::vector<long> hybridized_not_to_be_written_off = // http://oeis.org/A025620 (numbers where 4^i*9^j and i, j >= 0)
-	{
-		1, 4, 10, 23, 57, 132, 301, 701, 1296, 2304, 2916, 4096, 5184, 6561, 9216,
-		11664, 16384, 20736, 26244, 36864, 46656, 59049, 65536, 82944, 104976, 147456, 186624, 236196, 262144,
-		331776, 419904, 531441, 589824, 746496, 944784
-	}; // This barely changes performance (and I would need to verify it's correct).
-
-	// oh hey, I was reading Pratt's original paper and he gave me a really useful insight, so I am going to test 9^i*25^j (because 5/3 is the largest prime ratio gap)
-	std::vector<long> pratt_3_by_5 = // http://oeis.org/A003593 (numbers where 3^i*5^j and i, j >= 0)
-	{
-		1, 3, 5, 9, 15, 25, 27, 45, 75, 81,
-		125, 135, 225, 243, 375, 405, 625, 675, 729, 1125,
-		1215, 1875, 2025, 2187, 3125, 3375, 3645, 5625, 6075, 6561,
-		9375, 10125, 10935, 15625, 16875, 18225, 19683, 28125, 30375, 32805,
-		46875, 50625, 54675, 59049
-	};
-
-	// That's exciting :D
-	std::vector<long> pratt_squared = // no oeis.org sequence =( (numbers where 9^i*25^j and i, j >= 0)
-	{
-		1, 9, 25, 81, 225, 625, 729, 2025, 5625, 6561,
-		15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441, 1265625
-		// TODO: augment with the rest
-	};
-
-	std::vector<long> hybridized_pratt_squared = // no oeis.org sequence =( (numbers where 9^i*25^j and i, j >= 0)
+	// This formula is more
+	std::vector<long> hybridized_pratt_3_5_squared = //  http://oeis.org/A003593 (but squared) sequence (numbers where 9^i*25^j and i, j >= 0)
 	{
 		1, 4, 10, 23, 57, 132, 301, 701, 1750, 2025, 5625, 6561,
 		15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441, 1265625
 		// TODO: augment with the rest
 	};
-	// It sort of goes without saying: I really like this
-
-	std::vector<long> just_in_case = // http://oeis.org/A003592
-	{
-		1, 2, 4, 5, 8, 10, 16, 20, 25, 32,
-		40, 50, 64, 80, 100, 125, 128, 160, 200, 250,
-		256, 320, 400, 500, 512, 625, 640, 800, 1000, 1024,
-		1250, 1280, 1600, 2000, 2048, 2500, 2560, 3125, 3200, 4000,
-		4096, 5000, 5120, 6250, 6400, 8000, 8192, 10000
-	};
-
-	std::vector<long> just_in_case_squared = // 4^i*25^j
-	{
-		1, 4, 16, 25, 64, 100, 256, 400, 625, 1024,
-		1600, 2500, 4096, 6400, 10000, 15625, 16384, 25600, 40000, 62500, // You can tell if a formula is subjectively bad if e.g. you don't hit a million around 20 values
-		// TODO?
-	};
-
-	// I should probably test 5/11, 7/11, 5/7, and a few others.
-	// Maybe some eccentric tests like 17/42
-	// Testing non-adjacent primes (or non-primes or co-primes) is sort of important.
-	// Testing numbers 50+ will probably stop being useful.
-	std::vector<long> test1 = // 5^i*11^j http://oeis.org/A003598
-	{
-		1, 5, 11, 25, 55, 121, 125, 275, 605, 625,
-		1331, 1375, 3025, 3125, 6655, 6875, 14641, 15125, 15625, 33275,
-		34375, 73205, 75625, 78125, 161051, 166375, 171875, 366025, 378125, 390625,
-		805255, 831875, 859375, 1771561, 1830125, 1890625
-	};
-
-	std::vector<long> test2 = // 25^i*121^j
-	{
-		1, 25, 121, 625, 3025, 14641, 15625, 75625, 366025, 390625, // even if it doesn't seem like it's gonna work, you still have to try
-		1771561
-	};
-
-	// a lot of this is arbitrary
-	std::vector<long> test3 = // 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
-	{
-		// The interpolation formula: ceil(a*sqrt(b/a))
-		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
-		1, 4, 11,
-		25, 55,
-		121, 275,
-		625, 1375,
-		3025, 6655,
-		14641, // first value with no need for interpolation
-		15625, 34375,
-		75625, 166375,
-		366025,
-		390625, 831875,
-		1771561
-	};
 
 	// Best formula yet. Within striking distance of Ciura's formula (at least in terms of the asymptotic version because of its hybrid nature).
-	std::vector<long> test4 = // Ciura hybridized - 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
+	std::vector<long> hybridized_pseudo_pratt_5_11_squared = // Ciura hybridized - 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
 	{
 		// The interpolation formula: ceil(a*sqrt(b/a))
 		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
 		1, 4, 10, 23, 57, 132, 301, 701, 1750,
+		//1375, 2040, // I mostly wasn't sabotaged here. 1750 generally worsens Ciura's formula (it seems to worsen asymptotic behavior), but it helps me somehow
 		3025, 6655,
 		14641, // first value with no need for interpolation
 		15625, 34375,
@@ -188,28 +94,4 @@ namespace ShellSort
 		390625, 831875,
 		1771561
 	};
-
-	// Awww =( (it wasn't going to be trivial)
-	// I'll need to see if there's a nice algorithm for combining gaps that are too close (it would need extra contextual information)
-	std::vector<long> test5 = // Ciura hybridized - with even more arbitrary going on- 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
-	{
-		// The interpolation formula: ceil(a*sqrt(b/a))
-		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
-		1, 4, 10, 23, 57, 132, 301, 701, 1750,
-		3025, 6655,
-		//14641, // first value with no need for interpolation
-		15125, // how's that for trivial
-		/*15625,*/ 34375,
-		75625, 166375,
-		//366025, // if only I could "get rid of" (you can't actually do that, at least not trivially) these gaps I could probably beat Ciura's sequence
-		378125, // how's that for trivial
-		/*390625,*/ 831875,
-		1771561
-	};
-	// Thinking about why this last one didn't work (I pretty much knew it wasn't going to):
-	// There are basically three gap types in my algorithm:
-	// (a^2)^2, (a^2)*(b^2), (b^2)^2
-	// Generally, if you screw with the alignments then the guarantees no longer propagate correctly.
-	// In the case of trying to replace two values with a median: you get a problem because you are introducing an x-factor where x=sqrt(b/a)
-	// In the case of trying to replace a value with an interpolated median (limit of 1) you are adding a term among sqrt((a^2)^2), sqrt((a^2)*(b^2)), sqrt((b^2)^2), which does not mess with alignment.
 }
