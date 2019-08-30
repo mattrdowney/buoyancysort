@@ -188,4 +188,22 @@ namespace ShellSort
 		390625, 831875,
 		1771561
 	};
+
+	// Awww =( (it wasn't going to be trivial)
+	// I'll need to see if there's a nice algorithm for combining gaps that are too close (it would need extra contextual information)
+	std::vector<long> test5 = // Ciura hybridized - with even more arbitrary going on- 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
+	{
+		// The interpolation formula: ceil(a*sqrt(b/a))
+		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
+		1, 4, 10, 23, 57, 132, 301, 701, 1750,
+		3025, 6655,
+		//14641, // first value with no need for interpolation
+		15125, // how's that for trivial
+		/*15625,*/ 34375,
+		75625, 166375,
+		//366025, // if only I could "get rid of" (you can't actually do that, at least not trivially) these gaps I could probably beat Ciura's sequence
+		378125, // how's that for trivial
+		/*390625,*/ 831875,
+		1771561
+	};
 }
