@@ -206,4 +206,10 @@ namespace ShellSort
 		/*390625,*/ 831875,
 		1771561
 	};
+	// Thinking about why this last one didn't work (I pretty much knew it wasn't going to):
+	// There are basically three gap types in my algorithm:
+	// (a^2)^2, (a^2)*(b^2), (b^2)^2
+	// Generally, if you screw with the alignments then the guarantees no longer propagate correctly.
+	// In the case of trying to replace two values with a median: you get a problem because you are introducing an x-factor where x=sqrt(b/a)
+	// In the case of trying to replace a value with an interpolated median (limit of 1) you are adding a term among sqrt((a^2)^2), sqrt((a^2)*(b^2)), sqrt((b^2)^2), which does not mess with alignment.
 }
