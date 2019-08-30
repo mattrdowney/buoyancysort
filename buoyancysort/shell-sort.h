@@ -121,4 +121,71 @@ namespace ShellSort
 		// TODO: augment with the rest
 	};
 	// It sort of goes without saying: I really like this
+
+	std::vector<long> just_in_case = // http://oeis.org/A003592
+	{
+		1, 2, 4, 5, 8, 10, 16, 20, 25, 32,
+		40, 50, 64, 80, 100, 125, 128, 160, 200, 250,
+		256, 320, 400, 500, 512, 625, 640, 800, 1000, 1024,
+		1250, 1280, 1600, 2000, 2048, 2500, 2560, 3125, 3200, 4000,
+		4096, 5000, 5120, 6250, 6400, 8000, 8192, 10000
+	};
+
+	std::vector<long> just_in_case_squared = // 4^i*25^j
+	{
+		1, 4, 16, 25, 64, 100, 256, 400, 625, 1024,
+		1600, 2500, 4096, 6400, 10000, 15625, 16384, 25600, 40000, 62500, // You can tell if a formula is subjectively bad if e.g. you don't hit a million around 20 values
+		// TODO?
+	};
+
+	// I should probably test 5/11, 7/11, 5/7, and a few others.
+	// Maybe some eccentric tests like 17/42
+	// Testing non-adjacent primes (or non-primes or co-primes) is sort of important.
+	// Testing numbers 50+ will probably stop being useful.
+	std::vector<long> test1 = // 5^i*11^j http://oeis.org/A003598
+	{
+		1, 5, 11, 25, 55, 121, 125, 275, 605, 625,
+		1331, 1375, 3025, 3125, 6655, 6875, 14641, 15125, 15625, 33275,
+		34375, 73205, 75625, 78125, 161051, 166375, 171875, 366025, 378125, 390625,
+		805255, 831875, 859375, 1771561, 1830125, 1890625
+	};
+
+	std::vector<long> test2 = // 25^i*121^j
+	{
+		1, 25, 121, 625, 3025, 14641, 15625, 75625, 366025, 390625, // even if it doesn't seem like it's gonna work, you still have to try
+		1771561
+	};
+
+	// a lot of this is arbitrary
+	std::vector<long> test3 = // 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
+	{
+		// The interpolation formula: ceil(a*sqrt(b/a))
+		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
+		1, 4, 11,
+		25, 55,
+		121, 275,
+		625, 1375,
+		3025, 6655,
+		14641, // first value with no need for interpolation
+		15625, 34375,
+		75625, 166375,
+		366025,
+		390625, 831875,
+		1771561
+	};
+
+	// Best formula yet. Within striking distance of Ciura's formula (at least in terms of the asymptotic version because of its hybrid nature).
+	std::vector<long> test4 = // Ciura hybridized - 25^i*121^j with interpolation between values (quasi-geometric average of adjacent nodes (trying to minimize ratio on both sides, except on first gap), but only if the gap exceeds 2.2 (11/5))
+	{
+		// The interpolation formula: ceil(a*sqrt(b/a))
+		// An aside, as long as you add a constant number of interpolation nodes between elements, time complexity should not change drastically.
+		1, 4, 10, 23, 57, 132, 301, 701, 1750,
+		3025, 6655,
+		14641, // first value with no need for interpolation
+		15625, 34375,
+		75625, 166375,
+		366025, // if only I could "get rid of" (you can't actually do that, at least not trivially) these gaps I could probably beat Ciura's sequence
+		390625, 831875,
+		1771561
+	};
 }
