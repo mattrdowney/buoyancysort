@@ -180,5 +180,31 @@ namespace ShellSort
 		return exponentiated;
 	}
 
+	std::vector<long> primorial_sort = // a slower growing function instead of the primorial: n! where some_prime = p(n)
+	{
+		1, /*2,*/ 4, // from 2-smooth #s
+		9, 16, /*connecting seam post-30*/ 36, // from 3-smooth squares
+		64, 125, /*connecting seam post-210*/ 216, // from 5-smooth cubes
+		256, 625, 1296, 2401, 4096, 6561, 10000, 20736, // from 7-smooth quads
+		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000 // from 11-smooth quints
+	}; // not bad at all without hybridization
+
+	// Hybridization doesn't offer much of an improvement
+	std::vector<long> hybridized_primorial_sort = // a slower growing function instead of the primorial: n! where some_prime = p(n)
+	{
+		1, 4, 10, 23, 57, 132, 301, 701,
+		1296, 2401, 4096, 6561, 10000, 20736, // from 7-smooth quads
+		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000 // from 11-smooth quints
+	};
+
+	// Hmmm, but there's an interesting idea...
+	// Instead of doing this I can do the following:
+	// prefix with 1
+	// Next 3 generalized_pratt<2,3> numbers (4, 9, 36)
+	// Next 5 generalized_pratt<3,5> numbers
+	// Next 7 generalized_pratt<5,7> numbers, etc
+
+	// I'd want to make sure the primes grow about as quickly as the "3, 5, 7" sequence (whatever the final version looks like)
+
 	// My intuition says the best path forward is to work on the 4^i*9^j version. (Someone else can always test other possibilities; I would want to write code to test them via brute force if I actuallly went down that path)
 }

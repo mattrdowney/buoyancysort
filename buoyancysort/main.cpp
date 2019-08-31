@@ -55,11 +55,12 @@ int main()
 	
 	// (Ignoring the fatal bug) this worked pretty well for a first attempt.
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_pratt_3_5_squared);
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7 }, 20);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11 }, 25);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
 	}
+	std::cout << std::endl;
 	// Eventually, I'll want to generalize this even more.
 	// For instance: up until now I've used a hybrid approach (which is definitely possible with two layers),
 	// That being said, you might be able to do 3+ layers of sorting:
@@ -70,7 +71,7 @@ int main()
 	// I'm pretty sure I want to use 2-smooth numbers up until 2!, 3-smooth squares up until 5!, 5-smooth cubes up until 7!, ...
 	// What I can't know until I test is whether or not you need to add an extra value to help with interpolation
 	// (It's already a stretch that this works, at least on the first try.)
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::generalized_pratt(std::set<long>(result.begin(), result.end()), 50)); // Better performance yet
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_primorial_sort); // Better performance yet
 
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
 
