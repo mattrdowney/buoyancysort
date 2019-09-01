@@ -56,6 +56,12 @@ int main()
 	// (Ignoring the fatal bug) this worked pretty well for a first attempt.
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_pratt_3_5_squared);
 	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11 }, 25);
+	double a = 1;
+	double b = 2.38; // This seems like it might actually be the stable equilibrium. It matches Ciura's sequence pretty well. Adding or subtracting a small epsilon seems to break the sequence.
+	// Now I just need to find the exact equation.
+	// I'm also curious if there's anything special about 119/50.
+	// The number seems at least a little familiar but I can't place it.
+	result = ShellSort::gap_sequence_generator<long>([a, b](long n) { return (long)ceil(((pow(b, n) - pow(a, n)) / ((b - a) * pow(a, n - 1)))); }, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
@@ -71,8 +77,8 @@ int main()
 	// I'm pretty sure I want to use 2-smooth numbers up until 2!, 3-smooth squares up until 5!, 5-smooth cubes up until 7!, ...
 	// What I can't know until I test is whether or not you need to add an extra value to help with interpolation
 	// (It's already a stretch that this works, at least on the first try.)
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_primorial_sort); // Better performance yet
-
+	ShellSort::sort((current_type*)data.data(), -1, size, result);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
