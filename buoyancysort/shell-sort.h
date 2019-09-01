@@ -301,6 +301,27 @@ namespace ShellSort
 		1, 4, 9, 22, 53, 126, 297, 700, 1650, 3888, 9162, 21588, 50865, 119849, 282387, 665359
 	};
 
+	std::vector<long> invisal_gap_sequence12 =
+	{
+		// floor ceil floor ceil floor ceil
+		1, 5, 7, 23, 53, 131,
+		313, 751, 1783, 4253, 10133, 24151,
+		57493, 136963, 326219, 777097, 1850987, 4409033
+		// From equation:
+		// double unrounded = (pow(b, n) - 1) / (b - 1);
+		// long rounded = (n % 2) == 0 ? floor(unrounded) : ceil(unrounded);
+		// return rounded;
+		// Then, you just need to find the floor'ed or ceil'ed next/previous prime.
+	};
+
+	std::vector<long> invisal_gap_sequence13 =
+	{
+		// floor ceil floor ceil floor ceil
+		1, 4, 10, 23, 53, 131,
+		313, 751, 1783, 4253, 10133, 24151,
+		57493, 136963, 326219, 777097, 1850987, 4409033
+	};
+
 	//I really should've made this function a long time ago...
 	
 	template <typename Type>

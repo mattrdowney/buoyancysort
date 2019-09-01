@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <math.h>
 #include <random>
@@ -57,11 +58,31 @@ int main()
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::hybridized_pratt_3_5_squared);
 	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11 }, 25);
 	double a = 1;
-	double b = 2.38; // This seems like it might actually be the stable equilibrium. It matches Ciura's sequence pretty well. Adding or subtracting a small epsilon seems to break the sequence.
-	// Now I just need to find the exact equation.
-	// I'm also curious if there's anything special about 119/50.
-	// The number seems at least a little familiar but I can't place it.
-	result = ShellSort::gap_sequence_generator<long>([a, b](long n) { return (long)ceil(((pow(b, n) - pow(a, n)) / ((b - a) * pow(a, n - 1)))); }, 20L);
+	double b = 4 - 1.61803398874989484820;
+	std::function<long(long)> lambda_function = [a, b](long n)
+	{
+		double unrounded = (pow(b, n) - 1) / (b - 1);
+		long rounded = (n % 2) == 0 ? floor(unrounded) : ceil(unrounded);
+		return rounded;
+	};
+	// So a few comments related to this function:
+	// 1) I was probably overthinking it when I said you need to find the right underestimate numbers that don't repeat redundant actions.
+	// 2) An easy way of thinking about this problem is threading a needle around an asymptotic bound.
+	//        Essentially what you want to do is alternate in some fasion above and below the equation (preferably with prime numbers).
+	//        At first I was leaning towards doing 1 floor_to_prime ceil_to_prime floor ceil floor, because it would give better ratios for the first few numbers
+	//        But then I thought about it philosophically and realized that would mean 1 should be ceiled_to_prime (so 2) which would be incorrect
+	//        So I decided the alternating (at least when it alternates on even/odd and not according to some other math) should be:
+	//        1 5 7 23 53 131 313 751 1783...
+	// 3) Why do you want to thread a needle around an asymptotic bound?
+	//        My theory would be sort of related to the primes. If you have a mathematical boundary and alternate across it, then you force
+	//        Prime numbers to follow a particular pattern.
+	//        You could think about it as using guaranteed or semi-guaranteed statistics to sort.
+	//        I'd hope it's easy to do a worst case analysis, but maybe it's harder than I think (especially since few gap sequences have worst case analysis to back them up).
+	// Now to see if it works.
+
+
+
+	result = ShellSort::gap_sequence_generator<long>(lambda_function, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
@@ -77,7 +98,7 @@ int main()
 	// I'm pretty sure I want to use 2-smooth numbers up until 2!, 3-smooth squares up until 5!, 5-smooth cubes up until 7!, ...
 	// What I can't know until I test is whether or not you need to add an extra value to help with interpolation
 	// (It's already a stretch that this works, at least on the first try.)
-	ShellSort::sort((current_type*)data.data(), -1, size, result);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::invisal_gap_sequence13); // Eh, I guess it didn't work.
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
 
