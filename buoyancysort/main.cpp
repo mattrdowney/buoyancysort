@@ -31,7 +31,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000;
+	const long size = 1000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -56,7 +56,7 @@ int main()
 	
 	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11 }, 25);
 	double a = 1;
-	double b = 4 - 1.61803398874989484820;
+	double b = 4 - 1.61803398874989484820; // 4 minus phi (golden ratio)
 	std::function<long(long)> lambda_function = [a, b](long n)
 	{
 		double unrounded = (pow(b, n) - 1) / (b - 1);
@@ -64,10 +64,10 @@ int main()
 		return rounded;
 	};
 
-	double c = 1;
+	double c = 1.002718281828459045; // 1 + e/1000, super arbitrary --- I think I figured it out based on this
 	std::function<long(long)> lambda_function2 = [a, b, c](long n)
 	{
-		double value = 1.0002; // Yes, this was an accident (I meant to change c). Yes, this somehow made the algorithm better. 
+		double value = 1; // Yes, this was an accident (I meant to change c). Yes, this somehow made the algorithm better. 
 		for (int iteration = 1; iteration < n; iteration += 1)
 		{
 			value = b * value + pow(c,n); // The power function does nothing for now (since c=1)
