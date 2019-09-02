@@ -1,7 +1,6 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(63): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(22): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(183): note: see reference to function template instantiation 'Type FractalMinHeap::left_child<long>(Type,Type,double)' being compiled
           with
@@ -39,7 +38,7 @@ c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14):
               Type=long
           ]
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(20): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(86): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(80): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
           with
           [
               Type=current_type,
@@ -50,47 +49,47 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           with
           [
               _Rx=long,
-              _Callable=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,
+              _Callable=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,
               _Ty=long
           ]
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(16707566): note: see reference to function template instantiation '_Rx std::_Invoker_ret<_Rx,false>::_Call<_Callable&,_Ty>(_Callable &,_Ty &&)' being compiled
           with
           [
               _Rx=long,
-              _Callable=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,
+              _Callable=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,
               _Ty=long
           ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(15732480): note: while compiling class template member function 'long std::_Func_impl_no_alloc<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,_Ret,long>::_Do_call(long &&)'
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(15732480): note: while compiling class template member function 'long std::_Func_impl_no_alloc<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,_Ret,long>::_Do_call(long &&)'
           with
           [
               _Ret=long
           ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1061): note: see reference to class template instantiation 'std::_Func_impl_no_alloc<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,_Ret,long>' being compiled
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1061): note: see reference to class template instantiation 'std::_Func_impl_no_alloc<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,_Ret,long>' being compiled
           with
           [
               _Ret=long
           ]
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1312): note: see reference to class template instantiation 'std::_Is_large<_Impl>' being compiled
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1501): note: see reference to function template instantiation 'void std::_Func_class<_Ret,long>::_Reset<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>>(_Fx &&)' being compiled
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1501): note: see reference to function template instantiation 'void std::_Func_class<_Ret,long>::_Reset<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>>(_Fx &&)' being compiled
           with
           [
               _Ret=long,
-              _Fx=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>
+              _Fx=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>
           ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1501): note: see reference to function template instantiation 'void std::_Func_class<_Ret,long>::_Reset<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>>(_Fx &&)' being compiled
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(1501): note: see reference to function template instantiation 'void std::_Func_class<_Ret,long>::_Reset<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>>(_Fx &&)' being compiled
           with
           [
               _Ret=long,
-              _Fx=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>
+              _Fx=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(75): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(70): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,void>(_Fx)' being compiled
           with
           [
-              _Fx=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>
+              _Fx=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(75): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(70): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>,void>(_Fx)' being compiled
           with
           [
-              _Fx=main::<lambda_88d397c053b57e01aa07cc5a76f55e9e>
+              _Fx=main::<lambda_2dc8b98639ddc02d0aa2c00689fdca20>
           ]
   buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe
