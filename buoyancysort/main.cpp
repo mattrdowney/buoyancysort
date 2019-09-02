@@ -42,7 +42,7 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(2);
+	random_number_generator.seed(1);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
@@ -80,9 +80,19 @@ int main()
 	//        I'd hope it's easy to do a worst case analysis, but maybe it's harder than I think (especially since few gap sequences have worst case analysis to back them up).
 	// Now to see if it works.
 
+	double c = 1.0073;
+	std::function<long(long)> lambda_function2 = [a, b, c](long n)
+	{
+		double value = 1;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			value = b * value + c;
+		}
+		return ceil(value);
+	};
+	
 
-
-	result = ShellSort::gap_sequence_generator<long>(lambda_function, 20L);
+	result = ShellSort::gap_sequence_generator<long>(lambda_function2, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
@@ -98,7 +108,7 @@ int main()
 	// I'm pretty sure I want to use 2-smooth numbers up until 2!, 3-smooth squares up until 5!, 5-smooth cubes up until 7!, ...
 	// What I can't know until I test is whether or not you need to add an extra value to help with interpolation
 	// (It's already a stretch that this works, at least on the first try.)
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::invisal_gap_sequence13); // Eh, I guess it didn't work.
+	ShellSort::sort((current_type*)data.data(), -1, size, result); // Eh, I guess it didn't work.
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//SemiStablePartition::partition<current_type>((current_type*)data.data(), -1, size, size/2);
 
