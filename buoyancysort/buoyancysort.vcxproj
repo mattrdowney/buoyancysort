@@ -167,6 +167,7 @@
     <ClInclude Include="ordered-min-heap.h" />
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
+    <ClInclude Include="quicksort.h" />
     <ClInclude Include="reverse.h" />
     <ClInclude Include="semi-stable-partition.h" />
     <ClInclude Include="shell-sort.h" />

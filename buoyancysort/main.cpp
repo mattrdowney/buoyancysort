@@ -31,7 +31,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 2000;
+	const long size = 1000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -54,7 +54,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 	
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5 }, 25);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11, 13 }, 25);
 	double a = 1;
 	double i = 67.0;
 	double j = 103.0;
@@ -78,7 +78,7 @@ int main()
 		return ceil(pow(value1, r)*pow(value2, 1-r));
 	};
 
-	result = ShellSort::gap_sequence_generator<long>(ciura_approximation, 20L);
+	//result = ShellSort::gap_sequence_generator<long>(ciura_approximation, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
@@ -88,7 +88,7 @@ int main()
 	//ShellSort::sort((current_type*)data.data(), -1, size, result);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::trying_to_beat_ciura5);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique4);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
