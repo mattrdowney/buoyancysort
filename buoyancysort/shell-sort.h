@@ -348,7 +348,20 @@ namespace ShellSort
 		// 1, 4, 10, 23, 55, 131, 316, 751, 1797 -- going to a prime does significantly worse
 		// 1, 4, 10, 23, 55, 131, 316, 753, 1797 // -- going down 1 does significantly better
 		// 1, 4, 9, 23, 55, 131, 316, 753, 1797 -- just in case, checking if deconflicting the 10 does better (it doesn't)
-		1, 4, 10, 23, 55, 131, 316, 753, 1797
+		// 1, 4, 10, 23, 55, 131, 316, 753, 1797
+		// using the following idea:
+		// Every three places the ideal sequence identifies and removes a prime.
+		// E.g. 4/10 have 2 as a common factor; 57/132 have 3 as a common factor
+		// I am testing the idea that you can use this sequence to find primes (if you could and it was reliable you could have a prime number formula which is insane-sounding).
+		// 1 4 10 23 57! 132 317@ 755! 1800# is the sequence I came up with based on 1 4 10 23 55 132 316 754 1797 4285 10214 24349 58046 138374 329863 786349 1874550 4468675 10652732
+		// ! implies the number needed to be shifted to match the prime in the sequence 2, 3, 5, 7, 11, etc (requirement: must have exactly two factors)
+		// # implies the number needed to be shifted to match the adjacent prime and have as many factors as possible.
+		// @ implies the number needed to be shifted to a prime number.
+		// 1, 4, 10, 23, 57, 132, 317, 755, 1800 -- unfortunately didn't work
+		1, 4, 10, 23, 57, 132, 315, 756, 1796 // This works pretty well.
+		// I'm currently going off the principle of periodic behavior based on n instead of primes.
+		// Thus you still try to get common factors in 2/3 elements and a prime for the other, but the common factor is not the nth prime but instead n.
+		// We'll see how this goes. Next I'll commit and clean my code.
 	};
 
 	//I really should've made this function a long time ago...
