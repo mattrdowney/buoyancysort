@@ -31,7 +31,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000000;
+	const long size = 600;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -64,13 +64,12 @@ int main()
 		return rounded;
 	};
 
-	double c = 1.002718281828459045; // 1 + e/1000, super arbitrary --- I think I figured it out based on this
-	std::function<long(long)> lambda_function2 = [a, b, c](long n)
+	std::function<long(long)> lambda_function2 = [a, b](long n)
 	{
-		double value = 1; // Yes, this was an accident (I meant to change c). Yes, this somehow made the algorithm better. 
+		double value = 1;
 		for (int iteration = 1; iteration < n; iteration += 1)
 		{
-			value = b * value + pow(c,n); // The power function does nothing for now (since c=1)
+			value = b * value + pow(1 + 1.0/535.491656, n-1); // (1-(2*pi/n))^n, n=2000 // using the equation for euler's number except 1) subtracting and 2) using 2*pi instead of 1 // aka e^-(2*pi) apparently
 		}
 		return ceil(value);
 	};
@@ -82,9 +81,10 @@ int main()
 	}
 	std::cout << std::endl;
 
-	ShellSort::sort((current_type*)data.data(), -1, size, result);
+	//ShellSort::sort((current_type*)data.data(), -1, size, result);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::trying_to_beat_ciura);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 

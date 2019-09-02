@@ -333,6 +333,24 @@ namespace ShellSort
 		1, 4, 12, 29, 69, 166, 396, 944, 2249, 5358, 12763, 30402, 72418, 172498, 410886, 978717
 	};
 
+	std::vector<long> trying_to_beat_ciura =
+	{
+		
+		// Original sequence: 1, 4, 10, 23, 55, 132, 316, 754, 1797
+		// From: value = b * value + pow(1 + 1.0/535.491656, n-1), b = 4 - phi
+		// 55 and 132 share a common factor (11) so change one of them
+		// 1, 4, 10, 23, 55, 131, 316, 754, 1797
+		// All the other prime factorizations are good (4/10 and 316/754 share a factor of 2)
+		// Attempt didn't work: 1, 4, 10, 23, 55, 131, 316, 754, 1797
+		// Try to match Ciura and deconflict 55/132 like Ciura's sequence
+		// 1, 4, 10, 23, 53, 132, 316, 754, 1797 -- that did significantly worse
+		// Try to deconflict 316/754 even though they only share one common factor
+		// 1, 4, 10, 23, 55, 131, 316, 751, 1797 -- going to a prime does significantly worse
+		// 1, 4, 10, 23, 55, 131, 316, 753, 1797 // -- going down 1 does significantly better
+		// 1, 4, 9, 23, 55, 131, 316, 753, 1797 -- just in case, checking if deconflicting the 10 does better (it doesn't)
+		1, 4, 10, 23, 55, 131, 316, 753, 1797
+	};
+
 	//I really should've made this function a long time ago...
 	
 	template <typename Type>
