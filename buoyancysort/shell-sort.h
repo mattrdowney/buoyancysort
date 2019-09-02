@@ -132,10 +132,58 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	std::vector<long> trying_to_beat_ciura =
+	std::vector<long> trying_to_beat_ciura1 =
 	{
 		1, 4, 10, 23, 57, 132, 311, 756, 1776 // I am happy with this sequence so far.
 		// Minor changes may be needed but it follows the trend I want.
+	};
+
+	std::vector<long> trying_to_beat_ciura2 =
+	{
+		1, 4, 10, 23, 57, 132, 311, 750, 1786
+	};
+
+	std::vector<long> trying_to_beat_ciura3 =
+	{
+		// by tuples of 3: floor, ceil, floor, ceil, floor, ceil
+		// starting from 1:
+		//     n%3==1 implies you need a prime or 1,
+		//     n%3==2 implies you need a number congruent to T(n)%(floor(n/3)+2)==0
+		//     n%3==3 implies you need a number congruent to T(n)%(floor(n/3)+1)==0
+		//     Try to prioritize large prime numbers in factorizations
+		//1, 4, 10, 23, 57, 132, 313, 748, 1786,
+		1, 4, 10, 23, 57, 132, 313, 724, 1772 // nope, didn't work
+	};
+
+	std::vector<long> trying_to_beat_ciura4 =
+	{
+		// by tuples of 3: floor, ceil, floor, ceil, floor, ceil
+		// starting from 1:
+		//     n%3==1 implies you need a prime or 1,
+		//     n%3==2 implies you need a number congruent to T(n)%(floor(n/3)+2)==0
+		//     n%3==3 implies do not modify
+		1, 4, 10,
+		23, 57, 132,
+		313, 750, 1786,
+		4259, 10201, 24139, //101 × 239
+		57493, 136840, 326239, //311 × 1049
+		777097
+	};
+
+	std::vector<long> trying_to_beat_tokuda1 =
+	{
+		// 1 3 8 20 47 111 264 630 1500 3572 8509 20269 48279 114999 273924 652478 1554181 3702006 8818053 21004303
+		// 1 4 10 23 55 132 315 750 1786 4254 10134 24139 57499 136962 326239 777090 1851003 4409026 10502151 25015768
+		1, 3, 8, 20, 49,
+		118, 270, 637, 1509, 3583,
+		8522, 20269, 48279, 114999, 273924,
+		652478, 1554181, 3702006, 8818053, 21004303
+	};
+
+	std::vector<long> trying_to_beat_ciura5 =
+	{
+		//1 4 10 23 55 132 314 747 1779 4236 10086 24013 57169 136106 324035 771445 1836616 4372519 10409861 24783242
+		1, 4, 10, 23, 57, 132, 314, 748, 1779, 4236, 10086, 24013, 57169, 136106, 324035, 771445
 	};
 
 	// TODO: variable primorial gap sequence using k#/i# (thus it e.g. sorts on 2, then 3, then 5 instead of 5 then 3 then 2)
@@ -144,9 +192,40 @@ namespace ShellSort
 	// upon thinking about it more, I feel like this wouldn't worth but I might as well try it if I have time.
 	// Extending to other values that aren't arrays of size k#: 1) sort individual subarrays and merge or 2) double over with more primorials with remainder or 3) interpolate with standard gap sequences to get to primorial sorting
 
-	// TODO: test this concept
-	// prefix with 1
-	// Next 3 generalized_pratt<2,3> numbers (4, 9, 36)
-	// Next 5 generalized_pratt<3,5> numbers
-	// Next 7 generalized_pratt<5,7> numbers, etc
+	// concept:
+	// First 1 generalized_pratt<2> number (1)
+	// Next 3 generalized_pratt<2, 3> numbers (4, 9, 36)
+	// Next 5 generalized_pratt<3, 5, 7> numbers
+	// Next 7 generalized_pratt<2, 3, 5, 7> numbers, etc
+	// Next 9 generalized_pratt<2, 3, 5, 7, 11> numbers, etc
+	std::vector<long> pratt_technique =
+	{
+		1,
+		4, 9, 36,
+		64, 125, 216, 512, 729,
+		1296, 2401, 4096, 6561, 10000, 20736, 38416,
+		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
+		531441, 1000000
+	};
+	// If there's a reason to use an algorithm like this, it likely has to do with mitigating the worst case.
+	// At the same time, I feel like Tokuda's algorithm also does well in the worst case.
+
+	std::vector<long> hybridized_pratt_technique =
+	{
+		1, 4, 10, 23, 57, 132, 301, 701, // hybridization doesn't really affect the algorithm
+
+		1296, 2401, 4096, 6561, 10000, 20736, 38416,
+		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
+		531441, 1000000
+	};
+
+	std::vector<long> pratt_technique2 =
+	{
+		1,
+		4, 9, 25, 36,
+		64, 125, 216, 512, 729,
+		1296, 2401, 4096, 6561, 10000, 20736, 38416,
+		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
+		531441, 1000000
+	};
 }

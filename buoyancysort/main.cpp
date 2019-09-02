@@ -31,7 +31,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000;
+	const long size = 2000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -42,7 +42,7 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(8);
+	random_number_generator.seed(13);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
@@ -54,19 +54,28 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 	
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11 }, 25);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5 }, 25);
 	double a = 1;
+	double i = 67.0;
+	double j = 103.0;
 	double b = 4 - 1.61803398874989484820; // 4 minus phi (golden ratio)
+	double b2 = 9.0 / 4;
 	double c = 1 + 1.0 / 535.491656; //1 + e^(-2*pi) // similar to euler's formula / identity when x=i*pi
 
-	std::function<long(long)> ciura_approximation = [a, b, c](long n)
+	std::function<long(long)> ciura_approximation = [a, b, b2, c](long n)
 	{
-		double value = 1;
+		double value1 = 1;
+		double value2 = 1;
 		for (int iteration = 1; iteration < n; iteration += 1)
 		{
-			value = b * value + pow(c, n - 1);
+			value1 = b * value1 + 1;
 		}
-		return ceil(value);
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			value2 = b2 * value2 + 1;
+		}
+		double r = 0.99101670897; // 1 - 1/(e^(2*(pi*3/4)))
+		return ceil(pow(value1, r)*pow(value2, 1-r));
 	};
 
 	result = ShellSort::gap_sequence_generator<long>(ciura_approximation, 20L);
@@ -78,8 +87,8 @@ int main()
 
 	//ShellSort::sort((current_type*)data.data(), -1, size, result);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::trying_to_beat_ciura);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::trying_to_beat_ciura5);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
