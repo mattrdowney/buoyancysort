@@ -31,7 +31,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000000;
+	const long size = 1000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -42,7 +42,7 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(1);
+	random_number_generator.seed(8);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
@@ -77,10 +77,9 @@ int main()
 	std::cout << std::endl;
 
 	//ShellSort::sort((current_type*)data.data(), -1, size, result);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::trying_to_beat_ciura);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::threading_the_needle_again2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 

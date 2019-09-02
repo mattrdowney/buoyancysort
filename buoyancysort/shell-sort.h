@@ -134,37 +134,9 @@ namespace ShellSort
 
 	std::vector<long> trying_to_beat_ciura =
 	{
-		1, 4, 10, 23, 57, 132, 315, 756, 1796
+		1, 4, 10, 23, 57, 132, 311, 756, 1776 // I am happy with this sequence so far.
+		// Minor changes may be needed but it follows the trend I want.
 	};
-
-	std::vector<long> threading_the_needle_again =
-	{
-		1, 5, 7, 23, 53, 137, 313, 757, 1789, 4289, 10211, 24359, 58043, 138389, 329803, 786349
-	};
-
-	std::vector<long> threading_the_needle_again2 = // this really doesn't seem to work.
-	{
-		1, 4, 10, 23, 53, 137, 313, 757, 1789, 4289, 10211, 24359, 58043, 138389, 329803, 786349
-	};
-
-	// gap sequence similar to UNION(primorial, compositorial)
-	// primorial: 1, 2, 6, 30, 210, 2310, 30030, 510510,
-	// compositorial: 1, 4, 24, 192, 1728, 17280, 207360,
-	// union: 1, 2, 4, 6, 24, 30, 192, 210, 1728, 2310, 17280, 30030, 207360, 510510
-	std::vector<long> primorial_compositorial_union =
-	{
-		1, 2, 4, 6, 24, 30, 192, 210, 1728, 2310, 17280, 30030, 207360, 510510
-	}; // performs very poorly
-
-	// gap sequence similar to UNION(primorial, compositorial, factorial)
-	// primorial: 1, 2, 6, 30, 210, 2310, 30030, 510510,
-	// compositorial: 1, 4, 24, 192, 1728, 17280, 207360,
-	// factorial: 1, 2, 6, 24, 120, 720, 5040, 40320, 362880,
-	// union: 1, 2, 4, 6, 24, 30, 120, 192, 210, 720, 1728, 2310, 5040, 17280, 30030, 40320, 207360, 362880, 510510
-	std::vector<long> primorial_compositorial_factorial_union =
-	{
-		1, 2, 4, 6, 24, 30, 120, 192, 210, 720, 1728, 2310, 5040, 17280, 30030, 40320, 207360, 362880, 510510
-	}; // also performs very poorly
 
 	// TODO: variable primorial gap sequence using k#/i# (thus it e.g. sorts on 2, then 3, then 5 instead of 5 then 3 then 2)
 	// primorial: 1, 2, 6, 30, 210, 2310, 30030, 510510,
