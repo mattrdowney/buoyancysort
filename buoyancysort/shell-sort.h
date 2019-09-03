@@ -273,4 +273,16 @@ namespace ShellSort
 		1296, 2401, 4096, 6561, 10000, 20736,
 		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000
 	};
+
+	// Not doing anything with this right now, but:
+
+	// I am going to seriously consider the "threading the needle" strategy again with a slight difference.
+	// The (4-phi) value seems to be approximately right but something has always been off.
+	// More recently I decided you want to alternate between multiplying (4-phi) +/- 1/e^(pi*(3/4))
+	// What's the reason? I first tried alternating between 2.25 and 2.75 to try to get this behavior but it didn't converge correctly.
+	// I did some trial and error until I remembered the 2.48 number from @invisal https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+	// I checked ((4-phi)/sqrt(2.48))^2 which bounced around this mean pretty well by a distance of ~.1
+	// (You can do this check by 2.48-(4-phi) and 2.28780728982-(4-phi))
+	// I then checked what value was around ~.1 and found 1/e^(pi*(3/4)) is approximately around that value and it has served me well thus far
+	// For the final check I verified that (((4-phi) + 1/e^(pi*(3/4)))^.5)*(((4-phi) - 1/e^(pi*(3/4)))^.5) is approximately (4-phi) -- it is approximately the same (I'll need to do more research to find the precise values if they exist).
 }
