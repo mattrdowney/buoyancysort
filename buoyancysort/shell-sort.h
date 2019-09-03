@@ -285,4 +285,7 @@ namespace ShellSort
 	// (You can do this check by 2.48-(4-phi) and 2.28780728982-(4-phi))
 	// I then checked what value was around ~.1 and found 1/e^(pi*(3/4)) is approximately around that value and it has served me well thus far
 	// For the final check I verified that (((4-phi) + 1/e^(pi*(3/4)))^.5)*(((4-phi) - 1/e^(pi*(3/4)))^.5) is approximately (4-phi) -- it is approximately the same (I'll need to do more research to find the precise values if they exist).
+	// Other things worth mentioning: it seemed like (4-phi) was correct but it also seemed like the answer should have been 99% of (4-phi) (another way of saying the value is wrong).
+	// If you take the geometric average ((4-phi)+1/e^(3/4*pi))^(1/2) * ((4-phi)-1/e^(3/4*pi))^(1/2) you get a slight underestimate of this value (~2.38)
+	// This difference is small, but the first value used is the smaller one and the +1 affects the sequence as well.
 }

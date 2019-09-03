@@ -38,7 +38,7 @@ c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14):
               Type=long
           ]
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(20): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(91): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(122): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
           with
           [
               Type=current_type,
@@ -82,12 +82,12 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Ret=long,
               _Fx=main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(79): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(83): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>,void>(_Fx)' being compiled
           with
           [
               _Fx=main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(79): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(83): note: see reference to function template instantiation 'std::function<long (long)>::function<main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>,void>(_Fx)' being compiled
           with
           [
               _Fx=main::<lambda_5f70c1ddd0cd48fd60e6f7532c862d51>

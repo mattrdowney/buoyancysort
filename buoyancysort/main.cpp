@@ -53,7 +53,11 @@ int main()
 	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 
 	IntThatTracksComparisons::reset_comparisons();
-	
+
+	const double e = 2.7182818284590452353602874713527;
+	const double phi = 1.61803398874989484820;
+	const double pi = 3.14159265358979323846;
+
 	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11, 13 }, 25);
 	double a = 1;
 	double i = 67.0;
@@ -78,17 +82,47 @@ int main()
 		return ceil(pow(value1, r)*pow(value2, 1-r));
 	};
 
-	//result = ShellSort::gap_sequence_generator<long>(ciura_approximation, 20L);
+	std::function<long(long)> ciura_approximation2 = [phi, e, pi](long n)
+	{
+		const double center = 2.41;
+		//const double radius = 1 / pow(e, 1.5*pi);
+		//const double left = center - radius;
+		//const double right = center + radius;
+		//const double radius = 1 / pow(e, 1.25*pi);
+		//const double left = center / (1+radius);
+		//const double right = center * (1+radius);
+		const double min_gap = 2.2878; // empirically determined
+		const double max_gap = 2.48;//2.474; // empirically determined by https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+		//const double min_gap = 2.25;
+		//const double max_gap = pow(center / sqrt(min_gap), 2);
+		double value = 1;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			if ((iteration % 2) == 1) // odd
+			{
+				value = min_gap * value + 1;
+			}
+			else // even
+			{
+				value = max_gap * value + 1;
+			}
+		}
+		std::cout << value << std::endl;
+		return ceil(value);
+	};
+
+	result = ShellSort::gap_sequence_generator<long>(ciura_approximation2, 20L);
+	//result = ShellSort::gap_sequence_generator<long>([phi, e, pi](long n) { return pow(2.282/*(4 - phi) + 1 / pow(e, .75*pi)*/, n - 1); }, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
 		std::cout << *iterator << ' ';
 	}
 	std::cout << std::endl;
 
-	//ShellSort::sort((current_type*)data.data(), -1, size, result);
+	ShellSort::sort((current_type*)data.data(), -1, size, result);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique4);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique4);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
