@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="bubble-sort.h" />
     <ClInclude Include="buoyancysort.h" />
+    <ClInclude Include="comb-sort.h" />
     <ClInclude Include="fractal-max-heap.h" />
     <ClInclude Include="fractal-min-heap.h" />
     <ClInclude Include="heap-tests.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="semi-stable-partition.h" />
     <ClInclude Include="shell-sort.h" />
     <ClInclude Include="sift.h" />
+    <ClInclude Include="sorted.h" />
     <ClInclude Include="spindle.h" />
     <ClInclude Include="stable-three-way-partition.h" />
     <ClInclude Include="stdafx.h" />

@@ -7,6 +7,7 @@
 #include <set>
 #include "bubble-sort.h"
 #include "buoyancysort.h"
+#include "comb-sort.h"
 #include "heap-tests.h"
 #include "hoare-partition.h"
 #include "insertion-sort.h"
@@ -23,6 +24,7 @@
 #include "semi-stable-partition.h"
 #include "shell-sort.h"
 #include "sift.h"
+#include "sorted.h"
 #include "spindle.h"
 
 //typedef int current_type;
@@ -40,10 +42,10 @@ int main()
 		data[i] = size - i;
 	}
 	
-	std::random_device random_device;
-	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(13);
-	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+	//std::random_device random_device;
+	//std::mt19937 random_number_generator(random_device());
+	//random_number_generator.seed(13);
+	//std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
 	
@@ -58,7 +60,7 @@ int main()
 	const double phi = 1.61803398874989484820;
 	const double pi = 3.14159265358979323846;
 
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3, 5, 7, 11, 13 }, 25);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, 25);
 	double a = 1;
 	double i = 67.0;
 	double j = 103.0;
@@ -111,7 +113,7 @@ int main()
 		return ceil(value);
 	};
 
-	result = ShellSort::gap_sequence_generator<long>(ciura_approximation2, 20L);
+	//result = ShellSort::gap_sequence_generator<long>(ciura_approximation2, 20L);
 	//result = ShellSort::gap_sequence_generator<long>([phi, e, pi](long n) { return pow(2.282/*(4 - phi) + 1 / pow(e, .75*pi)*/, n - 1); }, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
@@ -119,13 +121,15 @@ int main()
 	}
 	std::cout << std::endl;
 
-	ShellSort::sort((current_type*)data.data(), -1, size, result);
+	//ShellSort::sort((current_type*)data.data(), -1, size, result);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique4);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique7);
+	CombSort::not_combsort((current_type*)data.data(), -1, size, result);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
+	Sorted::verify((current_type*)data.data(), -1, size);
 	//Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
