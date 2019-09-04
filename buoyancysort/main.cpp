@@ -60,7 +60,7 @@ int main()
 	const double phi = 1.61803398874989484820;
 	const double pi = 3.14159265358979323846;
 
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, 25);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, 40);
 	double a = 1;
 	double i = 67.0;
 	double j = 103.0;
@@ -117,7 +117,7 @@ int main()
 	//result = ShellSort::gap_sequence_generator<long>([phi, e, pi](long n) { return pow(2.282/*(4 - phi) + 1 / pow(e, .75*pi)*/, n - 1); }, 20L);
 	for (std::vector<long>::const_iterator iterator = result.begin(); iterator != result.end(); ++iterator)
 	{
-		std::cout << *iterator << ' ';
+		std::cout << *iterator << ", ";
 	}
 	std::cout << std::endl;
 
@@ -125,7 +125,7 @@ int main()
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::pratt_technique7);
-	CombSort::not_combsort((current_type*)data.data(), -1, size, result);
+	CombSort::not_combsort((current_type*)data.data(), -1, size, CombSort::three_smooth_squares);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
