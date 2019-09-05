@@ -29,9 +29,9 @@ namespace IntThatTracksComparisons
 		friend bool operator>= (const IntThatTracksComparisons &left, const IntThatTracksComparisons &right);
 	};
 
-	static std::size_t comparison_counter = 0;
+	static long long comparison_counter = 0; // std::size_t is unreliable (I had to change it because it overflowed on 100M-sized array (2^32 wasn't enough))
 
-	std::size_t get_comparisons()
+	long long get_comparisons()
 	{
 		return comparison_counter;
 	}

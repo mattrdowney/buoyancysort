@@ -33,7 +33,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000;
+	const long size = 1000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size); // I really should have used a container with unbounded size sooner (stack size is limited)
 	// the cool thing about the IntThatTracksComparisons function is it can work with std::partition, TimSort, etc (even if it has a blackbox implementation) -- plus it's easier to implement
@@ -60,7 +60,7 @@ int main()
 	const double phi = 1.61803398874989484820;
 	const double pi = 3.14159265358979323846;
 
-	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, 70);
+	std::vector<long> result = ShellSort::generalized_pratt(std::set<long>{ 7, 11 }, 100000000);
 	double a = 1;
 	double i = 67.0;
 	double j = 103.0;
@@ -128,7 +128,7 @@ int main()
 	std::vector<long> squared = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, size, true);
 	std::vector<long> unsquared = ShellSort::generalized_pratt(std::set<long>{ 2, 3 }, size, false);
 	std::cout << std::endl << squared.size() << " " << unsquared.size() << std::endl;
-	CombSort::not_combsort((current_type*)data.data(), -1, size, squared, unsquared);
+	CombSort::not_combsort((current_type*)data.data(), -1, size, ShellSort::pratt_technique7);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 

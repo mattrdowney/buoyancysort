@@ -21,6 +21,20 @@ namespace CombSort
 	}
 
 	template <typename Type>
+	void not_combsort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
+	{
+		int phases = 0;
+		//InsertionSort::sort_runs<Type, 36>(data, before_first, after_last);
+		while (!Sorted::verify(data, before_first, after_last))
+		{
+			broadphase(data, before_first, after_last, gap_sequence);
+			//InsertionSort::sort_runs<Type, 36>(data, before_first, after_last);
+			phases += 1;
+		}
+		std::cout << "Phases: " << phases << std::endl;
+	}
+
+	template <typename Type>
 	void not_combsort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence1, std::vector<long> gap_sequence2)
 	{
 		std::set<long> gap_sequence_set(gap_sequence1.begin(), gap_sequence1.end());
@@ -36,15 +50,7 @@ namespace CombSort
 
 		std::cout << gap_sequence.size();
 
-		int phases = 0;
-		InsertionSort::sort_runs<Type, 36>(data, before_first, after_last);
-		while (!Sorted::verify(data, before_first, after_last))
-		{
-			broadphase(data, before_first, after_last, gap_sequence);
-			InsertionSort::sort_runs<Type, 36>(data, before_first, after_last);
-			phases += 1;
-		}
-		std::cout << "Phases: " << phases << std::endl;
+		not_combsort<Type>(data, before_first, after_last, gap_sequence);
 	}
 
 	std::vector<long> three_smooth_squares =

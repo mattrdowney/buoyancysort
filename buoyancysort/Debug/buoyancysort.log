@@ -1,6 +1,7 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(133): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(22): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(183): note: see reference to function template instantiation 'Type FractalMinHeap::left_child<long>(Type,Type,double)' being compiled
           with
@@ -38,13 +39,13 @@ c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14):
               Type=long
           ]
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\comb-sort.h(13): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\comb-sort.h(43): note: see reference to function template instantiation 'void CombSort::broadphase<Type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\comb-sort.h(30): note: see reference to function template instantiation 'void CombSort::broadphase<Type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
           with
           [
               Type=current_type,
               _Ty=long
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(131): note: see reference to function template instantiation 'void CombSort::not_combsort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>,std::vector<_Ty,std::allocator<_Ty>>)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(131): note: see reference to function template instantiation 'void CombSort::not_combsort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
           with
           [
               Type=current_type,
