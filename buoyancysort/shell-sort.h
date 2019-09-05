@@ -120,6 +120,22 @@ namespace ShellSort
 		return result;
 	}
 
+
+	const double e = 2.7182818284590452353602874713527;
+	const double phi = 1.61803398874989484820;
+	const double pi = 3.14159265358979323846;
+
+	std::function<long(long)> ciura_approximation2 = [](long n)
+	{
+		const double r = 2.377411604869019028015819013165746863809012622871126918401; // (n+sqrt(n^2+4))/2, n=2-1/e^(pi)
+		double value = 1;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			value = r * value + 1;
+		}
+		return ceil(value);
+	};
+
 	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
 		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
@@ -143,60 +159,6 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	std::vector<long> trying_to_beat_ciura1 =
-	{
-		1, 4, 10, 23, 57, 132, 311, 756, 1776 // I am happy with this sequence so far.
-		// Minor changes may be needed but it follows the trend I want.
-	};
-
-	std::vector<long> trying_to_beat_ciura2 =
-	{
-		1, 4, 10, 23, 57, 132, 311, 750, 1786
-	};
-
-	std::vector<long> trying_to_beat_ciura3 =
-	{
-		// by tuples of 3: floor, ceil, floor, ceil, floor, ceil
-		// starting from 1:
-		//     n%3==1 implies you need a prime or 1,
-		//     n%3==2 implies you need a number congruent to T(n)%(floor(n/3)+2)==0
-		//     n%3==3 implies you need a number congruent to T(n)%(floor(n/3)+1)==0
-		//     Try to prioritize large prime numbers in factorizations
-		//1, 4, 10, 23, 57, 132, 313, 748, 1786,
-		1, 4, 10, 23, 57, 132, 313, 724, 1772 // nope, didn't work
-	};
-
-	std::vector<long> trying_to_beat_ciura4 =
-	{
-		// by tuples of 3: floor, ceil, floor, ceil, floor, ceil
-		// starting from 1:
-		//     n%3==1 implies you need a prime or 1,
-		//     n%3==2 implies you need a number congruent to T(n)%(floor(n/3)+2)==0
-		//     n%3==3 implies do not modify
-		1, 4, 10,
-		23, 57, 132,
-		313, 750, 1786,
-		4259, 10201, 24139, //101 × 239
-		57493, 136840, 326239, //311 × 1049
-		777097
-	};
-
-	std::vector<long> trying_to_beat_tokuda1 =
-	{
-		// 1 3 8 20 47 111 264 630 1500 3572 8509 20269 48279 114999 273924 652478 1554181 3702006 8818053 21004303
-		// 1 4 10 23 55 132 315 750 1786 4254 10134 24139 57499 136962 326239 777090 1851003 4409026 10502151 25015768
-		1, 3, 8, 20, 49,
-		118, 270, 637, 1509, 3583,
-		8522, 20269, 48279, 114999, 273924,
-		652478, 1554181, 3702006, 8818053, 21004303
-	};
-
-	std::vector<long> trying_to_beat_ciura5 =
-	{
-		//1 4 10 23 55 132 314 747 1779 4236 10086 24013 57169 136106 324035 771445 1836616 4372519 10409861 24783242
-		1, 4, 10, 23, 57, 132, 314, 748, 1779, 4236, 10086, 24013, 57169, 136106, 324035, 771445
-	};
-
 	// TODO: variable primorial gap sequence using k#/i# (thus it e.g. sorts on 2, then 3, then 5 instead of 5 then 3 then 2)
 	// primorial: 1, 2, 6, 30, 210, 2310, 30030, 510510,
 	// "k#/i#": 510510/1, 510510/2, 510510/6, 510510/30, 510510/210, 510510/2310, 510510/30030, 510510/510510, (reverse ordered and only an example since it's variable)
@@ -204,192 +166,19 @@ namespace ShellSort
 	// Extending to other values that aren't arrays of size k#: 1) sort individual subarrays and merge or 2) double over with more primorials with remainder or 3) interpolate with standard gap sequences to get to primorial sorting
 
 	// concept:
-	// First 1 generalized_pratt<2> number (1)
-	// Next 3 generalized_pratt<2, 3> numbers (4, 9, 36)
-	// Next 5 generalized_pratt<3, 5, 7> numbers
-	// Next 7 generalized_pratt<2, 3, 5, 7> numbers, etc
-	// Next 9 generalized_pratt<2, 3, 5, 7, 11> numbers, etc
-	std::vector<long> pratt_technique =
+	// First generalized_pratt<2> number
+	// Next generalized_pratt<2, 3> numbers
+	// Next generalized_pratt<3, 5, 7> numbers
+	// Next generalized_pratt<2, 3, 5, 7> numbers, etc
+	// Next generalized_pratt<2, 3, 5, 7, 11> numbers, etc
+	std::vector<long> probably_reliable =
 	{
-		/*
-		1,
-		4, 9, 36,
-		64, 125, 216, 512, 729,
-		1296, 2401, 4096, 6561, 10000, 20736, 38416,
-		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
-		531441, 1000000
-		*/ // this was due to an error
-
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-
-		1,
+		1, 2,
 		4, 9, 16,
 		27, 64, 125, 216, 512,
-		625, 1296, 2401, 4096, 6561, 10000, 20736,
-		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568
-	};
-	// If there's a reason to use an algorithm like this, it likely has to do with mitigating the worst case.
-	// At the same time, I feel like Tokuda's algorithm also does well in the worst case.
-
-	std::vector<long> hybridized_pratt_technique =
-	{
-		1, 4, 10, 23, 57, 132, 301, 701, // hybridization doesn't really affect the algorithm
-
-		1296, 2401, 4096, 6561, 10000, 20736, 38416,
-		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
-		531441, 1000000
-	};
-
-	std::vector<long> pratt_technique2 =
-	{
-		1,
-		4, 9, 25, 36, // I was originally just adding that 25 then I realized I can use 1,2,3,4 instead of 1,3,5,7,9...
-		64, 125, 216, 512, 729,
-		1296, 2401, 4096, 6561, 10000, 20736, 38416,
-		59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000,
-		531441, 1000000
-	};
-
-	std::vector<long> pratt_technique3 =
-	{
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-		1,
-		4, 9,
-		27, 64, 125,
-		256, 625, 1296, 2401,
-		3125, 7776, 16807, 32768, 59049,
-		15625, 46656, 117649, 262144, 531441, 1000000
-	};
-
-	std::vector<long> pratt_technique4 =
-	{
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-		1,
-		4, 9,
-		27, 64, 125, 216,
-		256, 625, 1296, 2401, 4096, 6561, 10000, 20736,
-		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000
-	};
-
-	std::vector<long> pratt_technique5 = // hybridization
-	{
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-		1, 4, 10, 23, 57, 132, 301, 701,
-
-		1296, 2401, 4096, 6561, 10000, 20736,
-		32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, 1889568, 3200000
-	};
-
-	std::vector<long> pratt_technique6 =
-	{
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-		1,
-		4, 9, 16,
-		27, 64, 125, 216, 512, 729, 1000,
-		1296, 2401, 4096, 6561, 10000, 20736, 38416, 50625, 65536, 104976, 160000, 194481, 331776, 390625, 531441,
-		537824, 759375, 1048576
-	};
-
-	std::vector<long> test = 
-	{
-		1, 4, 10, 29, 67
-	};
-
-	std::vector<long> pratt_technique7 =
-	{
-		//2-smooth: 1 2 4 8 16...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//5-smooth cubes: 1 8 27 64 125 216 512 729 1000 1728 3375 4096 5832 8000 13824 15625 19683 27000 32768 46656 64000 91125 110592
-		//7-smooth quads: 1 16 81 256 625 1296 2401 4096 6561 10000 20736 38416 50625 65536 104976 160000 194481 331776 390625 531441 614656 810000 1048576 1500625 1679616
-		//11-smooth pents: 1 32 243 1024 3125 7776 16807 32768 59049 100000 161051 248832 537824 759375 1048576 1889568 3200000 4084101 5153632 7962624 9765625 14348907 17210368 24300000 33554432
-		//13-smooth hexas: 1 64 729 4096 15625 46656 117649 262144 531441 1000000 1771561 2985984 4826809 7529536 11390625 16777216 34012224 64000000 85766121 113379904 191102976 244140625 308915776 387420489 481890304
-
-		// Wondering how to determine the crossover point for switching to the next sequence? Take the prime and raise it to the power of its sequence e.g. 2^2, 3^3, 5^4, 7^5, 11^6, 13^7
-
-		1, 2, // 2
-		4, 9, 16, // 3
-		27, 64, 125, 216, 512, // 5
-		625, 1296, 2401, 4096, 6561, 10000, // 6
-		16807, 32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576, // 9
-		1771561, 2985984, 4826809, 7529536, 11390625, 16777216, 34012224, // 7
+		625, 1296, 2401, 4096, 6561, 10000,
+		16807, 32768, 59049, 100000, 161051, 248832, 537824, 759375, 1048576,
+		1771561, 2985984, 4826809, 7529536, 11390625, 16777216, 34012224,
 		62748517
 	};
-
-	std::vector<long> pratt_technique8 =
-	{
-		//2-smooth squares: 1 4 16 64 256...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//9^i*25^j: 1, 9, 25, 81, 225, 625, 729, 2025, 5625, 6561, 15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441,
-		//25^i*49^j: 1, 25, 49, 625, 1225, 2401, 15625, 30625, 60025, 117649, 390625, 765625,
-		//49^i*121^j: 1, 49, 121, 2401, 5929, 14641, 117649, 290521, 717409, 1771561, 5764801, 14235529, 35153041, 86806489,
-		//121^i*169^j: 
-		//169^i*289^j: 
-
-		// Crossover point -- just take 1, 3, 5, 7, 9...
-
-		1, // 1
-		4, 9, 16, // 3
-		25, 81, 225, 625, 729, // 5
-		1225, 2401, 15625, 30625, 60025, 117649, 390625, // 7
-		717409, 1771561, 5764801, 14235529, 35153041, 86806489
-	};
-
-	std::vector<long> pratt_technique9 =
-	{
-		//2-smooth squares: 1 4 16 64 256...
-		//3-smooth squares: 1 4 9 16 36 64 81 144 256 324 576 729 1024 1296 2304 2916 4096 5184 6561 9216 11664 16384 20736 26244 36864
-		//9^i*25^j: 1, 9, 25, 81, 225, 625, 729, 2025, 5625, 6561, 15625, 18225, 50625, 59049, 140625, 164025, 390625, 455625, 531441,
-		//25^i*49^j: 1, 25, 49, 625, 1225, 2401, 15625, 30625, 60025, 117649, 390625, 765625,
-		//49^i*121^j: 1, 49, 121, 2401, 5929, 14641, 117649, 290521, 717409, 1771561, 5764801, 14235529, 35153041, 86806489,
-		//121^i*169^j: 
-		//169^i*289^j: 
-
-		// Crossover point -- just take 1, 2, 3, 4, 5...
-
-		1, // 1
-		4, 9, // 2
-		25, 81, 225, // 3
-		625, 1225, 2401, 15625, // 4
-		117649, 290521, 717409, 1771561, 5764801, // 5
-	};
-
-	// Not doing anything with this right now, but:
-
-	// I am going to seriously consider the "threading the needle" strategy again with a slight difference.
-	// The (4-phi) value seems to be approximately right but something has always been off.
-	// More recently I decided you want to alternate between multiplying (4-phi) +/- 1/e^(pi*(3/4))
-	// What's the reason? I first tried alternating between 2.25 and 2.75 to try to get this behavior but it didn't converge correctly.
-	// I did some trial and error until I remembered the 2.48 number from @invisal https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
-	// I checked ((4-phi)/sqrt(2.48))^2 which bounced around this mean pretty well by a distance of ~.1
-	// (You can do this check by 2.48-(4-phi) and 2.28780728982-(4-phi))
-	// I then checked what value was around ~.1 and found 1/e^(pi*(3/4)) is approximately around that value and it has served me well thus far
-	// For the final check I verified that (((4-phi) + 1/e^(pi*(3/4)))^.5)*(((4-phi) - 1/e^(pi*(3/4)))^.5) is approximately (4-phi) -- it is approximately the same (I'll need to do more research to find the precise values if they exist).
-	// Other things worth mentioning: it seemed like (4-phi) was correct but it also seemed like the answer should have been 99% of (4-phi) (another way of saying the value is wrong).
-	// If you take the geometric average ((4-phi)+1/e^(3/4*pi))^(1/2) * ((4-phi)-1/e^(3/4*pi))^(1/2) you get a slight underestimate of this value (~2.38)
-	// This difference is small, but the first value used is the smaller one and the +1 affects the sequence as well.
 }
