@@ -49,5 +49,6 @@ namespace SemiStablePartition
 				right_cursor += 1;
 			}
 		}
+		// FIXME: pivot needs to be in the middle and returned
 	}
 }

@@ -22,6 +22,7 @@
 #include "print.h"
 #include "reverse.h"
 #include "semi-stable-partition.h"
+#include "stable-three-way-partition.h"
 #include "shell-sort.h"
 #include "sift.h"
 #include "sorted.h"
@@ -33,20 +34,25 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000000;
+	const long size = 100;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
 	{
+		if ((i % 2) == 0)
+		{
+			data[i] = 50;
+			continue;
+		}
 		data[i] = size - i;
 	}
 	
-	std::random_device random_device;
-	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(13);
-	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+	//std::random_device random_device;
+	//std::mt19937 random_number_generator(random_device());
+	//random_number_generator.seed(13);
+	//std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	//Print::print((current_type*)data.data(), -1, size);
+	Print::print((current_type*)data.data(), -1, size);
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
@@ -55,12 +61,12 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-
+	StableThreeWayPartition::partition((current_type*)data.data(), -1, size, size/2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
 	Sorted::verify((current_type*)data.data(), -1, size);
-	//Print::print((current_type*)data.data(), -1, size);
+	Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);

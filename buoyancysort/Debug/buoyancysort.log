@@ -1,7 +1,7 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(60): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(66): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(22): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(183): note: see reference to function template instantiation 'Type FractalMinHeap::left_child<long>(Type,Type,double)' being compiled
           with
