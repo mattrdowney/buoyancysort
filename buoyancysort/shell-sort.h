@@ -49,7 +49,7 @@ namespace ShellSort
 		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
 	}
 
-	std::vector<long> generalized_pratt(std::set<long> factors_list, long values)
+	std::vector<long> generalized_pratt(std::set<long> factors_list, long last_value, bool exponentiate = true)
 	{
 		// Using ordered sets makes the implementation user-proof (sort of).
 		// Duplicate and misordered entries aren't a problem, although negative numbers still are.
@@ -66,10 +66,14 @@ namespace ShellSort
 		//     1) values < factors_list.size() or
 		//     2) the largest factor is greater than the nth value
 		std::set<long> unexponentiated(factors_list.begin(), factors_list.end());
-		for (int guaranteed_value = 0; guaranteed_value < values - 1; guaranteed_value += 1)
+		for (int guaranteed_value = 0; true; guaranteed_value += 1)
 		{
 			// Set cannot be modified while iterators are traversing, but we can avoid that altogether.
 			long current_value = *std::next(unexponentiated.begin(), guaranteed_value);
+			if (current_value > last_value)
+			{
+				break;
+			}
 			for (long factor : factors_list) // this includes 1 but I don't mind
 			{
 				unexponentiated.insert(current_value*factor);
@@ -80,8 +84,12 @@ namespace ShellSort
 		// For higher powers, I don't think it's quite the same
 		// E.g. for a Pratt<2,3,5> I think you don't want numbers in the same fashion. Hence this code.
 		int power = factors_list.size() - 1;
+		if (!exponentiate)
+		{
+			power = 1;
+		}
 		std::vector<long> exponentiated;
-		for (int index = 0; index < values; index += 1)
+		for (int index = 0; true; index += 1)
 		{
 			long value = *std::next(unexponentiated.begin(), index);
 			long result = 1;
@@ -89,6 +97,10 @@ namespace ShellSort
 			for (int lazy_power = 0; lazy_power < power; lazy_power += 1)
 			{
 				result *= value;
+			}
+			if (result > last_value)
+			{
+				break;
 			}
 			exponentiated.push_back(result);
 		}
