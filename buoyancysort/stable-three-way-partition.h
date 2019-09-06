@@ -35,7 +35,7 @@ namespace StableThreeWayPartition
 		}
 		long less_than_or_equal = size - greater;
 		long left_cursor = left;
-		long right_cursor = right - greater + 1; // In theory (and almost surely in practice) this can infinite loop (when greater == 0)
+		long right_cursor = right - greater + 1;
 		long right_pivot = right_cursor-1; // there may not be an equal pivot here yet, but it will be there at the end of both phases.
 		while (right_cursor <= right)
 		{
@@ -54,6 +54,7 @@ namespace StableThreeWayPartition
 				right_cursor += 1;
 			}
 		}
+		right = right_pivot;
 		long equal = 0;
 		for (int counter = left; counter <= right_pivot; counter += 1)
 		{
