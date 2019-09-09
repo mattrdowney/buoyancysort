@@ -93,9 +93,6 @@
     <ClInclude Include="semi-stable-partition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stable-three-way-partition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fractal-min-heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -109,6 +106,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sorted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stable-partition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

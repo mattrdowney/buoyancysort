@@ -1,8 +1,7 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(186): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(187): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(77): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(89): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
+c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(68): warning C4244: 'initializing': conversion from '__int64' to 'size_t', possible loss of data
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-min-heap.h(22): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\users\fujitora\source\repos\buoyancysort\buoyancysort\heap-tests.h(183): note: see reference to function template instantiation 'Type FractalMinHeap::left_child<long>(Type,Type,double)' being compiled
           with
@@ -38,13 +37,6 @@ c:\users\fujitora\source\repos\buoyancysort\buoyancysort\fractal-max-heap.h(14):
           with
           [
               Type=long
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(19): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(85): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>)' being compiled
-          with
-          [
-              Type=current_type,
-              _Ty=long
           ]
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\type_traits(16707566): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(16707566): note: see reference to function template instantiation '_Rx std::_Invoker_ret<_Rx,false>::_Call<_Callable&,_Ty>(_Callable &,_Ty &&)' being compiled
