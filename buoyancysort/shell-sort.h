@@ -32,7 +32,11 @@ namespace ShellSort
 	template <typename Type>
 	void lazy_sort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
 	{
-		// Start with InsertionSort::lazy_leftward_sort(data, before_first, after_last, [](long n){return 2*n;});
+		// Extra notes: I think doubling the gap distance is generally a good idea; you could slowly interpolate but there's a lot of negative side effects.
+		// You should cap the gap sequence on the 2nd and later iterations to be one less than the max on the prior iterations.
+		// You should never lower your gap number early (i.e. not until you hit the end of file and need to do another pass).
+
+		// Start with InsertionSort::lazy_leftward_sort(data, before_first, after_last, [](long n){return 4*n;});
 		// If done, return
 		// Otherwise lazily shell sort, the first iteration might be straightforward-ish, but the rest have substantial room for optimization (in this case, I'm actually interested in optimizing)
 		// Optimization: keep track of the leftmost "first unsorted" node
@@ -133,6 +137,57 @@ namespace ShellSort
 			value = r * value + 1;
 		}
 		return ceil(value);
+	};
+
+	std::function<long(long)> ciura_approximation3 = [](long n) // simplicity seems to work
+	{
+		const double r = 2.25;
+		double value = 1;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			value = r * value + iteration;
+		}
+		return ceil(value);
+	};
+
+	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
+	{
+		// Raw data:
+		//1, 4, 10, 24, 58, 136, 311, 706, 1595, 3598, 8105, 18246, 41065, 92408, 207931, 467860, 1052700, 2368590, 5329346, 11991046, 25487633
+		1, 4, 10,
+		23, // 4+10+10 = 24 so try next smaller number
+		57, //24 + 24 + 10 = 58 so try next smaller number
+		132, // this doesn't follow the pattern I tried above
+		301,
+		701,
+		1583, // lazily fetch next smallest prime
+		3593,
+		8101,
+		18233,
+		41057,
+		92401,
+		207931,
+		467833
+	};
+
+	std::vector<long> ciura_extended_gap_sequence_attempt2 = // adjusted Ciura sequence slightly
+	{
+		// Raw data:
+		//1, 4, 10, 24, 58, 136, 311, 706, 1595, 3598, 8105, 18246, 41065, 92408, 207931, 467860, 1052700, 2368590, 5329346, 11991046, 25487633
+		1, 4, 10,
+		23, // instead of Ciura, just try next smallest prime
+		53,
+		131,
+		311,
+		701,
+		1583, // lazily fetch next smallest prime
+		3593,
+		8101,
+		18233,
+		41057,
+		92401,
+		207931,
+		467833
 	};
 
 	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,

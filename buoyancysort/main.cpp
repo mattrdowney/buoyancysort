@@ -36,7 +36,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 100;
+	const long size = 100000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
@@ -51,10 +51,10 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(16);
+	random_number_generator.seed(17);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	Print::print((current_type*)data.data(), -1, size);
+	//Print::print((current_type*)data.data(), -1, size);
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
@@ -63,12 +63,20 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	StablePartition::three_way((current_type*)data.data(), -1, size, size/2);
+	std::vector<long> ciura_approximation = ShellSort::gap_sequence_generator(ShellSort::ciura_approximation3, 20);
+	for (long gap : ciura_approximation)
+	{
+		std::cout << gap << ", ";
+	}
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_extended_gap_sequence_attempt1);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
+
+	//StablePartition::three_way((current_type*)data.data(), -1, size, size/2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
 	Sorted::verify((current_type*)data.data(), -1, size);
-	Print::print((current_type*)data.data(), -1, size);
+	//Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
