@@ -43,7 +43,7 @@ int main()
 	{
 		if ((i % 2) == 0)
 		{
-			data[i] = 50;
+			data[i] = size/2;
 			continue;
 		}
 		data[i] = size - i;
@@ -54,7 +54,7 @@ int main()
 	random_number_generator.seed(20);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
-	//Print::print((current_type*)data.data(), -1, size);
+	Print::print((current_type*)data.data(), -1, size);
 	
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
@@ -63,23 +63,12 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	//std::vector<long> ciura_approximation = ShellSort::gap_sequence_generator(ShellSort::ciura_approximation3, 25);
-	std::vector<long> pratt = ShellSort::generalized_pratt(std::set<long>{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}, 9409, false);
-	for (long gap : pratt)
-	{
-		std::cout << gap << ", ";
-	}
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_extended_gap_sequence_attempt8);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::probably_reliable);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
-
-	//StablePartition::three_way((current_type*)data.data(), -1, size, size/2);
+	SemiStablePartition::three_way((current_type*)data.data(), -1, size, size/2);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 
 	Sorted::verify((current_type*)data.data(), -1, size);
-	//Print::print((current_type*)data.data(), -1, size);
+	Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);

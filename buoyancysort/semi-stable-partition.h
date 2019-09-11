@@ -5,7 +5,7 @@
 namespace SemiStablePartition // Semi-Stable is very misleading. Originally I thought the partition was stable when the pivot was unique but this is not the case. Additionally, both sides are usually disrupted / unstable.
 {
 	template <typename Type>
-	void two_way(Type *data, long before_first, long after_last, long pivot)
+	std::pair<long, long> two_way(Type *data, long before_first, long after_last, long pivot)
 	{
 		long left = before_first + 1;
 		long right = after_last - 1;
@@ -31,27 +31,69 @@ namespace SemiStablePartition // Semi-Stable is very misleading. Originally I th
 				greater += 1;
 			}
 		}
-		long less_than_or_equal = size - greater;
-		long left_cursor = left;
-		long right_cursor = right - greater + 1; // In theory (and almost surely in practice) this can infinite loop (when greater == 0)
-		while (right_cursor <= right)
+		if (greater > 0)
 		{
-			while (left_cursor <= right && data[left_cursor] <= pivot_value)
+			long less_than_or_equal = size - greater;
+			long left_cursor = left;
+			long right_cursor = right - greater + 1;
+			while (right_cursor <= right)
 			{
-				left_cursor += 1;
+				while (left_cursor <= right && data[left_cursor] <= pivot_value)
+				{
+					left_cursor += 1;
+				}
+				while (right_cursor <= right && data[right_cursor] > pivot_value)
+				{
+					right_cursor += 1;
+				}
+				if (left_cursor <= right && right_cursor <= right)
+				{
+					std::swap(data[left_cursor], data[right_cursor]);
+					left_cursor += 1;
+					right_cursor += 1;
+				}
 			}
-			while (right_cursor <= right && data[right_cursor] > pivot_value)
+			return std::pair<long, long>(right - greater, right - greater + 1);
+		}
+		else // no greater elements to partition
+		{
+			long lesser = 0;
+			for (int counter = left; counter <= right; counter += 1)
 			{
-				right_cursor += 1;
+				if (data[counter] < pivot_value) // The compiler should remove the branch prediction here.
+				{
+					lesser += 1;
+				}
 			}
-			if (left_cursor <= right && right_cursor <= right)
+			if (lesser > 0)
 			{
-				std::swap(data[left_cursor], data[right_cursor]);
-				left_cursor += 1;
-				right_cursor += 1;
+				long less_than_or_equal = size - lesser;
+				long left_cursor = left;
+				long right_cursor = right - lesser + 1;
+				while (right_cursor <= right)
+				{
+					while (left_cursor <= right && data[left_cursor] < pivot_value)
+					{
+						left_cursor += 1;
+					}
+					while (right_cursor <= right && data[right_cursor] >= pivot_value)
+					{
+						right_cursor += 1;
+					}
+					if (left_cursor <= right && right_cursor <= right)
+					{
+						std::swap(data[left_cursor], data[right_cursor]);
+						left_cursor += 1;
+						right_cursor += 1;
+					}
+				}
+				return std::pair<long, long>(right - lesser, right - lesser + 1);
+			}
+			else // you didn't partition anything again, which means you can do an early return
+			{
+				return std::pair<long, long>(before_first, after_last); // implies there are no elements left to partition.
 			}
 		}
-		// FIXME: pivot needs to be in the middle and returned
 	}
 
 	// The laziest way I can imagine implementing this:
