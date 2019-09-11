@@ -36,7 +36,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 7000000;
+	const long size = 1000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
@@ -51,7 +51,7 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(19);
+	random_number_generator.seed(20);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
@@ -64,15 +64,15 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//std::vector<long> ciura_approximation = ShellSort::gap_sequence_generator(ShellSort::ciura_approximation3, 25);
-	std::vector<long> pratt = ShellSort::generalized_pratt(std::set<long>{2, 3, 5, 7, 11, 13}, 100, false);
+	std::vector<long> pratt = ShellSort::generalized_pratt(std::set<long>{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}, 9409, false);
 	for (long gap : pratt)
 	{
 		std::cout << gap << ", ";
 	}
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_extended_gap_sequence_attempt7);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_extended_gap_sequence_attempt8);
 	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::probably_reliable);
-	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
-	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
+	ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::ciura_gap_sequence);
+	//ShellSort::sort((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 
 	//StablePartition::three_way((current_type*)data.data(), -1, size, size/2);
 
