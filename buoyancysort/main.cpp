@@ -41,18 +41,18 @@ int main()
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
 	{
-		if ((i % 2) == 0)
+		/*if ((i % 2) == 0)
 		{
 			data[i] = size/2;
 			continue;
-		}
+		}*/
 		data[i] = size - i;
 	}
 	
-	std::random_device random_device;
-	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(20);
-	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
+	//std::random_device random_device;
+	//std::mt19937 random_number_generator(random_device());
+	//random_number_generator.seed(20);
+	//std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	Print::print((current_type*)data.data(), -1, size);
 	
@@ -63,7 +63,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	SemiStablePartition::three_way((current_type*)data.data(), -1, size, size/2);
+	SemiStablePartition::three_way((current_type*)data.data(), -1, size, size/2+1);
 
 	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
 

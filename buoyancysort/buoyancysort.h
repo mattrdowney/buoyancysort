@@ -76,3 +76,12 @@ namespace Buoyancysort
 		sort<Type>(data, before_first, after_last, chunk_size);
 	}
 }
+
+// With respect to a new idea:
+// First do a traditional Quicksort with a O(n) Three-Way-Stable-Partition for O(lg(lg(n))) or O(sqrt(lg(lg(n)))) levels using Median-Of-Medians to get performance guarantees.
+// CONSIDER: run median-plex / quantile-plex during Quicksort iterations
+// Save all of the information about unsorted regions (beginnings and ends).
+// Build heaps from the topmost level downward (I don't know if you need to do periodic heap adjustments / synchronizations).
+// These heaps shall be a -1-indexed min heap for the left partition and a N-indexed max heap for the right partition
+// These heaps may or may not be ordered / sibling-sorted.
+// These heaps could be 2-ary or greater

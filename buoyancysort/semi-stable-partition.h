@@ -10,6 +10,7 @@ namespace SemiStablePartition // Semi-Stable is very misleading. Originally I th
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
+		std::cout << "Partitioning on " << pivot_value << std::endl;
 		// Ignore trivially-partitioned elements
 		// In the context of Buoyancysort/"Spindles" this is a great optimization
 		while (data[left] < pivot_value) // This is only safe if the pivot exists, since it becomes a sentinel
@@ -96,16 +97,14 @@ namespace SemiStablePartition // Semi-Stable is very misleading. Originally I th
 		}
 	}
 
-	// The laziest way I can imagine implementing this:
-	// iterate [left, right] and get all elements ==pivot and partition them separately to the front or back of array.
-	// Do a Semi-Stable-Partition on the remainder of the array.
-	// Do the Reverse(Reverse(A)Reverse(B)) strategy to get a three-way partition.
 	template <typename Type>
-	std::pair<long, long> three_way(Type *data, long before_first, long after_last, long pivot)
+	std::pair<long, long> three_way(Type *data, long before_first, long after_last, long pivot) // not moving / swapping elements helps with performance, cache-coherency also helps with performance (so in practical terms this is more useful than stable partitioning)
 	{
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
+		std::cout << "Partitioning on " << pivot_value << std::endl;
+		// FIXME? (I don't think this is easy to fix?): if you partition an array that's 50% redundant values on a unique value, then one side gets fucked up.// Confirmed: this should be the intended behavior.
 		// Ignore trivially-partitioned elements
 		// In the context of Buoyancysort/"Spindles" this is a great optimization
 		while (data[left] < pivot_value) // This is only safe if the pivot exists, since it becomes a sentinel
