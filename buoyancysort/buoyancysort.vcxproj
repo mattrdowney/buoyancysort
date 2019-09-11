@@ -163,6 +163,7 @@
     <ClInclude Include="max-heap.h" />
     <ClInclude Include="median-heap.h" />
     <ClInclude Include="median-of-medians.h" />
+    <ClInclude Include="mergesort.h" />
     <ClInclude Include="min-heap.h" />
     <ClInclude Include="ordered-max-heap.h" />
     <ClInclude Include="ordered-min-heap.h" />
