@@ -32,6 +32,10 @@ namespace Quicksort
 			not_quicksort(data, before_first, partitions.first, cutoff, !even);
 			not_quicksort(data, partitions.second, after_last, cutoff, !even);
 		}
+		else
+		{
+			ShellSort::sort(data, before_first, after_last, ShellSort::ciura_extended_gap_sequence_attempt1);
+		}
 	}
 
 	template <typename Type>
@@ -40,7 +44,5 @@ namespace Quicksort
 		long size = (after_last - (before_first + 1));
 		long cutoff = size / log2(log2(size)) / 2;
 		not_quicksort(data, before_first, after_last, cutoff, true);
-		cutoff = size / pow(log2(size), 1.5);
-		ShellSort::sort(data, before_first, after_last, ShellSort::ciura_extended_gap_sequence_attempt1, cutoff);
 	}
 }

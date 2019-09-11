@@ -8,6 +8,9 @@
 
 namespace StablePartition
 {
+	// FIXME: paritition indices that are returned are buggy (and inconsistent).
+	// I think the idea should be to avoid returning before_first and after_last where possible.
+
 	template <typename Type>
 	std::pair<long, long> two_way(Type *data, long before_first, long after_last, long pivot) // FIXME: I'm not doing the optimization where you can remove some of the leftmost/rightmost range
 	{
