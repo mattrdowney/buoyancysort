@@ -9,7 +9,7 @@
 namespace StablePartition
 {
 	template <typename Type>
-	std::pair<long, long> two_way(Type *data, long before_first, long after_last, long pivot)
+	std::pair<long, long> two_way(Type *data, long before_first, long after_last, long pivot) // FIXME: I'm not doing the optimization where you can remove some of the leftmost/rightmost range
 	{
 		std::vector<Type> lower;
 		std::vector<Type> upper;
@@ -54,7 +54,7 @@ namespace StablePartition
 	}
 
 	template <typename Type>
-	std::pair<long, long> three_way(Type *data, long before_first, long after_last, long pivot)
+	std::pair<long, long> three_way(Type *data, long before_first, long after_last, long pivot) // FIXME: I'm not doing the optimization where you can remove some of the leftmost/rightmost range
 	{
 		std::vector<Type> lower;
 		std::vector<Type> middle;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <climits>
 #include <functional>
 #include <iterator>
 #include <stddef.h>
@@ -9,11 +10,15 @@
 namespace ShellSort
 {
 	template <typename Type>
-	void sort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
+	void sort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence, long max_size = LONG_MAX)
 	{
 		for (long gap_index = gap_sequence.size() - 1; gap_index >= 0; gap_index -= 1)
 		{
 			long gap = gap_sequence[gap_index];
+			if (gap > max_size)
+			{
+				continue;
+			}
 			for (long unsorted_cursor = (before_first + 1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
 			{
 				int a;
