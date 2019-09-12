@@ -27,16 +27,16 @@ namespace Hierarchysort
 	template <typename Type>
 	void sort_interlaced_runs(Type *data)
 	{
-		for (long cursor = gap; cursor < double_run_size; cursor += 1)
+		for (long run_cursor = gap; run_cursor < double_run_size; run_cursor += 1)
 		{
-			Type unsorted_value = data[rightmost_to_insert];
-			long cursor = rightmost_to_insert - gap;
-			while (before_first < cursor && data[cursor] > unsorted_value)
+			Type unsorted_value = data[run_cursor];
+			long insertion_cursor = run_cursor - gap;
+			while (insertion_cursor >= 0 && data[insertion_cursor] > unsorted_value)
 			{
-				data[cursor + gap] = data[cursor];
-				cursor -= gap;
+				data[insertion_cursor + gap] = data[insertion_cursor];
+				insertion_cursor -= gap;
 			}
-			data[cursor + gap] = unsorted_value;
+			data[insertion_cursor + gap] = unsorted_value;
 		}
 	}
 
@@ -91,12 +91,12 @@ namespace Hierarchysort
 			// to allow an easy "in-place" (*not actually in-place*) merge.
 			if (interlaced_input[left_cursor] <= contiguous_input_output[right_cursor]) // ensures sort is stable
 			{
-				output[output_cursor] = interlaced_input[left_cursor];
+				contiguous_input_output[output_cursor] = interlaced_input[left_cursor];
 				left_cursor += gap; // only the left_cursor is interlaced (the others use contiguous data).
 			}
 			else
 			{
-				output[output_cursor] = contiguous_input_output[right_cursor];
+				contiguous_input_output[output_cursor] = contiguous_input_output[right_cursor];
 				right_cursor += 1;
 			}
 			output_cursor += 1;
@@ -105,14 +105,14 @@ namespace Hierarchysort
 		// Deal with any remainder (no need to compare anymore)
 		while (left_cursor < 2*interlaced_size)
 		{
-			output[output_cursor] = interlaced_input[left_cursor];
+			contiguous_input_output[output_cursor] = interlaced_input[left_cursor];
 			left_cursor += gap;
 			output_cursor += 1;
 		}
 		// because of the nature of doing everything "in-place" you don't actually need to copy the righthand side (it's implicitly there)
 		//while (right_cursor < contiguous_size)
 		//{
-		//	output[output_cursor] = contiguous_input_output[right_cursor];
+		//	contiguous_input_output[output_cursor] = contiguous_input_output[right_cursor];
 		//	right_cursor += 1;
 		//	output_cursor += 1;
 		//}

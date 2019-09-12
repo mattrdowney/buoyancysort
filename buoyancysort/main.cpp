@@ -11,6 +11,7 @@
 #include "buoyancysort.h"
 #include "comb-sort.h"
 #include "heap-tests.h"
+#include "hierarchysort.h"
 #include "hoare-partition.h"
 #include "insertion-sort.h"
 #include "int-that-tracks-comparisons.h"
@@ -65,9 +66,9 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//SemiStablePartition::three_way((current_type*)data.data(), -1, size, size/2+1);
-	Quicksort::not_quicksort((current_type*)data.data(), -1, size);
+	Hierarchysort::out_of_place((current_type*)data.data(), -1, size);
 
-	std::size_t comparisons = IntThatTracksComparisons::get_comparisons();
+	long long comparisons = IntThatTracksComparisons::get_comparisons();
 
 	Sorted::verify((current_type*)data.data(), -1, size);
 	//Print::print((current_type*)data.data(), -1, size);
