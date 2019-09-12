@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <string.h>
 #include "power-of-two.h"
 
 namespace Hierarchysort
@@ -75,6 +76,50 @@ namespace Hierarchysort
 		}
 	}
 
+	template <typename Type>
+	void merge_remainder(Type *contiguous_input_output, Type *interlaced_input, long contiguous_size, long interlaced_size)
+	{
+		// the contiguous_input is guaranteed to be less than or equal to the interlaced_input (so copy the smaller into an auxiliary buffer for a out-of-place merge)
+		// what's a sure-fire buffer for storage? the second position of the largest VList chunk size. Worst case: n is exactly 2^i (thus you have 2*2^i allocated and the largest chunk size is 2^i/2 (half the array)).
+		// Ehhh, but it's interlaced (you can't memcpy), so just use a vector<>. It's not the end of the world. Hopefully it's reused between function calls.
+
+		std::vector<Type> auxiliary_buffer(contiguous_size);
+		// This is an optimization present in Timsort. Copy the smaller of the two arrays into an auxiliary buffer to allow an easy "in-place" (*not actually in-place*) merge.
+		std::memcpy(auxiliary_buffer.data(), contiguous_input_output, sizeof(Type)*(contiguous_size));
+		
+		long left_cursor = 0;
+		long right_cursor = 0;
+		long output_cursor = 0;
+		while (left_cursor < contiguous_size && right_cursor < interlaced_size*2)
+		{
+			if (auxiliary_buffer[left_cursor] <= interlaced_input[right_cursor]) // ensures sort is stable
+			{
+				output[output_cursor] = auxiliary_buffer[left_cursor];
+				left_cursor += 1;
+			}
+			else
+			{
+				output[output_cursor] = interlaced_input[right_cursor];
+				right_cursor += gap; // only the right_cursor is interlaced (the others use contiguous data).
+			}
+			output_cursor += 1;
+		}
+
+		// Deal with any remainder (no need to compare anymore)
+		while (left_cursor < contiguous_size)
+		{
+			output[output_cursor] = auxiliary_buffer[left_cursor];
+			left_cursor += 1;
+			output_cursor += 1;
+		}
+		while (right_cursor < interlaced_size*2)
+		{
+			output[output_cursor] = interlaced_input[right_cursor];
+			right_cursor += gap;
+			output_cursor += 1;
+		}
+	}
+
 	// This is what I called hard O(n) adaptive best-case performance. This is better with nearly sorted data.
 	template <typename Type>
 	void in_place(Type *data, long before_first, long after_last) // conceptually, this is big-endian. What I think of as in-place isn't actually in-place if I remember correctly (once I realized in-place merge costs klg(k)).
@@ -106,6 +151,18 @@ namespace Hierarchysort
 			output = vlist.data() + merge_counter + 0;
 			interlaced_merge(output, input, merge_counter);
 			merged_elements += double_run_size;
+		}
+		InsertionSort::sort(data, before_first + merged_elements, after_last);
+		if (merged_elements > double_run_size) // <= double_run_size just ends up being an insertion sort.
+		{
+			// copy the remainder at the end to the beginning (not stable -- uhgh I hate this because it's the only reason for instability) // it's a smart/elegant optimization but it has a drawback // you can get around it by doing a right-to-left pass, but that means re-writing all this code (hence my frustration) -- also I'm not 100% it actually works but it could be an elegant solution.
+			// this is safe (in the sense it doesn't overwrite elements) because the worst case is arguably 2*double_run_size (but it just barely works since you barely can swap).
+			std::memcpy(data, &data[merged_elements], sizeof(Type)*(size - merged_elements));
+
+			// find all the chunk sizes that are occupied as a vector.
+			// E.g. 240 would be (16, 32, 64, 128)
+
+			// repeatedly call merge_remainder()
 		}
 		// You can do a lot of cool stuff with bit shifting. To get a VList index from a size you basically just bitshift/multiply by 2 (2 because there are 2n elements in the VList). If you need the second list just add 1 since they are interlaced.
 		// 1 1 2 2 4 4 8 8 16 16 (find 16a, note how there are ~32 elements before the first 16).
