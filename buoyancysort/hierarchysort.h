@@ -7,10 +7,11 @@
 
 namespace Hierarchysort
 {
-	const long run_size = 16; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
+	const long run_size = 8; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
 	const long gap = 2;
 	const long double_run_size = run_size * gap;
 
+	// essentially this is vector-to-vlist
 	template <typename Type>
 	void run_merge(Type *output, Type *run_input, long combined_input_size)
 	{
@@ -47,6 +48,7 @@ namespace Hierarchysort
 		}
 	}
 
+	// essentially this is vlist-to-vlist
 	template <typename Type>
 	void interlaced_merge(Type *output, Type *interlaced_input, long combined_input_size)
 	{
@@ -83,6 +85,7 @@ namespace Hierarchysort
 		}
 	}
 
+	// essentially this is vlist-to-vector
 	// Because the way the VLists are populated, we can still have stability if we do merge operations in reverse-order (which is the most efficient anyway).
 	template <typename Type>
 	void merge_remainder(Type *contiguous_input_output, Type *interlaced_input, long contiguous_size, long interlaced_size)
@@ -171,11 +174,11 @@ namespace Hierarchysort
 			input = &output[-1];
 			while (second)
 			{
-				merge_counter *= 4;
+				merge_counter *= 2;
 				second = merge_counter & vlist_elements;
-				Type *output = vlist.data() + merge_counter + (second ? 1 : 0);
+				Type *output = vlist.data() + 2*merge_counter + (second ? 1 : 0);
 				interlaced_merge(output, input, merge_counter);
-				input = &output[-1];
+				input = &output[-1]; // because the output was aligned one to the right because of "second"
 
 				Print::print(data, -1, after_last);
 				Print::print(vlist.data(), -1, vlist.size());
