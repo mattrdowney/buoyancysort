@@ -139,7 +139,11 @@ namespace Hierarchysort
 		long size = after_last - (before_first + 1);
 		// Data structure: VList (conceptually, not actually) storing power-of-two pairs of interlaced lists i.e. (a,b) represented as (a0, b0, a1, b1, a2, b2, a3, b3...)
 		// The data layout might be inefficient-looking, but it does help with cache prefetching, which is why I include it.
-		long vlist_size = 2*PowerOfTwo::upper_power_of_two(size); // TODO: this might overshoot on powers of two (I don't think so) so check it.
+		long vlist_size = 2*2*PowerOfTwo::upper_power_of_two(size); // TODO: this might overshoot on powers of two (I don't think so) so check it.
+		// *2 because the geometric sequence 1 + 2 + 4 + ... n/4 + n/2 + n ~= 2n
+		// *2 because you need two lists total
+		// next power of two because you need enough space to store n.
+		// As an aside, I really feel like this should be 2 not 4, because the geometric series should only go up to n/2.
 		std::vector<Type> vlist(vlist_size); // A VList is a data structure (this is technically not a VList, it's closer to a re-implementation I made); this has interlaced an contiguous properties.
 		long vlist_elements = 0;
 
@@ -159,7 +163,7 @@ namespace Hierarchysort
 			input = &output[-1];
 			while (second)
 			{
-				merge_counter *= 2;
+				merge_counter *= 4;
 				second = merge_counter & vlist_elements;
 				Type *output = vlist.data() + merge_counter + (second ? 1 : 0);
 				interlaced_merge(output, input, merge_counter);
