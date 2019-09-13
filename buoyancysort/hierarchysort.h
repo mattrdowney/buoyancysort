@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <string.h>
 #include "power-of-two.h"
+#include "print.h"
 
 namespace Hierarchysort
 {
@@ -155,14 +156,14 @@ namespace Hierarchysort
 			Type *output = vlist.data() + double_run_size * 2 + (second ? 1 : 0);
 			// You can now merge the two runs into the first or second slot of the VList at the "smallest" position.
 			run_merge(output, &data[vlist_elements], double_run_size);
-			input = output;
+			input = &output[-1];
 			while (second)
 			{
 				merge_counter *= 2;
 				second = merge_counter & vlist_elements;
 				Type *output = vlist.data() + merge_counter + (second ? 1 : 0);
 				interlaced_merge(output, input, merge_counter);
-				input = output;
+				input = &output[-1];
 			}
 			vlist_elements += double_run_size;
 		}
@@ -177,13 +178,15 @@ namespace Hierarchysort
 			{
 				if (remainder & vlist_elements) // check if the VList contains that particular list size
 				{
-					merge_remainder(data + after_last - merged_size - remainder, vlist.data() + 2*remainder, merged_size, remainder);
+					merge_remainder(&data[after_last - merged_size - remainder], &vlist[2*remainder], merged_size, remainder);
 					vlist_elements -= remainder;
 					merged_size += remainder;
 				}
 				remainder *= 2;
 			}
 		}
+
+		Print::print(vlist.data(), -1, vlist.size());
 	}
 
 	// As a hypothetical, this could be similar to an out-of-place hierarchysort concept I was considering (based on what I remember there was some interesting zig-zagging). One idea I had was to overlay power-of-two lists (a,b) like so (a0, bn, a1, bn-1, a2, bn-2, a3, bn-3 ... an-3, b3, an-2, b2, an-1, b1, an, b0). That being said, I remember I was working on multiple concepts when I started on this, so I shouldn't lock anything into place yet since I'm essentially in the discovery stage.
