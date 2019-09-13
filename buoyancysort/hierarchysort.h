@@ -8,6 +8,43 @@ namespace Hierarchysort
 {
 	const long run_size = 16; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
 	const long gap = 2;
+	const long double_run_size = run_size * gap;
+
+	template <typename Type>
+	void run_merge(Type *output, Type *run_input, long combined_input_size)
+	{
+		long left_cursor = 0;
+		long right_cursor = combined_input_size/2;
+		long output_cursor = 0;
+		while (left_cursor < combined_input_size && right_cursor < combined_input_size)
+		{
+			if (run_input[left_cursor] <= run_input[right_cursor]) // ensures sort is stable
+			{
+				output[output_cursor] = run_input[left_cursor];
+				left_cursor += 1;
+			}
+			else
+			{
+				output[output_cursor] = run_input[right_cursor];
+				right_cursor += 1;
+			}
+			output_cursor += gap; // remember: the output_cursor also uses gaps.
+		}
+
+		// Deal with any remainder (no need to compare anymore)
+		while (left_cursor < combined_input_size/2)
+		{
+			output[output_cursor] = run_input[left_cursor];
+			left_cursor += 1;
+			output_cursor += gap;
+		}
+		while (right_cursor < combined_input_size)
+		{
+			output[output_cursor] = run_input[right_cursor];
+			right_cursor += 1;
+			output_cursor += gap;
+		}
+	}
 
 	template <typename Type>
 	void interlaced_merge(Type *output, Type *interlaced_input, long combined_input_size)
@@ -108,20 +145,25 @@ namespace Hierarchysort
 		// Let's say you want to merge 16 (0b'0001'0000) elements into 240 (0b'1111'0000) elements. You bitwise AND (i.e. & operator) (0b'0001'0000) with (0b'1111'0000). Because there is a conflict, you place the elements into slot b and merge (conceptually, although you can skip the redundant copy). You can then bitshift up and notice a conflict again, etc, so merge. At the end add 16 and 240 to get 256 elements.
 		while (vlist_elements + double_run_size < size) // < instead of <= is intentional for a minor optimization for powers of two (it saves an O(n) copy operation which is significant).
 		{
-			Type *input = data + (before_first + 1) + vlist_elements;
-			sort_interlaced_runs(input);
+			// Sort two runs to be combined and inserted into the VList.
+			InsertionSort::sort(data, before_first + vlist_elements, (before_first + 1) + vlist_elements + run_size);
+			InsertionSort::sort(data, before_first + vlist_elements + run_size, (before_first + 1) + vlist_elements + double_run_size);
 			long merge_counter = double_run_size;
 			// You can do a lot of cool stuff with bit shifting. To get a VList index from a size you basically just bitshift/multiply by 2 (2 because there are 2n elements in the VList). If you need the second list just add 1 since they are interlaced.
 			bool second = merge_counter & vlist_elements;
-			Type *output;
+			Type *input;
+			Type *output = vlist.data() + double_run_size * 2 + (second ? 1 : 0);
+			// You can now merge the two runs into the first or second slot of the VList at the "smallest" position.
+			run_merge(output, &data[vlist_elements], double_run_size);
+			input = output;
 			while (second)
 			{
-				output = vlist.data() + merge_counter + 1;
-				interlaced_merge(output, input, merge_counter);
 				merge_counter *= 2;
+				second = merge_counter & vlist_elements;
+				Type *output = vlist.data() + merge_counter + (second ? 1 : 0);
+				interlaced_merge(output, input, merge_counter);
+				input = output;
 			}
-			output = vlist.data() + merge_counter + 0;
-			interlaced_merge(output, input, merge_counter);
 			vlist_elements += double_run_size;
 		}
 		InsertionSort::sort(data, before_first + vlist_elements, after_last);

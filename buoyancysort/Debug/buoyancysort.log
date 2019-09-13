@@ -1,27 +1,4 @@
 ﻿  main.cpp
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\quicksort.h(56): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(70): note: see reference to function template instantiation 'void Quicksort::not_quicksort<current_type>(Type *,long,long)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(24): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\quicksort.h(48): note: see reference to function template instantiation 'void ShellSort::sort<Type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>,long)' being compiled
-          with
-          [
-              Type=current_type,
-              _Ty=long
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\quicksort.h(57): note: see reference to function template instantiation 'void Quicksort::not_quicksort<Type>(Type *,long,long,long,bool)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(70): note: see reference to function template instantiation 'void Quicksort::not_quicksort<current_type>(Type *,long,long)' being compiled
-          with
-          [
-              Type=current_type
-          ]
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\type_traits(16707566): warning C4244: 'return': conversion from 'double' to 'long', possible loss of data
   c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.14.26428\include\functional(16707566): note: see reference to function template instantiation '_Rx std::_Invoker_ret<_Rx,false>::_Call<_Callable&,_Ty>(_Callable &,_Ty &&)' being compiled
           with
