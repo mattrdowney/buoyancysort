@@ -6,39 +6,8 @@
 
 namespace Hierarchysort
 {
-	// Uhgh my life is terrible. So I have to re-implement the merge algorithm for non-contiguous / interlaced sequences. Fun.
-	// That led me to realizing I cannot use Insertion-Sort out-of-box.
-	// Going a step further, the whole point is this will be used for random data, so it makes sense to use a perfect sort.
-	// Using a perfect sort on size 16 seems ideal, but the problem is that 16 is an unsolved problem with 45 or 46 comparisons.
-	// The best known algorithm with 46 comparisons is the Ford-Johnson algorithm, but there's no easy way to just get the results (you would have to run the algorithm and manually inspect which elements are being compared).
-	// Going further, you need to do simultaneous perfect sorts on interlaced sequences. You don't want to sort two size 16 runs or one size 32 run, you want to sort two interlaced size-16 runs.
-	// I over-engineer stuff (so this is me being dumb), but I genuinely want to work on this.
-
-	// How do you square this anoyying circle? Take a good implementation: https://codereview.stackexchange.com/questions/116367/ford-johnson-merge-insertion-sort (via @Morwenn)
-	// Implement your own comparison operation. What does it do? swaps and prints the iterator position of a and b. (i.e. 1-16)
-	// Uhgh, I think both implementations have variable comparisons. n=8 does ~13-15 comparisons and n=16 does ~37- comparisons. I am going to manually figure out the optimal n=8 case
-	// I have no idea what the decision tree actually looks like (I forgot it will be 2^8 or 2^16, which is pretty complicated).
-	// Giving up on that (it's maybe more efficient without it).
-	
 	const long run_size = 16; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
 	const long gap = 2;
-	const long double_run_size = gap * run_size;
-
-	template <typename Type>
-	void sort_interlaced_runs(Type *data)
-	{
-		for (long run_cursor = gap; run_cursor < double_run_size; run_cursor += 1)
-		{
-			Type unsorted_value = data[run_cursor];
-			long insertion_cursor = run_cursor - gap;
-			while (insertion_cursor >= 0 && data[insertion_cursor] > unsorted_value)
-			{
-				data[insertion_cursor + gap] = data[insertion_cursor];
-				insertion_cursor -= gap;
-			}
-			data[insertion_cursor + gap] = unsorted_value;
-		}
-	}
 
 	template <typename Type>
 	void interlaced_merge(Type *output, Type *interlaced_input, long combined_input_size)

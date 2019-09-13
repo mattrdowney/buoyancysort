@@ -114,6 +114,9 @@
     <ClInclude Include="mergesort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unstable-partition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

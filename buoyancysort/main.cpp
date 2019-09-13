@@ -66,7 +66,8 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//SemiStablePartition::three_way((current_type*)data.data(), -1, size, size/2+1);
-	Hierarchysort::out_of_place((current_type*)data.data(), -1, size);
+	//Hierarchysort::out_of_place((current_type*)data.data(), -1, size);
+	Quicksort::not_quicksort((current_type*)data.data(), -1, size);
 
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 
