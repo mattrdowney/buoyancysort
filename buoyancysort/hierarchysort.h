@@ -17,7 +17,7 @@ namespace Hierarchysort
 		long left_cursor = 0;
 		long right_cursor = combined_input_size/2;
 		long output_cursor = 0;
-		while (left_cursor < combined_input_size && right_cursor < combined_input_size)
+		while (left_cursor < combined_input_size/2 && right_cursor < combined_input_size)
 		{
 			if (run_input[left_cursor] <= run_input[right_cursor]) // ensures sort is stable
 			{
@@ -153,6 +153,11 @@ namespace Hierarchysort
 			// Sort two runs to be combined and inserted into the VList.
 			InsertionSort::sort(data, before_first + vlist_elements, (before_first + 1) + vlist_elements + run_size);
 			InsertionSort::sort(data, before_first + vlist_elements + run_size, (before_first + 1) + vlist_elements + double_run_size);
+
+
+			Print::print(data, -1, after_last);
+			Print::print(vlist.data(), -1, vlist.size());
+
 			long merge_counter = double_run_size;
 			// You can do a lot of cool stuff with bit shifting. To get a VList index from a size you basically just bitshift/multiply by 2 (2 because there are 2n elements in the VList). If you need the second list just add 1 since they are interlaced.
 			bool second = merge_counter & vlist_elements;
@@ -160,6 +165,9 @@ namespace Hierarchysort
 			Type *output = vlist.data() + double_run_size * 2 + (second ? 1 : 0);
 			// You can now merge the two runs into the first or second slot of the VList at the "smallest" position.
 			run_merge(output, &data[vlist_elements], double_run_size);
+
+			Print::print(data, -1, after_last);
+			Print::print(vlist.data(), -1, vlist.size());
 			input = &output[-1];
 			while (second)
 			{
@@ -168,6 +176,9 @@ namespace Hierarchysort
 				Type *output = vlist.data() + merge_counter + (second ? 1 : 0);
 				interlaced_merge(output, input, merge_counter);
 				input = &output[-1];
+
+				Print::print(data, -1, after_last);
+				Print::print(vlist.data(), -1, vlist.size());
 			}
 			vlist_elements += double_run_size;
 		}
@@ -187,10 +198,11 @@ namespace Hierarchysort
 					merged_size += remainder;
 				}
 				remainder *= 2;
+
+				Print::print(data, -1, after_last);
+				Print::print(vlist.data(), -1, vlist.size());
 			}
 		}
-
-		Print::print(vlist.data(), -1, vlist.size());
 	}
 
 	// As a hypothetical, this could be similar to an out-of-place hierarchysort concept I was considering (based on what I remember there was some interesting zig-zagging). One idea I had was to overlay power-of-two lists (a,b) like so (a0, bn, a1, bn-1, a2, bn-2, a3, bn-3 ... an-3, b3, an-2, b2, an-1, b1, an, b0). That being said, I remember I was working on multiple concepts when I started on this, so I shouldn't lock anything into place yet since I'm essentially in the discovery stage.
