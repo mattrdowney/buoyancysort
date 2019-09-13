@@ -157,10 +157,6 @@ namespace Hierarchysort
 			InsertionSort::sort(data, before_first + vlist_elements, (before_first + 1) + vlist_elements + run_size);
 			InsertionSort::sort(data, before_first + vlist_elements + run_size, (before_first + 1) + vlist_elements + double_run_size);
 
-
-			Print::print(data, -1, after_last);
-			Print::print(vlist.data(), -1, vlist.size());
-
 			long merge_counter = double_run_size;
 			// You can do a lot of cool stuff with bit shifting. To get a VList index from a size you basically just bitshift/multiply by 2 (2 because there are 2n elements in the VList). If you need the second list just add 1 since they are interlaced.
 			bool second = merge_counter & vlist_elements;
@@ -169,8 +165,6 @@ namespace Hierarchysort
 			// You can now merge the two runs into the first or second slot of the VList at the "smallest" position.
 			run_merge(output, &data[vlist_elements], double_run_size);
 
-			Print::print(data, -1, after_last);
-			Print::print(vlist.data(), -1, vlist.size());
 			input = &output[-1];
 			while (second)
 			{
@@ -179,9 +173,6 @@ namespace Hierarchysort
 				Type *output = vlist.data() + 2*merge_counter + (second ? 1 : 0);
 				interlaced_merge(output, input, merge_counter);
 				input = &output[-1]; // because the output was aligned one to the right because of "second"
-
-				Print::print(data, -1, after_last);
-				Print::print(vlist.data(), -1, vlist.size());
 			}
 			vlist_elements += double_run_size;
 		}
@@ -201,9 +192,6 @@ namespace Hierarchysort
 					merged_size += remainder;
 				}
 				remainder *= 2;
-
-				Print::print(data, -1, after_last);
-				Print::print(vlist.data(), -1, vlist.size());
 			}
 		}
 	}

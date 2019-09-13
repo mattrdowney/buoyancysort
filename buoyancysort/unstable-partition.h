@@ -11,7 +11,7 @@ namespace UnstablePartition
 		long left = before_first;
 		long right = after_last;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 
 		while (true)
 		{
@@ -37,7 +37,7 @@ namespace UnstablePartition
 	{
 		long left = before_first + 1;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 
 		for (long right = left; right < after_last; right += 1)
 		{

@@ -16,6 +16,21 @@
 
 namespace Quicksort
 {
+	template <typename Type>
+	void quicksort(Type *data, long before_first, long after_last)
+	{
+		if (after_last - (before_first + 1) <= 1000)
+		{
+			InsertionSort::sort(data, before_first, after_last);
+			return;
+		}
+
+		long pivot = before_first + (after_last - before_first)/2;
+		std::pair<long, long> partitions = UnstablePartition::hoare(data, before_first, after_last, pivot);
+		quicksort(data, before_first, partitions.first);
+		quicksort(data, partitions.second, after_last);
+	}
+
 	// okay, we might've did it: on reverse sorted data I got 
 	template <typename Type>
 	void not_quicksort(Type *data, long before_first, long after_last, long cutoff, bool even)

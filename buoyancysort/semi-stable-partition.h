@@ -10,7 +10,7 @@ namespace SemiStablePartition // Semi-Stable is very misleading. Originally I th
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 		// Ignore trivially-partitioned elements
 		// In the context of Buoyancysort/"Spindles" this is a great optimization
 		while (data[left] < pivot_value) // This is only safe if the pivot exists, since it becomes a sentinel
@@ -103,7 +103,7 @@ namespace SemiStablePartition // Semi-Stable is very misleading. Originally I th
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 		// FIXME? (I don't think this is easy to fix?): if you partition an array that's 50% redundant values on a unique value, then one side gets fucked up.// Confirmed: this should be the intended behavior.
 		// Ignore trivially-partitioned elements
 		// In the context of Buoyancysort/"Spindles" this is a great optimization

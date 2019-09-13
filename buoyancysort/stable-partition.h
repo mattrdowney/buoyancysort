@@ -19,7 +19,7 @@ namespace StablePartition
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 		for (int counter = left; counter <= right; counter += 1)
 		{
 			if (data[counter] <= pivot_value)
@@ -65,7 +65,7 @@ namespace StablePartition
 		long left = before_first + 1;
 		long right = after_last - 1;
 		Type pivot_value = data[pivot];
-		std::cout << "Partitioning on " << pivot_value << std::endl;
+		//std::cout << "Partitioning on " << pivot_value << std::endl;
 		for (int counter = left; counter <= right; counter += 1)
 		{
 			if (data[counter] < pivot_value)
