@@ -104,6 +104,7 @@ namespace Sift
 	// I'm sort of considering making a version of this that's like Insertion-Sort: intended for nearly-sorted and small data.
 	// Based on my comments, it seems like Siftsort is a better match than Reversesort (which is more stupid than useful -- but I should verify that since this uses more operations).
 	// I don't think I'll succeed here (not even close), but it's worth trying.
+	// (Siftsort isn't stable, I would probably want to alternate between a Reversesort pass and a Bubblesort pass (in a cocktail-shaker sort manner); also, consider, is this really how I should be spending my time? Reversing stretches loses its utility after the first pass (mostly))
 
 	/// <summary>
 	/// Mutator - SiftSort values in the range (before_first, after_last). Since it only uses Reverse on decreasing ranges and otherwise uses InsertionSort, it is a stable algorithm.

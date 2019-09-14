@@ -3,7 +3,7 @@
 namespace NaturalRuns
 {
 	template <typename Type>
-	void forward(Type *data, long before_first, long after_last)
+	long forward(Type *data, long before_first, long after_last)
 	{
 		long sequence_cursor = before_first + 1;
 		// increasing sequence that can be left alone
@@ -15,7 +15,7 @@ namespace NaturalRuns
 	}
 
 	template <typename Type>
-	void direction_agnostic(Type *data, long before_first, long after_last)
+	long direction_agnostic(Type *data, long before_first, long after_last)
 	{
 		long sequence_cursor = before_first + 1;
 		if (data[sequence_cursor] > data[sequence_cursor + 1])
