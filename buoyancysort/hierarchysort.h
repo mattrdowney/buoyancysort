@@ -7,7 +7,7 @@
 
 namespace Hierarchysort
 {
-	const long run_size = 8; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
+	const long run_size = 2; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
 	const long gap = 2;
 	const long double_run_size = run_size * gap;
 
@@ -142,7 +142,7 @@ namespace Hierarchysort
 		long size = after_last - (before_first + 1);
 		// Data structure: VList (conceptually, not actually) storing power-of-two pairs of interlaced lists i.e. (a,b) represented as (a0, b0, a1, b1, a2, b2, a3, b3...)
 		// The data layout might be inefficient-looking, but it does help with cache prefetching, which is why I include it.
-		long vlist_size = 2*2*PowerOfTwo::upper_power_of_two(size); // TODO: this might overshoot on powers of two (I don't think so) so check it.
+		long vlist_size = 2*PowerOfTwo::upper_power_of_two(size); // TODO: this might overshoot on powers of two (I don't think so) so check it.
 		// *2 because the geometric sequence 1 + 2 + 4 + ... n/4 + n/2 + n ~= 2n
 		// *2 because you need two lists total
 		// next power of two because you need enough space to store n.
@@ -194,6 +194,8 @@ namespace Hierarchysort
 				remainder *= 2;
 			}
 		}
+
+		Print::print(vlist.data(), -1, vlist.size());
 	}
 
 	// As a hypothetical, this could be similar to an out-of-place hierarchysort concept I was considering (based on what I remember there was some interesting zig-zagging). One idea I had was to overlay power-of-two lists (a,b) like so (a0, bn, a1, bn-1, a2, bn-2, a3, bn-3 ... an-3, b3, an-2, b2, an-1, b1, an, b0). That being said, I remember I was working on multiple concepts when I started on this, so I shouldn't lock anything into place yet since I'm essentially in the discovery stage.
