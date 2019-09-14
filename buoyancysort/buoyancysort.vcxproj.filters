@@ -123,6 +123,12 @@
     <ClInclude Include="in-place-hierarchysort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="outlier-search.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="natural-runs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

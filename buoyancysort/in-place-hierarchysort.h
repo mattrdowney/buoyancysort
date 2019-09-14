@@ -4,6 +4,7 @@
 
 namespace Hierarchysort
 {
+	// Let's get information theoretical.
 	// This is what I called hard O(n) adaptive best-case performance. This is better with nearly sorted data.
 	template <typename Type>
 	void in_place(Type *data, long before_first, long after_last) // conceptually, this is big-endian. What I think of as in-place isn't actually in-place if I remember correctly (once I realized in-place merge costs klg(k)).

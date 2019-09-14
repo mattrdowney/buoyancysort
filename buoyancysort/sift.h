@@ -101,6 +101,10 @@ namespace Sift
 		}
 	}
 
+	// I'm sort of considering making a version of this that's like Insertion-Sort: intended for nearly-sorted and small data.
+	// Based on my comments, it seems like Siftsort is a better match than Reversesort (which is more stupid than useful -- but I should verify that since this uses more operations).
+	// I don't think I'll succeed here (not even close), but it's worth trying.
+
 	/// <summary>
 	/// Mutator - SiftSort values in the range (before_first, after_last). Since it only uses Reverse on decreasing ranges and otherwise uses InsertionSort, it is a stable algorithm.
 	/// </summary>

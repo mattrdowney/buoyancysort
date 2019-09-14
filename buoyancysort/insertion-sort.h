@@ -19,6 +19,15 @@ namespace InsertionSort
 		}
 	}
 
+	template <typename Type>
+	void insert_block_from_right(Type *data, long before_first, long after_last, long last_sorted)
+	{
+		for (long cursor = last_sorted + 1; cursor < after_last; cursor += 1)
+		{
+			InsertionSort::insert_from_right(data, before_first, cursor);
+		}
+	}
+
 	/// <summary>
 	/// Mutator - Partially sorts values in range (before_first, after_last) in the subranges [0, run_size) using INSERTION-SORT algorithm. A reversed implementation would have a similar result.
 	/// </summary>

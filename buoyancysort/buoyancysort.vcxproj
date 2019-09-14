@@ -166,9 +166,11 @@
     <ClInclude Include="median-of-medians.h" />
     <ClInclude Include="mergesort.h" />
     <ClInclude Include="min-heap.h" />
+    <ClInclude Include="natural-runs.h" />
     <ClInclude Include="ordered-max-heap.h" />
     <ClInclude Include="ordered-min-heap.h" />
     <ClInclude Include="out-of-place-hierarchysort.h" />
+    <ClInclude Include="outlier-search.h" />
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="quicksort.h" />
