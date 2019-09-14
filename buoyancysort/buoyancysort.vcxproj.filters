@@ -27,9 +27,6 @@
     <ClInclude Include="interlaced-double-binary-heap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="hierarchysort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="median-of-medians.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -115,6 +112,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="unstable-partition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="out-of-place-hierarchysort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hybrid-hierarchysort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="in-place-hierarchysort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

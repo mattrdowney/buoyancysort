@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include "bubble-sort.h"
 #include "heuristics.h"
-#include "hierarchysort.h"
+#include "in-place-hierarchysort.h"
 #include "interlaced-double-binary-heap.h"
 #include "median-of-medians.h"
 

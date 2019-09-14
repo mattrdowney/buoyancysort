@@ -154,8 +154,9 @@
     <ClInclude Include="fractal-min-heap.h" />
     <ClInclude Include="heap-tests.h" />
     <ClInclude Include="heuristics.h" />
-    <ClInclude Include="hierarchysort.h" />
     <ClInclude Include="hoare-partition.h" />
+    <ClInclude Include="hybrid-hierarchysort.h" />
+    <ClInclude Include="in-place-hierarchysort.h" />
     <ClInclude Include="insertion-sort.h" />
     <ClInclude Include="int-that-tracks-comparisons.h" />
     <ClInclude Include="interlaced-double-binary-heap.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="min-heap.h" />
     <ClInclude Include="ordered-max-heap.h" />
     <ClInclude Include="ordered-min-heap.h" />
+    <ClInclude Include="out-of-place-hierarchysort.h" />
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="quicksort.h" />
