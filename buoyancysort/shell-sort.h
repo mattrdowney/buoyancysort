@@ -131,16 +131,53 @@ namespace ShellSort
 		return result;
 	}
 
-	std::function<long(long)> ciura_approximation = [](long n) // simplicity seems to work
+	// Okay, yeah, Tokuda just adds a constant, but I'm mostly limited by how functions work.
+	std::function<long(long, double, double)> generalized_tokuda = [](long n, double ratio, double skew) // simplicity seems to work
 	{
-		const double r = 2.25;
 		double value = 1;
 		for (int iteration = 1; iteration < n; iteration += 1)
 		{
-			value = r * value + iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
+			value = ratio * value + skew*iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 		}
 		return ceil(value);
 	};
+
+	std::function<long(long)> ciura_extension = [](long n) // simplicity seems to work
+	{
+		// 1 4 10 25 60 140 324 742 1692 3850 8750 19875 45135 102486 232696 528321 1199504 2723342 6183028 14037821 31871158 72359549 164283441 372985289
+		double ratio = 3*0.7567921710249769090317198; // three times the ratio of 2s and 3s via Euler's number: 2^(1-k)*3^(k) = e
+		double skew = +1;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> natural_extension = [](long n)
+	{
+		// Equivalent to 1 2 3 5 8 16 37 92 243 649 1755 4757 12919 35104 95408 259330 704914 1916137 5208581 14158372 38486424 104616926 284378265 773020247
+		double ratio = 2.718281828459045235360287471352662497757247093699959574966; // it just feels natural
+		double skew = -1;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> invisal_extension = [](long n) // simplicity seems to work
+	{
+		// Equivalent to 1 3 7 16 39 95 236 584 1451 3604 8953 22242 55253 137263 340994 847116 2104452 5227995 12987672 32264690 80153719 199122281 494670533 1228887775
+		double ratio = 2.484255063243666636247322; /*notably, 2.48 does way better*/ // (3*0.7567921710249769090317198)^.5*(e^.5) i.e. @ invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+		double skew = 0;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::vector<long> triple_threat =
+	{
+		// Ciura extension (small size):   1 4 10 25 60 140 324 742 1692 3850 8750 19875 45135 102486 232696 528321 1199504 2723342 6183028  14037821 31871158 72359549  164283441 372985289
+		// Invisal extension (med size):   1 3 7  16 39 95  236 584 1451 3604 8953 22242 55253 137263 340994 847116 2104452 5227995 12987672 32264690 80153719 199122281 494670533 1228887775
+		// Natural extension (large size): 1 2 3  5  8  16  37  92  243  649  1755 4757  12919 35104  95408  259330 704914  1916137 5208581  14158372 38486424 104616926 284378265 773020247
+		// First/best attempt:
+		1, 4, 10, 25, 60, 140, 324, 742, 1692, 3850, // Ciura extension values
+		8953, 22242, 55253, 137263, 340994, 847116, 2104452, 5227995, 12987672, 32264690, 80153719, 199122281, 494670533, 1228887775 // Invisal extension values
+		// In theory the natural extension values come into play, but it takes a while
+	};
+
+	// I still haven't tried these with a floor to prime function, so I'm sure this could still work out.
 
 	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
 	{
