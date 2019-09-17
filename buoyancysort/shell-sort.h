@@ -197,6 +197,16 @@ namespace ShellSort
 	// It's possible that it's better to start with the natural extension and towards Ciura for asymptotic performance (hard to say)
 	// It's also possible that it's best to cycle through the sequences in some fashion (although it would be difficult).
 
+	// Hmmm, there's a good idea.
+	// Up until now I've tried "threading the needle" around a sequence (by marginal changes that are basically negligible asymptotically).
+	// What if, instead, I do a sine curve of the three sequences?
+	// First do ~2.27n + k, then ~2.48n + 0, then ~2.718n - k, then ~2.48n + 0, then ~2.27n + k, then ...
+	// The basic idea: you use different "factorization highways" to get better statistical properties.
+	// There's probably no need to use primes anymore if I do that.
+	// This was an old concept, but I didn't know the full details of the functions when I previously thought about it.
+	// These three functions make total sense; it's not unfounded to say ~2.25, ~2.48, and ~e should yield some good results.
+	// You could use an actual sine curve (not a 4-cycle), and maybe that would yield better performance if you played around with the phaseshift and frequency (I think I got the amplitude and center, though)
+
 	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
 	{
 		// Raw data:
