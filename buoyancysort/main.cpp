@@ -73,7 +73,10 @@ int main()
 	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::invisal_extension, 24);
 	// Hmmm, I really thought these were going to work. There's still a small potential that this is a distinction between theory and practice.
 
-	std::vector<long> gap_sequence = ShellSort::triple_threat;
+	//std::vector<long> gap_sequence = ShellSort::triple_threat;
+	//std::vector<long> gap_sequence = ShellSort::triple_threat_primes;
+	std::vector<long> gap_sequence = ShellSort::ciura_extension_primes;
+
 	for (long gap : gap_sequence)
 	{
 		std::cout << gap << " ";

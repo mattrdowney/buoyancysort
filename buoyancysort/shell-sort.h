@@ -177,7 +177,25 @@ namespace ShellSort
 		// In theory the natural extension values come into play, but it takes a while
 	};
 
+	// Eventually I'll try Ciura only
+	std::vector<long> triple_threat_primes =
+	{
+		1, 4, 10, 23, 59, 139, 317, 739, 1669, 3847, // Ciura extension values
+		8951, 22229, 55249, 137251, 340979, 847109, 2104441, 5227991, 12987647, 32264689, 80153713, 199122233, 494670511, 1228887763 // Invisal extension values
+		// In theory the natural extension values come into play, but it takes a while
+	};
+
+	// Hmmm, even this does worse than the 2.25 Ciura extension with primes. It's more proof that Tokuda stumbled on a really good ratio.
+	std::vector<long> ciura_extension_primes =
+	{
+		// It's worth mentioning all of these sequences don't seem to have primes outside k > 5 or so, which is either a cool coincidence or proof they have some degree of value (since they use irrational numbers and it shouldn't be trivial to avoid primes with those).
+		1, 4, 10, 23, 59, 139, 317, 739, 1669, 3847, 8747, 19867, 45131, 102481, 232681, 528317, 1199491, 2723341, 6183017, 14037809, 31871137, 72359537, 164283403, 372985267 // Ciura extension values
+	};
+
 	// I still haven't tried these with a floor to prime function, so I'm sure this could still work out.
+	// It's also worth mentioning I am greedily choosing the largest gap sequence.
+	// It's possible that it's better to start with the natural extension and towards Ciura for asymptotic performance (hard to say)
+	// It's also possible that it's best to cycle through the sequences in some fashion (although it would be difficult).
 
 	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
 	{

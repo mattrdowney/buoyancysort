@@ -1,6 +1,6 @@
 ﻿  main.cpp
 c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(24): warning C4101: 'a': unreferenced local variable
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(81): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>,long)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(84): note: see reference to function template instantiation 'void ShellSort::sort<current_type>(Type *,long,long,std::vector<long,std::allocator<_Ty>>,long)' being compiled
           with
           [
               Type=current_type,
