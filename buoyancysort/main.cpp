@@ -75,8 +75,10 @@ int main()
 
 	//std::vector<long> gap_sequence = ShellSort::triple_threat;
 	//std::vector<long> gap_sequence = ShellSort::triple_threat_primes;
-	std::vector<long> gap_sequence = ShellSort::ciura_extension_primes;
+	//std::vector<long> gap_sequence = ShellSort::ciura_extension_primes;
 
+	// Does this work?
+	std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura, 21);
 	for (long gap : gap_sequence)
 	{
 		std::cout << gap << " ";

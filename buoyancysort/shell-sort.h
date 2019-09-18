@@ -4,6 +4,7 @@
 #include <climits>
 #include <functional>
 #include <iterator>
+#include <math.h>
 #include <stddef.h>
 #include <vector>
 
@@ -166,6 +167,30 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
+	// Another variant had slightly better performance (namely quarter rotations going through all four cases), but this matches Ciura's sequence better.
+	std::function<long(long)> generalized_ciura = [](long n) // simplicity seems to work
+	{
+		const double lower_multiplier = 3 * 0.7567921710249769090317198; // irrational constant is the solution to 2^(1-k)*3^(k) = e
+		const double upper_multiplier = 2.718281828459045235360287471352662497757247093699959574966; // e / Euler's constant
+		const double pi = 3.141592653589793238462643383279502884197169399375105;
+		
+		const double phase_shift = 0;
+		const double frequency = pi/4;
+
+		double value = 1;
+		double phase = phase_shift;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			double similarity = cos(phase); // There's several ways this could work, but this one is the most intuitive
+			double fraction = (similarity + 1) / 2;
+			double multiplier = pow(lower_multiplier, fraction)*pow(upper_multiplier, 1 - fraction);
+			value = multiplier * value + similarity * iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
+
+			phase = std::fmod(phase + frequency, pi); // move the multipliers in a sine curve.
+		}
+		return ceil(value);
+	};
+
 	std::vector<long> triple_threat =
 	{
 		// Ciura extension (small size):   1 4 10 25 60 140 324 742 1692 3850 8750 19875 45135 102486 232696 528321 1199504 2723342 6183028  14037821 31871158 72359549  164283441 372985289
@@ -206,6 +231,7 @@ namespace ShellSort
 	// This was an old concept, but I didn't know the full details of the functions when I previously thought about it.
 	// These three functions make total sense; it's not unfounded to say ~2.25, ~2.48, and ~e should yield some good results.
 	// You could use an actual sine curve (not a 4-cycle), and maybe that would yield better performance if you played around with the phaseshift and frequency (I think I got the amplitude and center, though)
+	// A more formal way of doing this would be integration rather than discrete multiplication (I don't think the formula would be that hard) but I'll definitely prototype it first.
 
 	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
 	{
