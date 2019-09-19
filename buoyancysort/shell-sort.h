@@ -170,12 +170,12 @@ namespace ShellSort
 	// Another variant had slightly better performance (namely quarter rotations going through all four cases), but this matches Ciura's sequence better.
 	std::function<long(long)> generalized_ciura = [](long n) // simplicity seems to work
 	{
-		const double lower_multiplier = 3 * 0.7567921710249769090317198; // irrational constant is the solution to 2^(1-k)*3^(k) = e
-		const double upper_multiplier = 2.718281828459045235360287471352662497757247093699959574966; // e / Euler's constant
+		const double lower_multiplier = 2.25; // irrational constant is the solution to 2^(1-k)*3^(k) = e
+		const double upper_multiplier = 2.7; // e / Euler's constant
 		const double pi = 3.141592653589793238462643383279502884197169399375105;
 		
 		const double phase_shift = 0;
-		const double frequency = pi/4;
+		const double frequency = 0.618033989; // 1 - phi
 
 		double value = 1;
 		double phase = phase_shift;
@@ -186,7 +186,7 @@ namespace ShellSort
 			double multiplier = pow(lower_multiplier, fraction)*pow(upper_multiplier, 1 - fraction);
 			value = multiplier * value + similarity * iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 
-			phase = std::fmod(phase + frequency, pi); // move the multipliers in a sine curve.
+			phase = std::fmod(phase + frequency, 2*pi/3); // move the multipliers in a sine curve.
 		}
 		return ceil(value);
 	};

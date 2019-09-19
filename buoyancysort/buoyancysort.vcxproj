@@ -172,6 +172,7 @@
     <ClInclude Include="out-of-place-hierarchysort.h" />
     <ClInclude Include="outlier-search.h" />
     <ClInclude Include="power-of-two.h" />
+    <ClInclude Include="primality-test.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="quicksort.h" />
     <ClInclude Include="reverse.h" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="primality-test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
