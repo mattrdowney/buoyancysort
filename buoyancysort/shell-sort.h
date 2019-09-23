@@ -191,9 +191,12 @@ namespace ShellSort
 		return ceil(value);
 	};
 
-	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,
+	std::vector<long> ciura_gap_sequence =
+	{
+		1, 4, 10, 23, 57, 132, 301, 701,
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
-		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
+		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711
+	};
 
 	std::vector<long> pratt_three_smooth_gap_sequence =
 	{
@@ -214,12 +217,6 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	// TODO: variable primorial gap sequence using k#/i# (thus it e.g. sorts on 2, then 3, then 5 instead of 5 then 3 then 2)
-	// primorial: 1, 2, 6, 30, 210, 2310, 30030, 510510,
-	// "k#/i#": 510510/1, 510510/2, 510510/6, 510510/30, 510510/210, 510510/2310, 510510/30030, 510510/510510, (reverse ordered and only an example since it's variable)
-	// upon thinking about it more, I feel like this wouldn't worth but I might as well try it if I have time.
-	// Extending to other values that aren't arrays of size k#: 1) sort individual subarrays and merge or 2) double over with more primorials with remainder or 3) interpolate with standard gap sequences to get to primorial sorting
-
 	// concept:
 	// First generalized_pratt<2> number
 	// Next generalized_pratt<2, 3> numbers
@@ -238,89 +235,9 @@ namespace ShellSort
 	};
 	// NOTE: I think this is a serious candidate for a parallel time O(lg(n)) sort. The sorting network construction would probably be hellish, but I think it's worth investigating (even if it would require "recursion")
 
-	std::vector<long> interpolated_primorial =
-	{
-		1,
-		2,
-		4, 6,
-		12, 18, 24, 30,
-		60, 90, 120, 150, 180, 210,
-		420, 630, 840, 1050, 1260, 1470, 1680, 1890, 2100, 2310,
-		4620, 6930, 9240, 11550, 13860, 16170, 18480, 20790, 23100, 25410, 17720, 30030,
-		60060, 90090, 120120, 150150, 180180, 210210, 240240, 270270, 300300, 330330, 360360, 390390, 420420, 450450, 480480, 510510,
-		1021020, 1531530, 2042040, 2552550, 3063060, 3573570, 4084080, 4594590, 5105100, 5615610, 6126120, 6636630, 7147140, 7657650, 8168160, 8678670, 9189180, 9699690,
-	};
-
-	std::vector<long> interpolated_primorial2 =
-	{
-		1,
-		2,
-		4, 6,
-		12, 18, 30,
-		60, 90, 150, 210,
-		420, 630, 1050, 1470, 2310,
-		4620, 6930, 11550, 16170, 25410, 30030,
-		60060, 90090, 150150, 210210, 330330, 390390, 510510,
-		1021020, 1531530, 2552550, 3573570, 5615610, 6636630, 8678670, 9699690,
-	};
-
-	std::vector<long> interpolated_factorial =
-	{
-		1,
-		2,
-		4, 6,
-		12, 18, 24,
-		48, 72, 96, 120,
-		240, 360, 480, 600, 720,
-		1440, 2160, 2880, 3600, 4320, 5040,
-		10080, 15120, 20160, 25200, 30240, 35280, 40320,
-		80640, 120960, 161280, 201600, 241920, 282240, 322560, 362880,
-		725760, 1088640, 1451520, 1814400, 2177280, 2540160, 2903040, 3265920, 3628800,
-		7257600 // ... 39916800,
-	};
-
-	std::vector<long> interpolated_factorial2 =
-	{
-		1,
-		2,
-		4, 6,
-		12, 18, 24,
-		48, 72, 120,
-		240, 360, 600, 720,
-		1440, 2160, 3600, 5040,
-		10080, 15120, 25200, 35280, 40320,
-		80640, 120960, 201600, 282240, 362880,
-		725760, 1088640, 1814400, 2540160, 3628800,
-		7257600 // ... 39916800,
-	};
-
 	// Keep this, it might be useful (at least on a theoretical level)
-	std::vector<long> interesting_idea =
+	std::vector<long> probably_reliable2 =
 	{
-		/*
-		1,
-		2,
-		6, 10, // 2*{3, 5}
-		42, 66, // 6*{7, 11}
-		130, 170, // 10*{13, 17}
-		798, 966, // 42*{19, 23}
-		1914, 2046, // 66*{29, 31}
-		4810, 5330, // 130*{37, 41}
-		7310, 7990, // 170*{43, 47}
-		1914, 2046, // 798*{53, 59}
-		*/
-
-		// I think this is the foundation for the O(lg(n)) parallel time sorting algorithm. It is extremely fast with the modified "CombSort" (simulated sorting network)
-		// It's possible if you sort within the largest prime factor -- bitonic sorter is fine since the subsort size doesn't grow that quickly (e.g. 127 for 1,014,730 and you sort four times then it might sort the data).
-
-		// Yesh, got it to work with size 10,000,000 with the following stats:
-		// Phases: 4
-		//	2710540386
-		//  271.054 // compared to lg(10,000,000)^2 or 540.725107 // I think a bitonic sorter would cost about 180, though =/ (although the performance would be better than 271 I think since a size 199 bitonic sorter would cost something like 36 (and you need the full cost 4 times over))
-		// Notably, a bitonic sorter would be faster than a size 199 insertion sort
-		// That being said, I don't know if the insertion-sort behavior of the comb sort function would work perfectly (I don't know how to properly construct sorting networks, especially for hardware).
-		// I'm also concerned about the growth rate of the gaps in this sequence (e.g. 1,677 to 7,990 or 189,501 to 1,014,730 are sizeable gaps, and there's a good chance they grow unbounded). I could manually construct good sequences by hand but an algorithm would be nice.
-
 		1,
 		2, 3, // 1*{2, 3}
 		10, 14, // 2*{5, 7}
@@ -346,40 +263,97 @@ namespace ShellSort
 		5660858, 5720134, // 29638*{191, 193}
 		6318578, 6382726, // 32074*{197, 199}
 		17915799, 18934707 // 84909*{211, 223}
+	};
 
-		/* // possible superceding concept (values intentionally out of order to show how the recursion works, appears to be more-or-less the same)
+	// Bad with simulated sorting networks, bad with ShellSort too
+	std::vector<long> probably_unreliable =
+	{
 		1,
-		2, 3, // 1*{2, 3}
-		10, 22, // 2*{5, 11}
-		21, 39, // 3*{7, 13}
-		170, 310, // 10*{17, 31}
-		399, 777, // 21*{19, 37}
-		506, 902, // 22*{23, 41}
-		1131, 1677, // 39*{29, 43}
-		*/
+		4, // 1*2^2
+		12, // 4*3
+		28, // 4*7
+		60, // 12*5
+		156, // 12*13
+		308, // 28*11
+		868, // 28*31
+		1740, // 60*29
+		4380, // 60*73
+		11076, // 156*71
+		28236, // 156*181
+		55132, // 308*179
+		142604, // 308*463
+		400148, // 868*461
+	};
 
-		/* // let's try manually?
+	// Works well compared to Tokuda considering it only uses a factor of ~2 instead of ~2.25
+	std::vector<long> probably_reliable3 =
+	{
 		1,
-		3, // 1*{3}
-		6, // 3*{2}
-		15, // 3*{5}
-		42, // 6*{7}
-		102, // 6*{17}
-		195, // 15*{13}
-		462, // 42*{11}
-		798, // 42*{19}
-		2346, // 102*{23}
-		5655, // 195*{29}
-		*/
+		4, // 1*(2*2)
+		9, // 1*(3*3)
+		20, // 4*5
+		45, // 9*5
+		99, // 9*11
+		220, // 20*11
+		460, // 20*23
+		1035, // 45*23
+		2115, // 45*47
+		4653, // 99*47
+		9603, // 99*97
+		21340, // 220*97
+		43340, // 220*197
+		90620, // 460*197
+		182620, // 460*397
+		410895, // 1035*397
+		824895, // 1035*797
+		1685655, // 2115*797
+	};
 
-		/* // another attempt mirroring Fibonacci
+	// Modified previous to use a factor of ~2.25 and it barely improved performance
+	std::vector<long> probably_reliable4 =
+	{
 		1,
-		2, // 2
-		3, // 3
-		10 // 2*{5}
-		21, 33, // 3*{7,11}
-		130, 170, 190, // 10*{13,17,19}
-		, // 21*{23, 29, 31, 37, 41}
-		*/
+		4, // 1*(2*2)
+		9, // 1*(3*3)
+		20, // 4*5
+		45, // 9*5
+		99, // 9*11
+		220, // 20*11
+		460, // 20*23
+		1035, // 45*23
+		2115, // 45*47
+		4653, // 99*47
+		10197, // 99*103
+		22660, // 220*103
+		50380, // 220*229
+		105340, // 460*229
+		234140, // 460*509
+		526815, // 1035*509
+		1168515, // 1035*1129
+		2387835, // 2115*1129
+	};
+
+	// Different approach without primes (way worse)
+	std::vector<long> probably_reliable5 =
+	{
+		1,
+		4, // 1*(2*2)
+		9, // 1*(3*3)
+		20, // 4*5
+		45, // 9*5
+		108, // 9*12
+		240, // 20*12
+		540, // 20*27
+		1215, // 45*27
+		2700, // 45*60
+		6480, // 108*60
+		14580, // 108*135
+		32400, // 240*135
+		72720, // 240*303
+		163620, // 540*303
+		367740, // 540*681
+		827415, // 1215*681
+		1861380, // 1215*1532
+		4136400 // 2700*1532
 	};
 }
