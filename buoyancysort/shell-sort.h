@@ -191,68 +191,6 @@ namespace ShellSort
 		return ceil(value);
 	};
 
-	std::vector<long> triple_threat =
-	{
-		// Ciura extension (small size):   1 4 10 25 60 140 324 742 1692 3850 8750 19875 45135 102486 232696 528321 1199504 2723342 6183028  14037821 31871158 72359549  164283441 372985289
-		// Invisal extension (med size):   1 3 7  16 39 95  236 584 1451 3604 8953 22242 55253 137263 340994 847116 2104452 5227995 12987672 32264690 80153719 199122281 494670533 1228887775
-		// Natural extension (large size): 1 2 3  5  8  16  37  92  243  649  1755 4757  12919 35104  95408  259330 704914  1916137 5208581  14158372 38486424 104616926 284378265 773020247
-		// First/best attempt:
-		1, 4, 10, 25, 60, 140, 324, 742, 1692, 3850, // Ciura extension values
-		8953, 22242, 55253, 137263, 340994, 847116, 2104452, 5227995, 12987672, 32264690, 80153719, 199122281, 494670533, 1228887775 // Invisal extension values
-		// In theory the natural extension values come into play, but it takes a while
-	};
-
-	// Eventually I'll try Ciura only
-	std::vector<long> triple_threat_primes =
-	{
-		1, 4, 10, 23, 59, 139, 317, 739, 1669, 3847, // Ciura extension values
-		8951, 22229, 55249, 137251, 340979, 847109, 2104441, 5227991, 12987647, 32264689, 80153713, 199122233, 494670511, 1228887763 // Invisal extension values
-		// In theory the natural extension values come into play, but it takes a while
-	};
-
-	// Hmmm, even this does worse than the 2.25 Ciura extension with primes. It's more proof that Tokuda stumbled on a really good ratio.
-	std::vector<long> ciura_extension_primes =
-	{
-		// It's worth mentioning all of these sequences don't seem to have primes outside k > 5 or so, which is either a cool coincidence or proof they have some degree of value (since they use irrational numbers and it shouldn't be trivial to avoid primes with those).
-		1, 4, 10, 23, 59, 139, 317, 739, 1669, 3847, 8747, 19867, 45131, 102481, 232681, 528317, 1199491, 2723341, 6183017, 14037809, 31871137, 72359537, 164283403, 372985267 // Ciura extension values
-	};
-
-	// I still haven't tried these with a floor to prime function, so I'm sure this could still work out.
-	// It's also worth mentioning I am greedily choosing the largest gap sequence.
-	// It's possible that it's better to start with the natural extension and towards Ciura for asymptotic performance (hard to say)
-	// It's also possible that it's best to cycle through the sequences in some fashion (although it would be difficult).
-
-	// Hmmm, there's a good idea.
-	// Up until now I've tried "threading the needle" around a sequence (by marginal changes that are basically negligible asymptotically).
-	// What if, instead, I do a sine curve of the three sequences?
-	// First do ~2.27n + k, then ~2.48n + 0, then ~2.718n - k, then ~2.48n + 0, then ~2.27n + k, then ...
-	// The basic idea: you use different "factorization highways" to get better statistical properties.
-	// There's probably no need to use primes anymore if I do that.
-	// This was an old concept, but I didn't know the full details of the functions when I previously thought about it.
-	// These three functions make total sense; it's not unfounded to say ~2.25, ~2.48, and ~e should yield some good results.
-	// You could use an actual sine curve (not a 4-cycle), and maybe that would yield better performance if you played around with the phaseshift and frequency (I think I got the amplitude and center, though)
-	// A more formal way of doing this would be integration rather than discrete multiplication (I don't think the formula would be that hard) but I'll definitely prototype it first.
-
-	std::vector<long> ciura_extended_gap_sequence_attempt1 = // this seemed to work, I'm guessing it's mostly because of Ciura.
-	{
-		// Raw data:
-		//1, 4, 10, 24, 58, 136, 311, 706, 1595, 3598, 8105, 18246, 41065, 92408, 207931, 467860, 1052700, 2368590, 5329346, 11991046, 25487633
-		1, 4, 10,
-		23, // 4+10+10 = 24 so try next smaller number
-		57, //24 + 24 + 10 = 58 so try next smaller number
-		132, // this doesn't follow the pattern I tried above
-		301,
-		701,
-		1583, // lazily fetch next smallest prime
-		3593,
-		8101,
-		18233,
-		41057,
-		92401,
-		207931,
-		467833
-	};
-
 	std::vector<long> ciura_gap_sequence = { 1, 4, 10, 23, 57, 132, 301, 701,
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
 		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711 };
@@ -299,4 +237,149 @@ namespace ShellSort
 		62748517
 	};
 	// NOTE: I think this is a serious candidate for a parallel time O(lg(n)) sort. The sorting network construction would probably be hellish, but I think it's worth investigating (even if it would require "recursion")
+
+	std::vector<long> interpolated_primorial =
+	{
+		1,
+		2,
+		4, 6,
+		12, 18, 24, 30,
+		60, 90, 120, 150, 180, 210,
+		420, 630, 840, 1050, 1260, 1470, 1680, 1890, 2100, 2310,
+		4620, 6930, 9240, 11550, 13860, 16170, 18480, 20790, 23100, 25410, 17720, 30030,
+		60060, 90090, 120120, 150150, 180180, 210210, 240240, 270270, 300300, 330330, 360360, 390390, 420420, 450450, 480480, 510510,
+		1021020, 1531530, 2042040, 2552550, 3063060, 3573570, 4084080, 4594590, 5105100, 5615610, 6126120, 6636630, 7147140, 7657650, 8168160, 8678670, 9189180, 9699690,
+	};
+
+	std::vector<long> interpolated_primorial2 =
+	{
+		1,
+		2,
+		4, 6,
+		12, 18, 30,
+		60, 90, 150, 210,
+		420, 630, 1050, 1470, 2310,
+		4620, 6930, 11550, 16170, 25410, 30030,
+		60060, 90090, 150150, 210210, 330330, 390390, 510510,
+		1021020, 1531530, 2552550, 3573570, 5615610, 6636630, 8678670, 9699690,
+	};
+
+	std::vector<long> interpolated_factorial =
+	{
+		1,
+		2,
+		4, 6,
+		12, 18, 24,
+		48, 72, 96, 120,
+		240, 360, 480, 600, 720,
+		1440, 2160, 2880, 3600, 4320, 5040,
+		10080, 15120, 20160, 25200, 30240, 35280, 40320,
+		80640, 120960, 161280, 201600, 241920, 282240, 322560, 362880,
+		725760, 1088640, 1451520, 1814400, 2177280, 2540160, 2903040, 3265920, 3628800,
+		7257600 // ... 39916800,
+	};
+
+	std::vector<long> interpolated_factorial2 =
+	{
+		1,
+		2,
+		4, 6,
+		12, 18, 24,
+		48, 72, 120,
+		240, 360, 600, 720,
+		1440, 2160, 3600, 5040,
+		10080, 15120, 25200, 35280, 40320,
+		80640, 120960, 201600, 282240, 362880,
+		725760, 1088640, 1814400, 2540160, 3628800,
+		7257600 // ... 39916800,
+	};
+
+	// Keep this, it might be useful (at least on a theoretical level)
+	std::vector<long> interesting_idea =
+	{
+		/*
+		1,
+		2,
+		6, 10, // 2*{3, 5}
+		42, 66, // 6*{7, 11}
+		130, 170, // 10*{13, 17}
+		798, 966, // 42*{19, 23}
+		1914, 2046, // 66*{29, 31}
+		4810, 5330, // 130*{37, 41}
+		7310, 7990, // 170*{43, 47}
+		1914, 2046, // 798*{53, 59}
+		*/
+
+		// I think this is the foundation for the O(lg(n)) parallel time sorting algorithm. It is extremely fast with the modified "CombSort" (simulated sorting network)
+		// It's possible if you sort within the largest prime factor -- bitonic sorter is fine since the subsort size doesn't grow that quickly (e.g. 127 for 1,014,730 and you sort four times then it might sort the data).
+
+		// Yesh, got it to work with size 10,000,000 with the following stats:
+		// Phases: 4
+		//	2710540386
+		//  271.054 // compared to lg(10,000,000)^2 or 540.725107 // I think a bitonic sorter would cost about 180, though =/ (although the performance would be better than 271 I think since a size 199 bitonic sorter would cost something like 36 (and you need the full cost 4 times over))
+		// Notably, a bitonic sorter would be faster than a size 199 insertion sort
+		// That being said, I don't know if the insertion-sort behavior of the comb sort function would work perfectly (I don't know how to properly construct sorting networks, especially for hardware).
+		// I'm also concerned about the growth rate of the gaps in this sequence (e.g. 1,677 to 7,990 or 189,501 to 1,014,730 are sizeable gaps, and there's a good chance they grow unbounded). I could manually construct good sequences by hand but an algorithm would be nice.
+
+		1,
+		2, 3, // 1*{2, 3}
+		10, 14, // 2*{5, 7}
+		33, 39, // 3*{11, 13}
+		170, 190, // 10*{17, 19}
+		322, 406, // 14*{23, 29}
+		1023, 1221, // 33*{31, 37}
+		1599, 1677, // 39*{41, 43}
+		7990, 9010, // 170*{47, 53}
+		11210, 11590, // 190*{59, 61}
+		21574, 22862, // 322*{67, 71}
+		29638, 32074, // 406*{73, 79}
+		84909, 91047, // 1023*{83, 89}
+		118437, 123321, // 1221*{97, 101}
+		164697, 171093, // 1599*{103, 107}
+		182793, 189501, // 1677*{109, 113}
+		1014730, 1046690, // 7990*{127, 131}
+		1234370, 1252390, // 9010*{137, 139}
+		1670290, 1692710, // 11210*{149, 151}
+		1819630, 1889170, // 11590*{157, 163}
+		3602858, 3732302, // 21574*{167,173}
+		4092298, 4138022, // 22862*{179, 181}
+		5660858, 5720134, // 29638*{191, 193}
+		6318578, 6382726, // 32074*{197, 199}
+		17915799, 18934707 // 84909*{211, 223}
+
+		/* // possible superceding concept (values intentionally out of order to show how the recursion works, appears to be more-or-less the same)
+		1,
+		2, 3, // 1*{2, 3}
+		10, 22, // 2*{5, 11}
+		21, 39, // 3*{7, 13}
+		170, 310, // 10*{17, 31}
+		399, 777, // 21*{19, 37}
+		506, 902, // 22*{23, 41}
+		1131, 1677, // 39*{29, 43}
+		*/
+
+		/* // let's try manually?
+		1,
+		3, // 1*{3}
+		6, // 3*{2}
+		15, // 3*{5}
+		42, // 6*{7}
+		102, // 6*{17}
+		195, // 15*{13}
+		462, // 42*{11}
+		798, // 42*{19}
+		2346, // 102*{23}
+		5655, // 195*{29}
+		*/
+
+		/* // another attempt mirroring Fibonacci
+		1,
+		2, // 2
+		3, // 3
+		10 // 2*{5}
+		21, 33, // 3*{7,11}
+		130, 170, 190, // 10*{13,17,19}
+		, // 21*{23, 29, 31, 37, 41}
+		*/
+	};
 }

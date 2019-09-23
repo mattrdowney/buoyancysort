@@ -40,7 +40,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000000;
+	const long size = 10000000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
@@ -78,12 +78,13 @@ int main()
 	//std::vector<long> gap_sequence = ShellSort::ciura_extension_primes;
 
 	// Does this work?
-	std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura, 21);
+	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura, 21);
+	std::vector<long> gap_sequence = ShellSort::interesting_idea;
 	for (long gap : gap_sequence)
 	{
 		std::cout << gap << " ";
 	}
-	ShellSort::sort((current_type*)data.data(), -1, size, gap_sequence);
+	CombSort::not_combsort((current_type*)data.data(), -1, size, gap_sequence);
 
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 

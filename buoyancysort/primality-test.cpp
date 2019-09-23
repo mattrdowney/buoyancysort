@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "primality-test.h"
 
 // Yes, I realize how lazy I am for not making a new project.
