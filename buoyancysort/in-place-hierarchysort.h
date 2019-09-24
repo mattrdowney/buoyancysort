@@ -5,23 +5,36 @@
 
 namespace Hierarchysort
 {
-	const long run_alignment = 2;
+	const long run_alignment = 8;
+	const long run_alignment_mask = ~((1 << run_alignment) - 1); // I feel like this concept inadvertently runs slower with random data (the original intention was to use [run_alignment, 2*run_alignment) runs -- and greater for natural runs).
 
 	template <typename Type>
 	long get_run(Type *data, long before_first, long after_last)
 	{
 		long end = NaturalRuns::direction_agnostic(data, before_first, after_last);
-		if (end - before_first < min_run_size)
+		long aligned_end = (before_first & run_alignment_mask) + 2 * run_alignment; // hilarious bug I noticed before running: -1 & run_alignment_mask is gonna be a crazy bug (or at least inconsistency) on certain systems (e.g. 1s-complement, could be wrong here). I think since I use before_first this lucks out and works as I want it to on random data.
+		aligned_end = std::min(aligned_end, after_last);
+		if (end < aligned_end)
 		{
-			InsertionSort::insert_block_from_right(data, before_first, before_first + min_run_size + 1, end);
-			end = before_first + min_run_size;
+			InsertionSort::insert_block_from_right(data, before_first, aligned_end, end);
+			end = aligned_end;
 		}
 		return end;
 	}
 
+	// I think merge follows this logic:
+	// Take the run_size and add it to the contiguous run that is adjacent (all relevant cells).
+	// Find the lower power of two (that's the largest size you'd want to create while preserving efficiency).
+	// Bitshift 1 larger and subtract 1 to get a bitmask that will detect any collisions.
+	// Use this against the VList of sorted cells (except the contiguous elements you already used) to detect a collision.
+	// If there is a collision find the element using the XOR operator (i.e. ^) and power-of-two tricks (or most/least significant bits if an assembly instruction exists).
 	template <typename Type>
 	void merge_run(Type *left, Type *right, long left_size, long right_size)
 	{
+		// NOTE: merging a run often requires 2+ merges (O(lg(n)) on nearly-sorted (non-random) data.
+		// I can call the MergeSort::merge() subroutine.
+		// I will need to use extra data structures to store the state of the Hierarchy (which is probably my main source of dread).
+
 		/*
 		long left_cursor = 0;
 		long right_cursor = combined_input_size / 2;

@@ -67,25 +67,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	//std::vector<long> gap_sequence = ShellSort::tokuda_gap_sequence;
-	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::ciura_extension, 24);
-	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::natural_extension, 24);
-	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::invisal_extension, 24);
-	// Hmmm, I really thought these were going to work. There's still a small potential that this is a distinction between theory and practice.
-
-	//std::vector<long> gap_sequence = ShellSort::triple_threat;
-	//std::vector<long> gap_sequence = ShellSort::triple_threat_primes;
-	//std::vector<long> gap_sequence = ShellSort::ciura_extension_primes;
-
-	// Does this work?
-	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura, 21);
-	std::vector<long> gap_sequence = ShellSort::probably_reliable5;
-	for (long gap : gap_sequence)
-	{
-		std::cout << gap << " ";
-	}
-	//CombSort::not_combsort((current_type*)data.data(), -1, size, gap_sequence);
-	ShellSort::sort((current_type*)data.data(), -1, size, gap_sequence);
+	Hierarchysort::in_place((current_type*)data.data(), -1, size);
 
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 
