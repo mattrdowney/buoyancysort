@@ -3,6 +3,7 @@
 #include <algorithm>
 
 // This code is based on https://github.com/tvanslyke/timsort-cpp/blob/master/include/tim/utils.h
+// The algorithm is generally called https://en.wikipedia.org/wiki/Exponential_search (although that name makes more sense in the context of infinite arrays).
 namespace GallopSearch
 {
 	template <typename Type>

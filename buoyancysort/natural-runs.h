@@ -11,7 +11,7 @@ namespace NaturalRuns
 		{
 			sequence_cursor += 1;
 		}
-		return sequence_cursor;
+		return sequence_cursor + 1;
 	}
 
 	template <typename Type>
@@ -37,6 +37,6 @@ namespace NaturalRuns
 				sequence_cursor += 1;
 			}
 		}
-		return sequence_cursor;
+		return sequence_cursor + 1;
 	}
 }
