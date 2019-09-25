@@ -1,5 +1,8 @@
 #pragma once
 
+#include <algorithm>
+
+// I knew I was gonna hate testing these functions before I wrote them DX
 namespace OutlierSearch
 {
 	// You can think of this as a specialized BinarySearch. It's good at finding elements at the extremes but performs about half as well towards the middle.
@@ -8,13 +11,36 @@ namespace OutlierSearch
 	template <typename Type>
 	void lower_bound(Type *haystack, long before_first, long after_last, Type needle)
 	{
-		// I really just -don't- wanna work on this right now.
-		// Even if I can use gallop_upper_bound() as a template from here and add almost no new code: https://github.com/tvanslyke/timsort-cpp/blob/master/include/tim/utils.h
+		if (before_first + 1 < after_last) // if there is at least one element
+		{
+			long median = (before_first + after_last) / 2; // CONSIDER: proper (low + (high - low)/2) trapezoid rule.
+			if (haystack[median] < needle)
+			{
+				GallopSearch::reverse_lower_bound(haystack, median - 1, after_last, needle);
+			}
+			else
+			{
+				GallopSearch::forward_lower_bound(haystack, before_first, median + 1, needle);
+			}
+		}
+		return after_last;
 	}
 
 	template <typename Type>
 	void upper_bound(Type *haystack, long before_first, long after_last, Type needle)
 	{
-
+		if (before_first + 1 < after_last) // if there is at least one element
+		{
+			long median = (before_first + after_last) / 2; // CONSIDER: proper (low + (high - low)/2) trapezoid rule.
+			if (haystack[median] <= needle)
+			{
+				GallopSearch::reverse_upper_bound(haystack, median - 1, after_last, needle);
+			}
+			else
+			{
+				GallopSearch::forward_upper_bound(haystack, before_first, median + 1, needle);
+			}
+		}
+		return before_first;
 	}
 }

@@ -147,11 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="binary-search.h" />
     <ClInclude Include="bubble-sort.h" />
     <ClInclude Include="buoyancysort.h" />
     <ClInclude Include="comb-sort.h" />
     <ClInclude Include="fractal-max-heap.h" />
     <ClInclude Include="fractal-min-heap.h" />
+    <ClInclude Include="gallop-search.h" />
     <ClInclude Include="heap-tests.h" />
     <ClInclude Include="heuristics.h" />
     <ClInclude Include="hoare-partition.h" />

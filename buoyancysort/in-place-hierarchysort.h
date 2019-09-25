@@ -6,13 +6,13 @@
 namespace Hierarchysort
 {
 	const long run_alignment = 8;
-	const long run_alignment_mask = ~((1 << run_alignment) - 1); // I feel like this concept inadvertently runs slower with random data (the original intention was to use [run_alignment, 2*run_alignment) runs -- and greater for natural runs).
+	const long run_alignment_mask = ~((1 << run_alignment) - 1);
 
 	template <typename Type>
 	long get_run(Type *data, long before_first, long after_last)
 	{
 		long end = NaturalRuns::direction_agnostic(data, before_first, after_last);
-		long aligned_end = (before_first & run_alignment_mask) + 2 * run_alignment; // hilarious bug I noticed before running: -1 & run_alignment_mask is gonna be a crazy bug (or at least inconsistency) on certain systems (e.g. 1s-complement, could be wrong here). I think since I use before_first this lucks out and works as I want it to on random data.
+		long aligned_end = (before_first & run_alignment_mask) + 2 * run_alignment; // HACK: -1 & run_alignment_mask will result in undefined behavior later (e.g. 1s-complement vs 2s-complement)
 		aligned_end = std::min(aligned_end, after_last);
 		if (end < aligned_end)
 		{
