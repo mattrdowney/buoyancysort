@@ -8,5 +8,7 @@ namespace Hierarchysort
 	template <typename Type>
 	void hybrid(Type *data, long before_first, long after_last) // conceptually this is a hybrid of big-endian and little-endian (supposed to be adaptive in both the real and programmer sense of the word). (This was a work-in-progress.)
 	{
+		// NOTE: the biggest implementation issue here is stability.
+		// If you let certain chunks enter the VList at advanced positions (not starting from 1, 2, 4, 8...) you essentially let them shortcut the line, breaking stability.
 	}
 }

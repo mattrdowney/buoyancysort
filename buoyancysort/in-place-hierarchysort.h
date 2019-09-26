@@ -63,3 +63,28 @@ namespace Hierarchysort
 		}
 	}
 }
+
+
+// Out-of-place hierarchysort is easier conceptually since it's just a question of how to merge lists in the following fashion:
+// A: 1 2 4 8 16
+// B: 1 2 4 8 16
+// It's very similar to addition with carry bits.
+
+// In-place hierarchysort on the other hand has uneven sizes:
+// 1024 256 57 (16)
+// In this case you would probably want to merge-in 7 elements to have a size 64 array. Basically, you only tolerate non-power-of-two sizes on the lowest level (the rest are powers of two).
+// That being said, there's a lot of choices, and I think the best one should be similar to out-of-place hierarchysort.
+// That probably means I will use an algorithm that's more similar to Mergesort than Timsort.
+// This means that Hierarchysort still does merges of size 1 1 1 1 1 1 1 1 | 2 2 2 2 | 4 4 | 8, except it does them in a cache-coherent way with extra methods like OutlierSearch for quicker merging.
+
+// Can this make performance markedly worse than Timsort? I don't think so, because Timsort's performance seems to be mostly bound by the number of inversions in the data.
+// Thus Timsort will perform poorly if there are elements that are significantly displaced from their sorted order, because that means many of the early return conditions will mostly be unmet.
+
+// It took me a while to figure this one out, but once I thought about it with respect to philosophy, e.g. "What version of in-place hierarchysort would be truest to the out-of-place version?", it started making more sense.
+// Ironically, there's almost no differences between mergesort and hierarchysort, except that no one ever seemed to find the caching optimization (and OutlierSearch is a non-trivial discovery too, I suppose). Many of these optimizations either come from Timsort or might as well have.
+
+// Hmmm, but if you think of Hierarchysort with natural runs there might be an interesting way to deal with natural runs and merging them.
+// If you take the size 8 array example:
+// ( 1 3 5 ) ( 2 6 8 ) ( 4 7 )
+// Can be thought of as a Mergesort that has some extra rules to it.
+// At the same time, I feel like this example would be better solved by mutating the array into (1 3)(2 5)(6 8)(4 7) and just doing a standard mergesort, so I'm probably overcomplicating it.
