@@ -96,3 +96,25 @@ namespace Hierarchysort
 // It's worth mentioning this feels like a bad algorithm, because it always prefers to do insertion sorts for single elements.
 // It does make the logic an run_stack simpler, though (at least I think it does) and natural runs don't matter too much after the lowest-level merges.
 // Additionally, cache-coherency is relevant, and should be prioritized in most cases.
+
+
+// Algorithm:
+// get_run()
+// get next power of two
+// if the run is a power of two trivially merge it (when the bit-ordering allows it).
+// if the run is not a power of two use recursion
+
+// Eh, this is all trash.
+// The main limitation Timsort dealt with was the O(lgn) GallopSearch on all iterations preventing it from doing well on nearly sorted data.
+// Why not trust the data to sort itself?
+// By this I mean, just use a Mergesort with blocks of 2^i (nothing fancy).
+// When the adjacent information is nearly sorted then sort will require two comparisons to figure that out because of OutlierSearch().
+// I do like the idea of getting natural runs from the data (which avoids some unnecessary comparisons), but I'll figure that one out as well.
+
+// I think if I can find the equivalent of an accounting method ( https://en.wikipedia.org/wiki/Accounting_method_(computer_science) ) then I will be able to get this to work.
+
+// On odd numbers (n & 1), do a merge of two size-1 arrays.
+// On n mod 4 == 3 ((n & 3) == 3), do a merge of two size-2 arrays.
+// And so on...
+// You can skip this process if there is only a single array up to that point (since it is trivially merged).
+// In practice, you have to do this continuously, e.g. for two size-6 arrays (1 2 5 6 8 10) (3 4 7 9 11 12) you cannot just check at the end of each run because there should be a merge of two size-4 arrays when the cursor hits position 7.
