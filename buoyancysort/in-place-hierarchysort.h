@@ -88,3 +88,11 @@ namespace Hierarchysort
 // ( 1 3 5 ) ( 2 6 8 ) ( 4 7 )
 // Can be thought of as a Mergesort that has some extra rules to it.
 // At the same time, I feel like this example would be better solved by mutating the array into (1 3)(2 5)(6 8)(4 7) and just doing a standard mergesort, so I'm probably overcomplicating it.
+
+// I think the new in-place Hierarchysort would turn ( 1 3 5 ) ( 2 6 8 ) ( 4 7 ) => ( 1 2 3 5 ) ( 6 8 ) ( 4 7 ) => ( 1 2 3 5 ) ( 4 6 7 8 ) => ( 1 2 3 4 5 6 7 8)
+// In the first step, (1 3 5) has a refinedness of 2/3 (across three positions) and one position has a refinedness of 1/3 for a total refinedness of (2/3)*3 + (1/3)*1 or (2+1/3)/4 which is greater than or equal to 50% refinedness so it needs to be merged.
+// Obviously it would be cumbersome to step through all powers of 2^i at each merge position, so some extra logic would need to be made.
+
+// It's worth mentioning this feels like a bad algorithm, because it always prefers to do insertion sorts for single elements.
+// It does make the logic an run_stack simpler, though (at least I think it does) and natural runs don't matter too much after the lowest-level merges.
+// Additionally, cache-coherency is relevant, and should be prioritized in most cases.
