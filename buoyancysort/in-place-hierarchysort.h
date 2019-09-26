@@ -118,3 +118,23 @@ namespace Hierarchysort
 // And so on...
 // You can skip this process if there is only a single array up to that point (since it is trivially merged).
 // In practice, you have to do this continuously, e.g. for two size-6 arrays (1 2 5 6 8 10) (3 4 7 9 11 12) you cannot just check at the end of each run because there should be a merge of two size-4 arrays when the cursor hits position 7.
+
+// How about:
+// You can merge a run of size n with any other run of size (n/2, 2*n) [exclusive].
+// Thus you just pull a run and find the smallest contiguous segment and try to merge with some fraction (maybe 100%) of it.
+// You do this recursively until you run out of the current run or you run out of segments (in which case you greedily insert the current residue).
+
+// Another thought, I should probably avoid runs that aren't multiples of run_alignment.
+// It's a little extra work, but probably avoids a lot of small merges.
+
+// If I'm correct (a rare occurence XD), Timsort on random data does not do power-of-two merges (but instead ~phi because of the invariants), which is why it generally does worse than Quicksort.
+// Because of this, I think I should be concerned with making performance better on random data.
+// If you think about it ( https://en.wikipedia.org/wiki/Timsort#Formal_verification ) the formal verification of Timsort talks about how you need to check the top four runs, and maybe I should do something similar.
+
+// What would be elegant?
+// I like falling back to the idea of merging in as many elements as possible and storing whether runs are contiguous.
+
+// This means the data would look like:
+// vector<int> vlist_position_occupied; // this is indexed by the bit position (i.e. little-endian) // stores zero when unoccupied. Otherwise it stores a unique index representing the contiguous chunk it is a part of.
+// vector<long> vlist_contiguous_sizes; // this is indexed by the run position (i.e. big-endian)
+// I think I can make this work, so I'll start coding with this as the basis of in-place hierarchysort.
