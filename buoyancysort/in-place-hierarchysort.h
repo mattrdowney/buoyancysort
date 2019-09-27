@@ -7,8 +7,10 @@
 
 namespace Hierarchysort
 {
-	const long run_alignment = 16;
-	const long run_alignment_mask = ~((1 << run_alignment) - 1);
+	const long run_bits = 4;
+	const long run_alignment = (1 << run_bits);
+	// const long run_alignment_mask = ~((1 << run_alignment) - 1); // lol, this is definitely one of my favorite bugs now. (This is why you should prefer multiplication.) // I was going to create a variable for bit_size so I would have found this before compiling, but then I realized I wanted non-power-of-two sizes eventually and also that being able to sort subarrays means I would need modulo tricks instead. Also -1 bitwise math is undefined-behavior so this had a lot of underlying problems.
+	// To be clear: the logic is still bound to powers of two for now. There are ways to decouple it, but they are inconvenient.
 
 	template <typename Type>
 	long get_run(Type *data, long before_first, long after_last, long &residue_index) // TODO: this is broken (terribly)
@@ -37,7 +39,6 @@ namespace Hierarchysort
 		long size = after_last - (before_first + 1);
 		long bit_size = std::ceil(std::log(size)) + 1 /*because of floating-point imprecision, I'm adding some room for error*/ + 1;
 		std::vector<int> vlist_position_occupied(bit_size); // this is indexed by the bit position (i.e. little-endian) // stores zero when unoccupied. Otherwise it stores a unique index representing the contiguous chunk it is a part of.
-		std::vector<long> vlist_contiguous_sizes(bit_size); // this is indexed by the run position (i.e. big-endian)
 
 		int vlist_indices = 0;
 		long residue_index = -1;
@@ -55,6 +56,35 @@ namespace Hierarchysort
 				run_end = get_run(data, run_begin - 1, after_last);
 				run_size = run_end - run_begin;
 				// TODO: This is the hard work
+				// Pseudocode:
+				// if (run_size <= run_alignment)
+				// simple merge in
+				// otherwise
+				// while (run_size > 0)
+				//     bit = run_bits; // 16 (1 << 4) is actually the 5th position since we start from 0.
+				//     trivial_merge = true;
+				//     vlist_size = 0;
+				//     mix_in_size = run_alignment;
+				//     while (true)
+				//         if (bit belongs to a second contiguous set)
+				//             break;
+				//         if (bit is used by vlist)
+				//             vlist_size += (1 << bit);
+				//             bit += 1;
+				//             trivial_merge = false;
+				//             continue;
+				//         test_size = mix_in_size + (1 << bit);
+				//         if (test_size <= run_size)
+				//             // bit must be unused at this point
+				//             mix_in_size = test_size;
+				//             bit += 1;
+				//         if (test_size >= run_size)
+				//             break;
+				//     if (not trivial_merge)
+				//         MergeSort::merge(-vlist_size-, -mix_in_size-);
+				//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
+				//     run_size -= mix_in_size;
+
 				partially_sorted_size += run_size;
 			}
 		}
