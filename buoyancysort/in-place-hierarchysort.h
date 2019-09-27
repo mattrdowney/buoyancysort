@@ -9,8 +9,6 @@ namespace Hierarchysort
 {
 	const long run_bits = 4;
 	const long run_alignment = (1 << run_bits);
-	// const long run_alignment_mask = ~((1 << run_alignment) - 1); // lol, this is definitely one of my favorite bugs now. (This is why you should prefer multiplication.) // I was going to create a variable for bit_size so I would have found this before compiling, but then I realized I wanted non-power-of-two sizes eventually and also that being able to sort subarrays means I would need modulo tricks instead. Also -1 bitwise math is undefined-behavior so this had a lot of underlying problems.
-	// To be clear: the logic is still bound to powers of two for now. There are ways to decouple it, but they are inconvenient.
 
 	template <typename Type>
 	long get_run(Type *data, long before_first, long after_last, long &residue_index) // TODO: this is broken (terribly)
@@ -33,6 +31,8 @@ namespace Hierarchysort
 	}
 
 	// This is what I called hard O(n) adaptive best-case performance. This is better with nearly sorted data.
+	// While this is certainly complicated, it is probably a third as difficult as I thought it would be.
+	// The code seems pretty elegant (you don't have to think about 50 moving parts at once).
 	template <typename Type>
 	void in_place(Type *data, long before_first, long after_last) // conceptually, this is big-endian. While you could potentially do this in true O(nlg(n)) like Blocksort (note: the sizes of A and B are often not equal), for now I'm going to implement it with auxiliary memory // As an aside, it baffles me that Blocksort also uses the mergesort 1,2,4,8 merge system. I am pretty sure very few people know about this optimization based on the Mergesort page and other sources.
 	{
@@ -55,37 +55,57 @@ namespace Hierarchysort
 				long run_begin = run_end;
 				run_end = get_run(data, run_begin - 1, after_last);
 				run_size = run_end - run_begin;
-				// TODO: This is the hard work
-				// Pseudocode:
-				// if (run_size <= run_alignment)
-				// simple merge in
-				// otherwise
-				// while (run_size > 0)
-				//     bit = run_bits; // 16 (1 << 4) is actually the 5th position since we start from 0.
-				//     trivial_merge = true;
-				//     vlist_size = 0;
-				//     mix_in_size = run_alignment;
-				//     while (true)
-				//         if (bit belongs to a second contiguous set)
-				//             break;
-				//         if (bit is used by vlist)
-				//             vlist_size += (1 << bit);
-				//             bit += 1;
-				//             trivial_merge = false;
-				//             continue;
-				//         test_size = mix_in_size + (1 << bit);
-				//         if (test_size <= run_size)
-				//             // bit must be unused at this point
-				//             mix_in_size = test_size;
-				//             bit += 1;
-				//         if (test_size >= run_size)
-				//             break;
-				//     if (not trivial_merge)
-				//         MergeSort::merge(-vlist_size-, -mix_in_size-);
-				//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
-				//     run_size -= mix_in_size;
-
-				partially_sorted_size += run_size;
+				partially_sorted_size += run_size; // I could do this after the merge to be more formal, but whatever (run_size is modified, so it's easier to change here)
+				if (run_size <= run_alignment)
+				{
+					// "simple" merge in (which isn't that simple since you still need to properly use the data structures and take into account all of the other optimizations (e.g. OutlierSearch, contiguous regions, gallop merge (last one is a stretch goal))
+				}
+				else
+				{
+					while (run_size > 0)
+					{
+						bit = run_bits; // 16 (1 << 4) is actually the 5th position since we start from 0.
+						trivial_merge = true;
+						vlist_size = 0;
+						mix_in_size = run_alignment;
+						while (true)
+						{
+							if (bit belongs to a second contiguous set)
+							{
+								break;
+							}
+							if (bit is used by vlist)
+							{
+								vlist_size += (1 << bit);
+								bit += 1;
+								trivial_merge = false;
+								continue;
+							}
+							test_size = mix_in_size + (1 << bit);
+							if (test_size <= run_size)
+							{
+								// bit must be unused at this point
+								mix_in_size = test_size;
+								bit += 1;
+							}
+							if (test_size >= run_size)
+							{
+								break;
+							}
+						}
+						if (!trivial_merge)
+						{
+							// Note, the merge is actually more complicated:
+							// 1) it cascades
+							// 2) you need to make sure cascading chunks take contiguous optimization into account
+							// 3) if you want to be cache-friendly you have to do the memory zig-zag
+							// 4) even if you don't want to be cache-friendly, you are doing this in-place so MergeSort::merge() doesn't work out-of-box, you need an auxiliary buffer.
+							MergeSort::merge(-vlist_size - , -mix_in_size - );
+						}
+						//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
+						run_size -= mix_in_size;
+					}
+				}
 			}
 		}
 	}
