@@ -126,7 +126,7 @@ namespace Hierarchysort
 		//}
 	}
 
-	// This is what I called soft O(n) adaptive best-case performance. This is better with random data (I have to test this theory, though).
+	// If stable, this has O(nlgn) performance no matter what. If unstable, this is what I called soft O(n) adaptive best-case performance. This is better with random data (I have to test this theory, though).
 	template <typename Type>
 	void out_of_place(Type *data, long before_first, long after_last) // conceptually, this is little-endian
 	{

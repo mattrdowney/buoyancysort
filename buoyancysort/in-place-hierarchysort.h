@@ -7,7 +7,7 @@
 
 namespace Hierarchysort
 {
-	const long run_bits = 4;
+	const long run_bit_alignment = 4; // Starts from 0 (0 implies no alignment)
 	const long run_alignment = (1 << run_bits);
 
 	template <typename Type>
@@ -30,9 +30,7 @@ namespace Hierarchysort
 		return end;
 	}
 
-	// This is what I called hard O(n) adaptive best-case performance. This is better with nearly sorted data.
-	// While this is certainly complicated, it is probably a third as difficult as I thought it would be.
-	// The code seems pretty elegant (you don't have to think about 50 moving parts at once).
+	// This is what I called hard O(n) adaptive best-case performance -- caveat I think I'm missing some optimizations that would make the adaptive performance better. This is better with nearly sorted data.
 	template <typename Type>
 	void in_place(Type *data, long before_first, long after_last) // conceptually, this is big-endian. While you could potentially do this in true O(nlg(n)) like Blocksort (note: the sizes of A and B are often not equal), for now I'm going to implement it with auxiliary memory // As an aside, it baffles me that Blocksort also uses the mergesort 1,2,4,8 merge system. I am pretty sure very few people know about this optimization based on the Mergesort page and other sources.
 	{
@@ -47,7 +45,6 @@ namespace Hierarchysort
 		long run_size = first_run_end - (before_first + 1);
 		if (unsorted_size > run_size)
 		{
-			run_stack.push(run_size);
 			partially_sorted_size += run_size;
 
 			while (partially_sorted_size < size)
