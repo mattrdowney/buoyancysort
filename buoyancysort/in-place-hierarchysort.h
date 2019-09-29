@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits.h>
 #include <math.h>
 #include <stddef.h>
 #include <vector>
@@ -38,72 +39,69 @@ namespace Hierarchysort
 		long bit_size = std::ceil(std::log(size)) + 1 /*because of floating-point imprecision, I'm adding some room for error*/ + 1;
 		std::vector<int> vlist_position_occupied(bit_size); // this is indexed by the bit position (i.e. little-endian) // stores zero when unoccupied. Otherwise it stores a unique index representing the contiguous chunk it is a part of.
 
-		int vlist_indices = 0;
-		long residue_index = -1;
-		long partially_sorted_size = 0;
-		long run_end = get_run(data, before_first, after_last);
-		long run_size = first_run_end - (before_first + 1);
-		if (unsorted_size > run_size)
+		for (long bit = 0; bit < bit_size; bit += 1)
 		{
-			partially_sorted_size += run_size;
+			vlist_position_occupied[bit] = INT_MAX; // This is more convenient than zero.
+		}
 
-			while (partially_sorted_size < size)
+		long unique_segments = 0;
+		long partially_sorted_size = 0;
+		while (partially_sorted_size < size)
+		{
+			long run_begin = run_end;
+			long run_end = get_run(data, run_begin - 1, after_last);
+			long run_size = run_end - run_begin;
+			partially_sorted_size += run_size; // NOTE: I could do this after the merge but it's more convenient if I can mutate run_size
+			while (run_size > 0)
 			{
-				long run_begin = run_end;
-				run_end = get_run(data, run_begin - 1, after_last);
-				run_size = run_end - run_begin;
-				partially_sorted_size += run_size; // I could do this after the merge to be more formal, but whatever (run_size is modified, so it's easier to change here)
-				if (run_size <= run_alignment)
+				long bit = run_bit_alignment;
+				bool trivial_merge = true;
+				long left_size = 0;
+				long right_size = run_alignment;
+				while (true)
 				{
-					// "simple" merge in (which isn't that simple since you still need to properly use the data structures and take into account all of the other optimizations (e.g. OutlierSearch, contiguous regions, gallop merge (last one is a stretch goal))
-				}
-				else
-				{
-					while (run_size > 0)
+					if (vlist_position_occupied[bit] < unique_segments) // bit belongs to a second contiguous set (you cannot safely merge beyond this point)
 					{
-						bit = run_bits; // 16 (1 << 4) is actually the 5th position since we start from 0.
-						trivial_merge = true;
-						vlist_size = 0;
-						mix_in_size = run_alignment;
-						while (true)
-						{
-							if (bit belongs to a second contiguous set)
-							{
-								break;
-							}
-							if (bit is used by vlist)
-							{
-								vlist_size += (1 << bit);
-								bit += 1;
-								trivial_merge = false;
-								continue;
-							}
-							test_size = mix_in_size + (1 << bit);
-							if (test_size <= run_size)
-							{
-								// bit must be unused at this point
-								mix_in_size = test_size;
-								bit += 1;
-							}
-							if (test_size >= run_size)
-							{
-								break;
-							}
-						}
-						if (!trivial_merge)
-						{
-							// Note, the merge is actually more complicated:
-							// 1) it cascades
-							// 2) you need to make sure cascading chunks take contiguous optimization into account
-							// 3) if you want to be cache-friendly you have to do the memory zig-zag
-							// 4) even if you don't want to be cache-friendly, you are doing this in-place so MergeSort::merge() doesn't work out-of-box, you need an auxiliary buffer.
-							MergeSort::merge(-vlist_size - , -mix_in_size - );
-						}
-						//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
-						run_size -= mix_in_size;
+						break;
+					}
+					if (vlist_position_occupied[bit] == unique_segments)
+					{
+						left_size += (1 << bit);
+						bit += 1;
+						trivial_merge = false;
+						continue;
+					}
+					long extrapolated_size = right_size + (1 << bit);
+					if (extrapolated_size <= run_size)
+					{
+						// bit must be unused at this point (because the value is INT_MAX, the sentinel value representing unused vlist positions).
+						right_size = extrapolated_size;
+						bit += 1;
+					}
+					if (extrapolated_size >= run_size)
+					{
+						break;
 					}
 				}
+				if (!trivial_merge)
+				{
+					// Note, the merge is actually more complicated:
+					// 1) it cascades
+					// 2) you need to make sure cascading chunks take contiguous optimization into account
+					// 3) if you want to be cache-friendly you have to do the memory zig-zag
+					// 4) even if you don't want to be cache-friendly, you are doing this in-place so MergeSort::merge() doesn't work out-of-box, you need an auxiliary buffer.
+					MergeSort::merge(-vlist_size - , -mix_in_size - );
+				}
+				//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
+				run_size -= right_size;
 			}
 		}
 	}
 }
+
+// Minor note: the worst case for wasting sorted runs:
+// Natural runs with a size like 0b'1000'0000 or 0b'0111'111 have elegant merge procedures (they use the natural sortedness to avoid unnecessary work).
+// Natural runs with a size like 0b'1010'1010 (alternating zeroes and ones) have inelegant merge procedures because you cannot easily skip over work (since it's hard to put elements next to one another).
+// While you could solve this problem by making the algorithm more complicated, the waste isn't attrocious.
+// The limit of 1 + 1/4 + 1/16 + 1/64 + 1/256 = 1.33333... so the waste could sort of be looked at as a 33% overhead beyond ideal *in the worst case*. Additionally, it's not like you actually remerge these elements, you just have to merge the already sorted lists again (redundant work, but not building from scratch).
+// This is why I don't focus on this optimization, it has a small effect on some types of data, but for uniformly nearly-sorted data it should be detrimental; it's only for certain types of datasets where it actually matters (particularly disjoint partially sorted sets).
