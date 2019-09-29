@@ -66,6 +66,7 @@ namespace Hierarchysort
 					}
 					if (vlist_position_occupied[bit] == unique_segments)
 					{
+						vlist_position_occupied[bit] = INT_MAX; // merge in the values (unset the bit (to the sentinel value)) to show the position is unoccupied.
 						left_size += (1 << bit);
 						bit += 1;
 						trivial_merge = false;
@@ -76,14 +77,33 @@ namespace Hierarchysort
 					{
 						// bit must be unused at this point (because the value is INT_MAX, the sentinel value representing unused vlist positions).
 						right_size = extrapolated_size;
-						bit += 1;
 					}
+					bit += 1;
 					if (extrapolated_size >= run_size)
 					{
 						break;
 					}
 				}
-				if (!trivial_merge)
+				if (trivial_merge)
+				{
+					if (unique_segments == 0 || data[run_begin - 1] >= data[run_begin])
+					{
+						// You don't actually have to search for the segment, if you know it exists, you just get the element before run_begin. (If it doesn't exist you can get a segmentation fault.)
+						// If the data is not trivially sorted, then you have a new segment.
+						unique_segments += 1;
+					}
+
+					// Set all of the bits that are being merged in.
+					for (; bit >= run_alignment_bits; bit -= 1)
+					{
+						long subarray_size = (1 << bit);
+						if (subarray_size & run_size)
+						{
+							vlist_position_occupied[bit] = unique_segments;
+						}
+					}
+				}
+				else // standard merge (possibly cascading)
 				{
 					// Note, the merge is actually more complicated:
 					// 1) it cascades
@@ -92,7 +112,8 @@ namespace Hierarchysort
 					// 4) even if you don't want to be cache-friendly, you are doing this in-place so MergeSort::merge() doesn't work out-of-box, you need an auxiliary buffer.
 					MergeSort::merge(-vlist_size - , -mix_in_size - );
 				}
-				//     set and unset bits in vlist_position_occupied as necessary (you can actually perform this work throughout the while (true) loop, you just want to be careful (and I won't be while making pseudocode).
+
+				run_begin += right_size;
 				run_size -= right_size;
 			}
 		}
