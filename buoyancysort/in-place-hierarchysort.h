@@ -5,13 +5,14 @@
 #include <stddef.h>
 #include <string.h>
 #include <vector>
+#include "mergesort.h"
 #include "natural-runs.h"
 #include "outlier-search.h"
 
 namespace Hierarchysort
 {
 	const long run_bit_alignment = 4; // Starts from 0 (0 implies no alignment)
-	const long run_alignment = (1 << run_bits);
+	const long run_alignment = (1 << run_bit_alignment);
 
 	template <typename Type>
 	long get_run(Type *data, long before_first, long after_last)
@@ -96,7 +97,7 @@ namespace Hierarchysort
 					}
 
 					// Set all of the bits that are being merged in.
-					for (; bit >= run_alignment_bits; bit -= 1)
+					for (; bit >= run_bit_alignment; bit -= 1)
 					{
 						long subarray_size = (1 << bit);
 						if (subarray_size & run_size)
@@ -108,8 +109,8 @@ namespace Hierarchysort
 				else // standard merge (possibly cascading)
 				{
 					long merge_begin = run_begin;
-					long merge_left = left;
-					long merge_right = right;
+					long merge_left = left_size;
+					long merge_right = right_size;
 					long merge_bit = bit;
 					while (true)
 					{
@@ -125,11 +126,11 @@ namespace Hierarchysort
 						}
 						// TODO: OutlierSearch optimization
 						// The right array is generally smaller, so search that first.
-						long actual_right = OutlierSearch::upper_bound(data, &data[merge_begin - 1], &data[merge_begin + merge_right], data[merge_begin - 1]);
+						long actual_right = OutlierSearch::upper_bound<Type>(data, merge_begin - 1, merge_begin + merge_right, data[merge_begin - 1]);
 						long actual_left = merge_begin-1;
 						if (actual_right <= merge_begin)
 						{
-							long actual_left = OutlierSearch::lower_bound(data, &data[merge_begin - merge_left], &data[merge_begin], data[merge_begin]);
+							long actual_left = OutlierSearch::lower_bound<Type>(data, merge_begin - merge_left, merge_begin, data[merge_begin]);
 						}
 						std::memcpy(auxiliary_buffer.data(), &data[merge_begin], (actual_right-merge_begin+1) * sizeof(Type));
 						MergeSort::leftward_merge(&data[merge_begin - actual_left], &data[merge_begin], auxiliary_buffer.data(), actual_left + actual_right, actual_left, actual_right);

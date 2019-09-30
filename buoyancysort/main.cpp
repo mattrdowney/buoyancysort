@@ -67,7 +67,7 @@ int main()
 
 	IntThatTracksComparisons::reset_comparisons();
 
-	Hierarchysort::in_place((current_type*)data.data(), -1, size);
+	Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
 
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 
