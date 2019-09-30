@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stddef.h>
+#include <string.h>
 #include <vector>
 #include "natural-runs.h"
 
@@ -12,18 +13,11 @@ namespace Hierarchysort
 	const long run_alignment = (1 << run_bits);
 
 	template <typename Type>
-	long get_run(Type *data, long before_first, long after_last, long &residue_index) // TODO: this is broken (terribly)
+	long get_run(Type *data, long before_first, long after_last)
 	{
-		long residue_cursor = (residue & run_alignment_mask) + 2 * run_alignment;
-		if (residue_cursor - before_first >= run_alignment)
-		{
-			return residue_cursor;
-		}
-		long end = NaturalRuns::direction_agnostic(data, residue_index /*this is before_first*/, after_last);
-		// TODO: merge in the residue with the next run (up to run_alignment) then check if the two can be trivially merged.
-		long aligned_end = (before_first & run_alignment_mask) + 2 * run_alignment; // HACK: -1 & run_alignment_mask will result in undefined behavior later (e.g. 1s-complement vs 2s-complement)
-		aligned_end = std::min(aligned_end, after_last);
-		if (end < aligned_end)
+		long end = NaturalRuns::direction_agnostic(data, before_first, after_last);
+		long aligned_end = (before_first + 1) + run_alignment;
+		if (end < aligned_end && end < after_last)
 		{
 			InsertionSort::insert_block_from_right(data, before_first, aligned_end, end);
 			end = aligned_end;
@@ -47,6 +41,7 @@ namespace Hierarchysort
 
 		long unique_segments = 0;
 		long partially_sorted_size = 0;
+		long run_end = 0;
 		while (partially_sorted_size < size)
 		{
 			long run_begin = run_end;
@@ -163,10 +158,3 @@ namespace Hierarchysort
 		}
 	}
 }
-
-// Minor note: the worst case for wasting sorted runs:
-// Natural runs with a size like 0b'1000'0000 or 0b'0111'111 have elegant merge procedures (they use the natural sortedness to avoid unnecessary work).
-// Natural runs with a size like 0b'1010'1010 (alternating zeroes and ones) have inelegant merge procedures because you cannot easily skip over work (since it's hard to put elements next to one another).
-// While you could solve this problem by making the algorithm more complicated, the waste isn't attrocious.
-// The limit of 1 + 1/4 + 1/16 + 1/64 + 1/256 = 1.33333... so the waste could sort of be looked at as a 33% overhead beyond ideal *in the worst case*. Additionally, it's not like you actually remerge these elements, you just have to merge the already sorted lists again (redundant work, but not building from scratch).
-// This is why I don't focus on this optimization, it has a small effect on some types of data, but for uniformly nearly-sorted data it should be detrimental; it's only for certain types of datasets where it actually matters (particularly disjoint partially sorted sets).
