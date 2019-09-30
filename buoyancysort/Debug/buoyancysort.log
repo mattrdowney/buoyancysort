@@ -53,42 +53,4 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Fx=ShellSort::<lambda_a5e634f9d089f04f9db272b8fee52a01>
           ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\binary-search.h(16): error C2440: 'return': cannot convert from 'IntThatTracksComparisons::IntThatTracksComparisons *' to 'long'
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\binary-search.h(16): note: There is no context in which this conversion is possible
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\gallop-search.h(79): note: see reference to function template instantiation 'long BinarySearch::upper_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\outlier-search.h(38): note: see reference to function template instantiation 'long GallopSearch::reverse_upper_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\in-place-hierarchysort.h(129): note: see reference to function template instantiation 'long OutlierSearch::upper_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\main.cpp(70): note: see reference to function template instantiation 'void Hierarchysort::in_place<current_type>(Type *,long,long)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-c:\users\fujitora\source\repos\buoyancysort\buoyancysort\binary-search.h(10): error C2440: 'return': cannot convert from 'IntThatTracksComparisons::IntThatTracksComparisons *' to 'long'
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\binary-search.h(10): note: There is no context in which this conversion is possible
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\gallop-search.h(61): note: see reference to function template instantiation 'long BinarySearch::lower_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\outlier-search.h(20): note: see reference to function template instantiation 'long GallopSearch::reverse_lower_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\in-place-hierarchysort.h(133): note: see reference to function template instantiation 'long OutlierSearch::lower_bound<Type>(Type *,long,long,Type)' being compiled
-          with
-          [
-              Type=current_type
-          ]
+  buoyancysort.vcxproj -> C:\Users\Fujitora\source\repos\buoyancysort\Debug\buoyancysort.exe

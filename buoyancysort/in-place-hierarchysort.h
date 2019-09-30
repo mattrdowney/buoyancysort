@@ -116,7 +116,7 @@ namespace Hierarchysort
 					{
 						// A unique segment might have been deleted, so find the number of unique_segments
 						unique_segments = 0; // This can happen (e.g. during a merge of two size 16 arrays). Otherwise the value will be set in the for loop.
-						for (long segment = bit; bit < bit_size; segment += 1)
+						for (long segment = bit; segment < bit_size; segment += 1)
 						{
 							if (vlist_position_occupied[bit] != INT_MAX)
 							{
@@ -139,7 +139,7 @@ namespace Hierarchysort
 						merge_left = 0;
 						if (unique_segments > 0)
 						{
-							for (long segment = bit; bit < bit_size; segment += 1)
+							for (long segment = bit; segment < bit_size; segment += 1)
 							{
 								if (vlist_position_occupied[bit] != unique_segments)
 								{
