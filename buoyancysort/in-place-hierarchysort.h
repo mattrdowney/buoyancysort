@@ -6,6 +6,7 @@
 #include <string.h>
 #include <vector>
 #include "natural-runs.h"
+#include "outlier-search.h"
 
 namespace Hierarchysort
 {
@@ -123,8 +124,15 @@ namespace Hierarchysort
 							}
 						}
 						// TODO: OutlierSearch optimization
-						std::memcpy(auxiliary_buffer.data(), &data[merge_begin], merge_right * sizeof(Type));
-						MergeSort::leftward_merge(&data[merge_begin - merge_left], &data[merge_begin], auxiliary_buffer.data(), merge_left + merge_right, merge_left, merge_right);
+						// The right array is generally smaller, so search that first.
+						long actual_right = OutlierSearch::upper_bound(data, &data[merge_begin - 1], &data[merge_begin + merge_right], data[merge_begin - 1]);
+						long actual_left = merge_begin-1;
+						if (actual_right <= merge_begin)
+						{
+							long actual_left = OutlierSearch::lower_bound(data, &data[merge_begin - merge_left], &data[merge_begin], data[merge_begin]);
+						}
+						std::memcpy(auxiliary_buffer.data(), &data[merge_begin], (actual_right-merge_begin+1) * sizeof(Type));
+						MergeSort::leftward_merge(&data[merge_begin - actual_left], &data[merge_begin], auxiliary_buffer.data(), actual_left + actual_right, actual_left, actual_right);
 						merge_begin -= merge_left;
 						merge_right += merge_left;
 						merge_left = 0;
@@ -155,6 +163,11 @@ namespace Hierarchysort
 				run_begin += right_size;
 				run_size -= right_size;
 			}
+		}
+
+		if (unique_segments > 1)
+		{
+			// Do the final merges of the VList
 		}
 	}
 }
