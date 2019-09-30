@@ -68,7 +68,7 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::probably_reliable3);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::probably_reliable5);
 	
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 

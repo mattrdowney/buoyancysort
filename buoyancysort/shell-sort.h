@@ -225,7 +225,7 @@ namespace ShellSort
 	// Next generalized_pratt<2, 3, 5, 7, 11> numbers, etc
 	std::vector<long> probably_reliable =
 	{
-		1, 2,
+		1, //2,
 		4, 9, 16,
 		27, 64, 125, 216, 512,
 		625, 1296, 2401, 4096, 6561, 10000,
@@ -236,7 +236,7 @@ namespace ShellSort
 	// NOTE: I think this is a serious candidate for a parallel time O(lg(n)) sort. The sorting network construction would probably be hellish, but I think it's worth investigating (even if it would require "recursion")
 
 	// Keep this, it might be useful (at least on a theoretical level)
-	std::vector<long> probably_reliable2 =
+	std::vector<long> probably_reliable2 = // sprawling primes
 	{
 		1,
 		2, 3, // 1*{2, 3}
@@ -265,7 +265,7 @@ namespace ShellSort
 		17915799, 18934707 // 84909*{211, 223}
 	};
 
-	std::vector<long> probably_reliable3 =
+	std::vector<long> probably_reliable3 = // sprawling primes (interesting property: not purely ascending order)
 	{
 		1,
 		4, // 1*2^2
@@ -306,6 +306,93 @@ namespace ShellSort
 		11025567, // 73017*151
 		3149420, // 20060*157
 		11901771 // 73017*163
-		// TODO: because of the nature of this function, you cannot safely sort 10,000,000 elements yet (you need more gap sequence numbers)
+		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
+	};
+
+	std::vector<long> probably_reliable4 = // rearranged form of probably_reliable3 (ascending order)
+	{
+		1,
+		4, // 1*2^2
+		9, // 1*3^2
+		20, // 4*5
+		44,
+		63, // 9*7
+		//44, // 4*11
+		117, // 9*13
+		340, // 20*17
+		460,
+		1197, // 63*19
+		1364,
+		1804,
+		//460, // 20*23
+		1827, // 63*29
+		//1364, // 44*31
+		4329, // 117*37
+		//1804, // 44*41
+		5031, // 117*43
+		15980, // 340*47
+		20060,
+		30820,
+		33580,
+		63441, // 1197*53
+		//20060, // 340*59
+		73017, // 1197*61
+		113212,
+		//30820, // 460*67
+		129717, // 1827*71
+		132308,
+		//33580, // 460*73
+		144333, // 1827*79
+		185812,
+		196636,
+		//113212, // 1364*83
+		385281, // 4329*89
+		//132308, // 1364*97
+		437229, // 4329*101
+		//185812, // 1804*103
+		538317, // 5031*107
+		//196636, // 1804*109
+		568503, // 5031*113
+		2029460, // 15980*127
+		8310771, // 63441*131
+		2189260, // 15980*137
+		8818299, // 63441*139
+		2988940, // 20060*149
+		11025567, // 73017*151
+		3149420, // 20060*157
+		11901771 // 73017*163
+		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
+	};
+
+	// An interesting function that seems to have slower growth.
+	std::vector<long> probably_reliable5 =
+	{
+		1,
+		3,
+		2,
+		9,
+		4,
+		27,
+		16,
+		81,
+		32,
+		243,
+		128,
+		729,
+		256,
+		2187,
+		1024,
+		6561,
+		4096,
+		19683,
+		8192,
+		59049,
+		32768,
+		177147,
+		131072,
+		531441,
+		262144,
+		1594323,
+		1048576
 	};
 }
