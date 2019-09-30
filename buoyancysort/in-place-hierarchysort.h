@@ -38,6 +38,7 @@ namespace Hierarchysort
 		long size = after_last - (before_first + 1);
 		long bit_size = std::ceil(std::log(size)) + 1 /*because of floating-point imprecision, I'm adding some room for error*/ + 1;
 		std::vector<int> vlist_position_occupied(bit_size); // this is indexed by the bit position (i.e. little-endian) // stores zero when unoccupied. Otherwise it stores a unique index representing the contiguous chunk it is a part of.
+		std::vector<Type> auxiliary_buffer(size); // If this weren't initialized to size, you couldn't memcpy safely.
 
 		for (long bit = 0; bit < bit_size; bit += 1)
 		{
@@ -62,6 +63,7 @@ namespace Hierarchysort
 				{
 					if (vlist_position_occupied[bit] < unique_segments) // bit belongs to a second contiguous set (you cannot safely merge beyond this point)
 					{
+						// "bit" position will always be one-past the end here
 						break;
 					}
 					if (vlist_position_occupied[bit] == unique_segments)
@@ -77,10 +79,14 @@ namespace Hierarchysort
 					{
 						// bit must be unused at this point (because the value is INT_MAX, the sentinel value representing unused vlist positions).
 						right_size = extrapolated_size;
+						//if (extrapolated_size < run_size)
+						//{
+							bit += 1;
+						//}
 					}
-					bit += 1;
 					if (extrapolated_size >= run_size)
 					{
+						// "bit" position will always be one-past the end here // TODO: VERIFY: I don't know if this is right...
 						break;
 					}
 				}
@@ -105,12 +111,50 @@ namespace Hierarchysort
 				}
 				else // standard merge (possibly cascading)
 				{
-					// Note, the merge is actually more complicated:
-					// 1) it cascades
-					// 2) you need to make sure cascading chunks take contiguous optimization into account
-					// 3) if you want to be cache-friendly you have to do the memory zig-zag
-					// 4) even if you don't want to be cache-friendly, you are doing this in-place so MergeSort::merge() doesn't work out-of-box, you need an auxiliary buffer.
-					MergeSort::merge(-vlist_size - , -mix_in_size - );
+					long merge_begin = run_begin;
+					long merge_left = left;
+					long merge_right = right;
+					long merge_bit = bit;
+					while (true)
+					{
+						// A unique segment might have been deleted, so find the number of unique_segments
+						unique_segments = 0; // This can happen (e.g. during a merge of two size 16 arrays). Otherwise the value will be set in the for loop.
+						for (long segment = bit; bit < bit_size; segment += 1)
+						{
+							if (vlist_position_occupied[bit] != INT_MAX)
+							{
+								unique_segments = vlist_position_occupied[bit]; // You could do this concept using indices/"pointers" and it would probably be more elegant.
+								break;
+							}
+						}
+						// TODO: OutlierSearch optimization
+						std::memcpy(auxiliary_buffer.data(), &data[merge_begin], merge_right * sizeof(Type));
+						MergeSort::leftward_merge(&data[merge_begin - merge_left], &data[merge_begin], auxiliary_buffer.data(), merge_left + merge_right, merge_left, merge_right);
+						merge_begin -= merge_left;
+						merge_right += merge_left;
+						merge_left = 0;
+						if (unique_segments > 0)
+						{
+							for (long segment = bit; bit < bit_size; segment += 1)
+							{
+								if (vlist_position_occupied[bit] != unique_segments)
+								{
+									break;
+								}
+								merge_left += (1 << segment);
+								merge_bit += 1;
+							}
+						}
+						if (merge_left <= 0)
+						{
+							if (unique_segments == 0 || data[run_begin - 1] >= data[run_begin])
+							{
+								unique_segments += 1;
+							}
+							vlist_position_occupied[merge_bit] = unique_segments;
+							break;
+						}
+					}
 				}
 
 				run_begin += right_size;
