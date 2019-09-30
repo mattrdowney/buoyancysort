@@ -395,4 +395,63 @@ namespace ShellSort
 		1594323,
 		1048576
 	};
+
+	std::vector<long> probably_reliable6 =
+	{
+		1,
+		3,
+		2,
+		9,
+		4,
+		8,
+		27,
+		16,
+		81,
+		32,
+		64,
+		243,
+		128,
+		729,
+		256,
+		512
+
+	};
+
+	std::vector<long> probably_reliable7 = // Interestingly, this is very true to the original gap sequences of ShellSort (O(n^(3/2)) versions or Shell's original sequences).
+	{
+		// The beginning isn't very elegant or well-established, but I think the pattern is approximately what I want
+		1, //2^1 - 1
+		4, //3^1 + 1
+		3, //2^2 - 1
+		10, //3^2 + 1
+		7, //2^3-1
+		28, //3^3 + 1
+		15, //2^4 - 1
+		82, //3^4 + 1
+		31, //2^5 - 1
+		63, //2^6 - 1
+		244, //3^5 + 1
+		127, //2^7 - 1
+		730, //3^6 + 1
+		255, //2^8 - 1
+		511, //2^9 - 1
+		2188, //3^7 + 1
+		1023, //2^10 - 1
+		2047, //2^11 - 1
+		6562, //3^8 + 1
+		4095, //2^12 - 1
+		19682, //3^9 - 1
+		8191, //2^13 - 1
+		16383, //2^14 - 1
+		59050, //3^10 + 1
+		32767, //2^15 - 1
+		177148, //3^11 + 1
+		65535, //2^16 - 1
+		131071, //2^17 - 1
+		531442, //3^12 + 1
+		262143, //2^18 - 1
+		524287, //2^19 - 1
+		1594324, //3^13 + 1
+		1048575, //2^20 - 1
+	};
 }
