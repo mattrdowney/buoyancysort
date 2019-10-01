@@ -454,4 +454,42 @@ namespace ShellSort
 		1594324, //3^13 + 1
 		1048575, //2^20 - 1
 	};
+
+	std::vector<long> probably_reliable8 =
+	{
+		// (1^1)^i: 1, 1, 1, 1, 1...
+		// (2^2)^i: 1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216...
+		// (3^3)^i: 1, 27, 729, 19683, 531441, 14348907...
+		// (5^4)^i: 1, 625, 390625, 244140625...
+		// (7^5)^i: 1, 16807, 282475249...
+		// (11^6)^i: 1, 1771561...
+		// (13^7)^i: 1, 62748517...
+		// (17^8)
+		// (19^9)
+		// (23^10)
+		// (29^11)
+		// (31^12)
+
+		// (I'm curious what the average ratio is asymptotically).
+
+		// The believe the answer should be log(n) / log[log4(n) + log27(n) + log625(n) + log16807(n) + log1771561(n) + log62748517(n)...] or something like that.
+		// The basic idea: you have that many numbers in each of the sequences (base-p^k).
+
+		// Thus: consider numbers up to 31^12
+		// log4(31^12) + log27(31^12) + log625(31^12) + log16807(31^12) + log1771561(31^12) + log62748517(31^12) + log6975757441() +
+		// log322687697779() + log41426511213649(31^12) + log1.22005098E16(31^12)  + 1
+
+		// floor(log(31 ^ 12)/log(4)) + floor(log(31 ^ 12)/log(27)) + floor(log(31 ^ 12)/log(625)) + floor(log(31 ^ 12)/log(16807)) + floor(log(31 ^ 12)/log(1771561)) + floor(log(31 ^ 12)/log(62748517)) + floor(log(31 ^ 12)/log(6975757441)) +
+		// floor(log(31 ^ 12)/log(322687697779) + floor(log(31^12)/log(41426511213649)) + floor(log(31^12)/log(1.22005098E16))  + 1
+		// Which equates to 29 + 12 + 6 + 4 + 2 + 2 + 1 + 1 + 1 + 1 + 1
+		// And you basically want to solve (31^12)^(1/(29 + 12 + 6 + 4 + 2 + 2 + 1 + 1 + 1 + 1 + 1))
+		// Which equals 1.98734075. Basically, unless my math is wrong I screwed up (this gap sequence sucks asymptotically).
+
+		1,
+		4, 16,
+		27, 64, 256,
+		625, 729, 1024, 4096,
+		16807, 16384, 19683, 65536, 262144, 390625, 531441, 1048576,
+		1771561, 4194304, 14348907, 16777216
+	};
 }

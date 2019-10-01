@@ -24,11 +24,11 @@ namespace CombSort
 	void not_combsort(Type *data, long before_first, long after_last, std::vector<long> gap_sequence)
 	{
 		int phases = 0;
-		InsertionSort::sort_runs<Type, 113>(data, before_first, after_last);
+		InsertionSort::sort_runs<Type, 11>(data, before_first, after_last);
 		while (!Sorted::verify(data, before_first, after_last))
 		{
 			broadphase(data, before_first, after_last, gap_sequence);
-			InsertionSort::sort_runs<Type, 113>(data, before_first, after_last);
+			InsertionSort::sort_runs<Type, 11>(data, before_first, after_last);
 			phases += 1;
 		}
 		std::cout << "Phases: " << phases << std::endl;
