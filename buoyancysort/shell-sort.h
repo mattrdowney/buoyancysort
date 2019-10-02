@@ -140,6 +140,7 @@ namespace ShellSort
 		{
 			value = ratio * value + skew*iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 		}
+		std::cout.precision(17);
 		std::cout << value << std::endl;
 		return ceil(value);
 	};
@@ -156,7 +157,7 @@ namespace ShellSort
 	{
 		// Equivalent to 
 		double ratio = 2.48; // invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
-		double skew = -0.060416; // solution to sqrt(5)^k*e^(1-k) = 2.48, except interpolated to range [-1, +1]
+		double skew = 0; // solution to sqrt(5)^k*e^(1-k) = 2.48, except interpolated to range [-1, +1]
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -165,14 +166,6 @@ namespace ShellSort
 		// Equivalent to 
 		double ratio = 2.477174902979417465884730570041969366598932726655742649618; // (sqrt(5)+e)/2  @ invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
 		double skew = 0;
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> invisal_extension3 = [](long n) // simplicity seems to work
-	{
-		// Equivalent to 
-		double ratio = 2.48; // invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
-		double skew = +0.469792; // solution to sqrt(5)^k*e^(1-k) = 2.48
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -207,19 +200,44 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
+	// ~100% chance this was a coincidence, but I still feel it could be useful.
 	std::function<long(long)> generalized_ciura3 = [](long n) // simplicity seems to work
 	{
 		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
 		double ratio = 2.25;
-		double skew = +0.968193; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
+		double skew = +0.9681928; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
 		return generalized_tokuda(n, ratio, skew);
 	};
 
 	std::function<long(long)> generalized_ciura4 = [](long n) // simplicity seems to work
 	{
 		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 2.25; 
+		double skew = 0.971108; // solution to sqrt(5)*k + e*(1-k) = 2.25
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura5 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
 		double ratio = 2.25;
-		double skew = +0.936386; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto the range [-1, +1]
+		double skew = 0.942216; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura6 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 2.25;
+		double skew = 1; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura7 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 2.25;
+		double skew = 0.969; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
 		return generalized_tokuda(n, ratio, skew);
 	};
 

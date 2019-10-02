@@ -40,7 +40,7 @@ typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 int main()
 {
 	//HeapTests::heap_tests();
-	const long size = 1000000;
+	const long size = 1000;
 	const long tuple_size = 2;
 	std::vector<current_type> data(size);
 	for (std::size_t i = 0; i < size; i += 1)
@@ -55,7 +55,7 @@ int main()
 	
 	std::random_device random_device;
 	std::mt19937 random_number_generator(random_device());
-	random_number_generator.seed(22);
+	random_number_generator.seed(26);
 	std::shuffle(&data[0], (&data[size-1]) + 1, random_number_generator);
 	
 	//Print::print((current_type*)data.data(), -1, size);
@@ -68,12 +68,14 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::invisal_extension3, 20);
+	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura3, 20);
+	std::vector<long> gap_sequence = ShellSort::extrapolated_ciura_tokuda; // Yesh, I might have finally found a gap sequence that beats Ciura. It took a while and I've only done 5 tests (seeds 22-26 @ size 1,000) but it beat Ciura in 5/5.
+	//std::vector<long> gap_sequence = ShellSort::ciura_gap_sequence;
 	for (long gap : gap_sequence)
 	{
 		std::cout << gap << " ";
 	}
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::extrapolated_ciura_tokuda);
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, gap_sequence);
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
