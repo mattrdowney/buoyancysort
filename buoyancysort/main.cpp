@@ -68,7 +68,13 @@ int main()
 	IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	CombSort::not_combsort<current_type>((current_type*)data.data(), -1, size, ShellSort::probably_reliable8);
+	std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::invisal_extension3, 20);
+	for (long gap : gap_sequence)
+	{
+		std::cout << gap << " ";
+	}
+	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::extrapolated_ciura_tokuda);
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	
 	long long comparisons = IntThatTracksComparisons::get_comparisons();
 

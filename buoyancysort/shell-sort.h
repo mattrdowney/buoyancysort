@@ -140,15 +140,8 @@ namespace ShellSort
 		{
 			value = ratio * value + skew*iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 		}
+		std::cout << value << std::endl;
 		return ceil(value);
-	};
-
-	std::function<long(long)> ciura_extension = [](long n) // simplicity seems to work
-	{
-		// 1 4 10 25 60 140 324 742 1692 3850 8750 19875 45135 102486 232696 528321 1199504 2723342 6183028 14037821 31871158 72359549 164283441 372985289
-		double ratio = 3*0.7567921710249769090317198; // three times the ratio of 2s and 3s via Euler's number: 2^(1-k)*3^(k) = e
-		double skew = +1;
-		return generalized_tokuda(n, ratio, skew);
 	};
 
 	std::function<long(long)> natural_extension = [](long n)
@@ -159,11 +152,27 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
-	std::function<long(long)> invisal_extension = [](long n) // simplicity seems to work
+	std::function<long(long)> invisal_extension1 = [](long n) // simplicity seems to work
 	{
-		// Equivalent to 1 3 7 16 39 95 236 584 1451 3604 8953 22242 55253 137263 340994 847116 2104452 5227995 12987672 32264690 80153719 199122281 494670533 1228887775
-		double ratio = 2.484255063243666636247322; /*notably, 2.48 does way better*/ // (3*0.7567921710249769090317198)^.5*(e^.5) i.e. @ invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+		// Equivalent to 
+		double ratio = 2.48; // invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+		double skew = -0.060416; // solution to sqrt(5)^k*e^(1-k) = 2.48, except interpolated to range [-1, +1]
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> invisal_extension2 = [](long n) // simplicity seems to work
+	{
+		// Equivalent to 
+		double ratio = 2.477174902979417465884730570041969366598932726655742649618; // (sqrt(5)+e)/2  @ invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
 		double skew = 0;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> invisal_extension3 = [](long n) // simplicity seems to work
+	{
+		// Equivalent to 
+		double ratio = 2.48; // invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
+		double skew = +0.469792; // solution to sqrt(5)^k*e^(1-k) = 2.48
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -191,6 +200,29 @@ namespace ShellSort
 		return ceil(value);
 	};
 
+	std::function<long(long)> generalized_ciura2 = [](long n) // simplicity seems to work
+	{
+		double ratio = 2.236067977499789696409173668731276235440618359611525724270; //sqrt(5)
+		double skew = +1;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura3 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 2.25;
+		double skew = +0.968193; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura4 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 2.25;
+		double skew = +0.936386; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto the range [-1, +1]
+		return generalized_tokuda(n, ratio, skew);
+	};
+
 	std::vector<long> ciura_gap_sequence =
 	{
 		1, 4, 10, 23, 57, 132, 301, 701,
@@ -216,6 +248,12 @@ namespace ShellSort
 		1, 3, 7, 21, 48, 112, 336, 861, 1968, 4592, 13776, 33936, 86961, 198768, 463792, 1391376, 3402672, 8382192,
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
+
+	std::vector<long> extrapolated_ciura_tokuda =
+	{
+		1, 4, 10, 23, 57, 132, 305, 692, 1565, 3530, 7953, 17904, 40294, 90673, 204028, 459077, 1032939, 2324129, 5229307, 11765959, 26755942
+	};
+
 
 	// concept:
 	// First generalized_pratt<2> number
@@ -309,61 +347,6 @@ namespace ShellSort
 		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
 	};
 
-	std::vector<long> probably_reliable4 = // rearranged form of probably_reliable3 (ascending order)
-	{
-		1,
-		4, // 1*2^2
-		9, // 1*3^2
-		20, // 4*5
-		44,
-		63, // 9*7
-		//44, // 4*11
-		117, // 9*13
-		340, // 20*17
-		460,
-		1197, // 63*19
-		1364,
-		1804,
-		//460, // 20*23
-		1827, // 63*29
-		//1364, // 44*31
-		4329, // 117*37
-		//1804, // 44*41
-		5031, // 117*43
-		15980, // 340*47
-		20060,
-		30820,
-		33580,
-		63441, // 1197*53
-		//20060, // 340*59
-		73017, // 1197*61
-		113212,
-		//30820, // 460*67
-		129717, // 1827*71
-		132308,
-		//33580, // 460*73
-		144333, // 1827*79
-		185812,
-		196636,
-		//113212, // 1364*83
-		385281, // 4329*89
-		//132308, // 1364*97
-		437229, // 4329*101
-		//185812, // 1804*103
-		538317, // 5031*107
-		//196636, // 1804*109
-		568503, // 5031*113
-		2029460, // 15980*127
-		8310771, // 63441*131
-		2189260, // 15980*137
-		8818299, // 63441*139
-		2988940, // 20060*149
-		11025567, // 73017*151
-		3149420, // 20060*157
-		11901771 // 73017*163
-		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
-	};
-
 	// An interesting function that seems to have slower growth.
 	std::vector<long> probably_reliable5 =
 	{
@@ -402,6 +385,75 @@ namespace ShellSort
 		3,
 		2,
 		9,
+		6,
+		27,
+		16,
+		81,
+		48,
+		243,
+		128,
+		729,
+		384,
+		2187,
+		1536,
+		6561,
+		4096,
+		19683,
+		12288,
+		59049,
+		32768,
+		177147,
+		98304,
+		531441,
+		393216,
+		1594323,
+		1048576
+	};
+
+	std::vector<long> probably_reliable7 =
+	{
+		1,
+		3,
+		2,
+		9,
+		8,
+		4,
+		27,
+		16,
+		81,
+		64,
+		32,
+		243,
+		128,
+		729,
+		512,
+		256,
+		2187,
+		2048,
+		1024,
+		6561,
+		4096,
+		19683,
+		16384,
+		8192,
+		59049,
+		32768,
+		177147,
+		131072,
+		65536,
+		531441,
+		524288,
+		262144,
+		1594323,
+		1048576
+	};
+
+	std::vector<long> probably_reliable8 =
+	{
+		1,
+		3,
+		2,
+		9,
 		4,
 		8,
 		27,
@@ -413,83 +465,61 @@ namespace ShellSort
 		128,
 		729,
 		256,
-		512
-
+		512,
+		2187,
+		1024,
+		2048,
+		6561,
+		4096,
+		19683,
+		8192,
+		16384,
+		59049,
+		32768,
+		177147,
+		65536,
+		131072,
+		531441,
+		262144,
+		524288,
+		1594323,
+		1048576
 	};
 
-	std::vector<long> probably_reliable7 = // Interestingly, this is very true to the original gap sequences of ShellSort (O(n^(3/2)) versions or Shell's original sequences).
+	std::vector<long> definitely_unreliable =
 	{
-		// The beginning isn't very elegant or well-established, but I think the pattern is approximately what I want
-		1, //2^1 - 1
-		4, //3^1 + 1
-		3, //2^2 - 1
-		10, //3^2 + 1
-		7, //2^3-1
-		28, //3^3 + 1
-		15, //2^4 - 1
-		82, //3^4 + 1
-		31, //2^5 - 1
-		63, //2^6 - 1
-		244, //3^5 + 1
-		127, //2^7 - 1
-		730, //3^6 + 1
-		255, //2^8 - 1
-		511, //2^9 - 1
-		2188, //3^7 + 1
-		1023, //2^10 - 1
-		2047, //2^11 - 1
-		6562, //3^8 + 1
-		4095, //2^12 - 1
-		19682, //3^9 - 1
-		8191, //2^13 - 1
-		16383, //2^14 - 1
-		59050, //3^10 + 1
-		32767, //2^15 - 1
-		177148, //3^11 + 1
-		65535, //2^16 - 1
-		131071, //2^17 - 1
-		531442, //3^12 + 1
-		262143, //2^18 - 1
-		524287, //2^19 - 1
-		1594324, //3^13 + 1
-		1048575, //2^20 - 1
-	};
-
-	std::vector<long> probably_reliable8 =
-	{
-		// (1^1)^i: 1, 1, 1, 1, 1...
-		// (2^2)^i: 1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216...
-		// (3^3)^i: 1, 27, 729, 19683, 531441, 14348907...
-		// (5^4)^i: 1, 625, 390625, 244140625...
-		// (7^5)^i: 1, 16807, 282475249...
-		// (11^6)^i: 1, 1771561...
-		// (13^7)^i: 1, 62748517...
-		// (17^8)
-		// (19^9)
-		// (23^10)
-		// (29^11)
-		// (31^12)
-
-		// (I'm curious what the average ratio is asymptotically).
-
-		// The believe the answer should be log(n) / log[log4(n) + log27(n) + log625(n) + log16807(n) + log1771561(n) + log62748517(n)...] or something like that.
-		// The basic idea: you have that many numbers in each of the sequences (base-p^k).
-
-		// Thus: consider numbers up to 31^12
-		// log4(31^12) + log27(31^12) + log625(31^12) + log16807(31^12) + log1771561(31^12) + log62748517(31^12) + log6975757441() +
-		// log322687697779() + log41426511213649(31^12) + log1.22005098E16(31^12)  + 1
-
-		// floor(log(31 ^ 12)/log(4)) + floor(log(31 ^ 12)/log(27)) + floor(log(31 ^ 12)/log(625)) + floor(log(31 ^ 12)/log(16807)) + floor(log(31 ^ 12)/log(1771561)) + floor(log(31 ^ 12)/log(62748517)) + floor(log(31 ^ 12)/log(6975757441)) +
-		// floor(log(31 ^ 12)/log(322687697779) + floor(log(31^12)/log(41426511213649)) + floor(log(31^12)/log(1.22005098E16))  + 1
-		// Which equates to 29 + 12 + 6 + 4 + 2 + 2 + 1 + 1 + 1 + 1 + 1
-		// And you basically want to solve (31^12)^(1/(29 + 12 + 6 + 4 + 2 + 2 + 1 + 1 + 1 + 1 + 1))
-		// Which equals 1.98734075. Basically, unless my math is wrong I screwed up (this gap sequence sucks asymptotically).
-
 		1,
-		4, 16,
-		27, 64, 256,
-		625, 729, 1024, 4096,
-		16807, 16384, 19683, 65536, 262144, 390625, 531441, 1048576,
-		1771561, 4194304, 14348907, 16777216
+		6, // *6
+		3, // /2
+		18, // *6
+		6, // /3
+		36, // *6
+		18, // /2
+		108, // *6
+		36, // /3
+		216, // *6
+		108, // /2
+		648, // *6
+		216, // 6^3
+		1296,
+		648,
+		3888,
+		1296, // 6^4
+		7776,
+		3888,
+		23328,
+		7776, // 6^5
+		46656,
+		23328,
+		139968,
+		46656, // 6^6
+		279936,
+		139968,
+		839808,
+		279936, // 6^7
+		1679616,
+		839808,
+		5038848,
+		1679616 // 6^8
 	};
 }
