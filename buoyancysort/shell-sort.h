@@ -145,6 +145,7 @@ namespace ShellSort
 		return ceil(value);
 	};
 
+	// Actually, this can't be swap-optimal, right? My first impression is that swap optimal should approximately be n-1, n-2, n-3, n-4... 3, 2, 1 (which isn't actually true, but I think there would be more gaps).
 	std::function<long(long)> natural_extension = [](long n)
 	{
 		// Equivalent to 1 2 3 5 8 16 37 92 243 649 1755 4757 12919 35104 95408 259330 704914 1916137 5208581 14158372 38486424 104616926 284378265 773020247
@@ -158,14 +159,6 @@ namespace ShellSort
 		// Equivalent to 
 		double ratio = 2.48; // invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
 		double skew = 0; // solution to sqrt(5)^k*e^(1-k) = 2.48, except interpolated to range [-1, +1]
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> invisal_extension2 = [](long n) // simplicity seems to work
-	{
-		// Equivalent to 
-		double ratio = 2.477174902979417465884730570041969366598932726655742649618; // (sqrt(5)+e)/2  @ invisal's 2.48 sequence https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence
-		double skew = 0;
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -193,51 +186,12 @@ namespace ShellSort
 		return ceil(value);
 	};
 
-	std::function<long(long)> generalized_ciura2 = [](long n) // simplicity seems to work
-	{
-		double ratio = 2.236067977499789696409173668731276235440618359611525724270; //sqrt(5)
-		double skew = +1;
-		return generalized_tokuda(n, ratio, skew);
-	};
-
 	// ~100% chance this was a coincidence, but I still feel it could be useful.
 	std::function<long(long)> generalized_ciura3 = [](long n) // simplicity seems to work
 	{
 		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
 		double ratio = 2.25;
-		double skew = +0.9681928; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> generalized_ciura4 = [](long n) // simplicity seems to work
-	{
-		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
-		double ratio = 2.25; 
-		double skew = 0.971108; // solution to sqrt(5)*k + e*(1-k) = 2.25
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> generalized_ciura5 = [](long n) // simplicity seems to work
-	{
-		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
-		double ratio = 2.25;
-		double skew = 0.942216; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> generalized_ciura6 = [](long n) // simplicity seems to work
-	{
-		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
-		double ratio = 2.25;
-		double skew = 1; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
-		return generalized_tokuda(n, ratio, skew);
-	};
-
-	std::function<long(long)> generalized_ciura7 = [](long n) // simplicity seems to work
-	{
-		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
-		double ratio = 2.25;
-		double skew = 0.969; // solution to sqrt(5)^k*e^(1-k) = 2.25, except interpolated onto [-1, +1]
+		double skew = +0.971108; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -266,6 +220,52 @@ namespace ShellSort
 		1, 3, 7, 21, 48, 112, 336, 861, 1968, 4592, 13776, 33936, 86961, 198768, 463792, 1391376, 3402672, 8382192,
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
+
+	// Yes, this gap sequence is good, but we might be able to do better.
+	// There's two competing explanations (in my mind) for the @invisal 2.48 gap sequence ( https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence )
+	// Explanation 1: it has something to do with 11 & 7 (which could actually imply 3 and 5 is the ideal gap sequence) -- it's possible you have to connect these sequences in-order (rather than starting with the "optimal"-ish sequence).
+	// Explanation 2: 2.48 is halfway between e and something else (e.g. 2.25 or sqrt(5)) and is essentially an ideal center. This could mean you want to middle around that point or it could mean you want to fluctuate around that point.
+	// Explanation ?: (There are plenty more reasons to think about)
+
+	// I am particularly interested in the 3/5 "factorization highway" (notation abuse since I would normally call the 2/3 highway 1-3530). Based on Median-Of-Medians and other circumstantial evidence, I think 3 and 5 are some of the more important numbers in mathematics (at least from an information theory standpoint). 2 is important in an even/odd function sense (so perhaps it is more important than both combined) but I don't think about it as much.
+	// All wild conjecture from here on: (and beforehand, really)
+	// 5^2/3^2 = 2.77777778
+	// in the 2/3 "factorization highway" you use a skew k that is the solution to the equation: sqrt(5)^k*e^(1-k) = 2.25
+	// here that could mean: sqrt(3+5)^k*e^(1-k) = (5^2)/(3^2) thus k= 0.545086 OR sqrt(3*5-1)^k*e^(1-k) = (5^2)/(3^2) thus k = 0.067759953696224392398... (I think the second is more likely)
+	// The binary representation of sqrt(3) would be used starting from the 4th digit or so.
+	// The number would become a perfect integer on the 5^2 + 1 number.
+
+	// Slight revision: I think that if the sqrt(2) binary is relevant, you start right after the decimal but the first one is ignored if you are starting from e.g. 1 or an integer.
+	// Thus g(n) = (5^2)/(3^2) * g(n-1) + 0.067759953696224392398*n, g(0) = 1
+	// Thus:
+	// -0.059554646803322220 + 1.0595546468033222 e^(1.0216512475319813664 n) - 0.038114973954126221 n
+	// 1, 2, 9, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394,
+	
+	std::vector<long> three_five =
+	{
+		1, 2, 9, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394
+	};
+
+	std::vector<long> three_five_ish = // it's not doing bad, but it isn't better. One issue: it's hard to verify by checking g(25) due to floating-point imprecision // The underlying problem could be a malformed equation or e.g. an unsolvable issue like 5^2/3^2 exceeds e, so the formula is less reliable.
+	{
+		1, 4, 10, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394
+	};
+
+	// I'm going to ignore 5^2/3^2 and focus on this octave / music theory angle.
+	// I like the idea of using 23/2^3. Sure it exceeds e, but it looks pretty perfect to me.
+	// 2.875 ratio. Interestingly, it relates to 2.56 (approximately the center of 2.25 and 2.875), which I also thought might be relevant because 2^6/5^2 (which I came up with because of the @invisal sequence)
+	// Thus sqrt(23*8-1)^k*e^(1-k) = 23/2^3 means k ~= 0.034929375968604340232677412848592 (if that equation was actually the right one to use)
+	// I'm just going to use intuition to round everything.
+
+	std::vector<long> octavarium = // inspired by Dream Theater's song on the album of the same name.
+	{
+		// 1, 2/3, 8/9, 24/25, 70/71, 201/202, 580/581, 1669/1670, 4800/4801, 13802/13803, 39683/4, 114089/114090, 328008/9, 943025/6, 
+		1, 3, 8, 25, 70, 202, 580, 1670, 4800, 13803, 39683, 114090, 328008, 943026
+		// Notably, the rounding just alternates. 3 and 8 seem like obvious choices, then that means you can't use 24. After that alternating seemed like a good idea.
+	};
+	// Hmmm, it worked okay considering it's even further from the ~2.2 ratio and I have far less certainty on the sequence (and the 3/5 one was already pretty improvised).
+
+	// I just realized I am biased towards the numbers 3 and 5 because my favorite number is 15. (It's my favorite number out of sheer luck too).
 
 	std::vector<long> extrapolated_ciura_tokuda =
 	{
@@ -363,181 +363,5 @@ namespace ShellSort
 		3149420, // 20060*157
 		11901771 // 73017*163
 		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
-	};
-
-	// An interesting function that seems to have slower growth.
-	std::vector<long> probably_reliable5 =
-	{
-		1,
-		3,
-		2,
-		9,
-		4,
-		27,
-		16,
-		81,
-		32,
-		243,
-		128,
-		729,
-		256,
-		2187,
-		1024,
-		6561,
-		4096,
-		19683,
-		8192,
-		59049,
-		32768,
-		177147,
-		131072,
-		531441,
-		262144,
-		1594323,
-		1048576
-	};
-
-	std::vector<long> probably_reliable6 =
-	{
-		1,
-		3,
-		2,
-		9,
-		6,
-		27,
-		16,
-		81,
-		48,
-		243,
-		128,
-		729,
-		384,
-		2187,
-		1536,
-		6561,
-		4096,
-		19683,
-		12288,
-		59049,
-		32768,
-		177147,
-		98304,
-		531441,
-		393216,
-		1594323,
-		1048576
-	};
-
-	std::vector<long> probably_reliable7 =
-	{
-		1,
-		3,
-		2,
-		9,
-		8,
-		4,
-		27,
-		16,
-		81,
-		64,
-		32,
-		243,
-		128,
-		729,
-		512,
-		256,
-		2187,
-		2048,
-		1024,
-		6561,
-		4096,
-		19683,
-		16384,
-		8192,
-		59049,
-		32768,
-		177147,
-		131072,
-		65536,
-		531441,
-		524288,
-		262144,
-		1594323,
-		1048576
-	};
-
-	std::vector<long> probably_reliable8 =
-	{
-		1,
-		3,
-		2,
-		9,
-		4,
-		8,
-		27,
-		16,
-		81,
-		32,
-		64,
-		243,
-		128,
-		729,
-		256,
-		512,
-		2187,
-		1024,
-		2048,
-		6561,
-		4096,
-		19683,
-		8192,
-		16384,
-		59049,
-		32768,
-		177147,
-		65536,
-		131072,
-		531441,
-		262144,
-		524288,
-		1594323,
-		1048576
-	};
-
-	std::vector<long> definitely_unreliable =
-	{
-		1,
-		6, // *6
-		3, // /2
-		18, // *6
-		6, // /3
-		36, // *6
-		18, // /2
-		108, // *6
-		36, // /3
-		216, // *6
-		108, // /2
-		648, // *6
-		216, // 6^3
-		1296,
-		648,
-		3888,
-		1296, // 6^4
-		7776,
-		3888,
-		23328,
-		7776, // 6^5
-		46656,
-		23328,
-		139968,
-		46656, // 6^6
-		279936,
-		139968,
-		839808,
-		279936, // 6^7
-		1679616,
-		839808,
-		5038848,
-		1679616 // 6^8
 	};
 }
