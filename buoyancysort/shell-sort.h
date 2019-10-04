@@ -261,11 +261,16 @@ namespace ShellSort
 	{
 		// 1, 2/3, 8/9, 24/25, 70/71, 201/202, 580/581, 1669/1670, 4800/4801, 13802/13803, 39683/4, 114089/114090, 328008/9, 943025/6, 
 		1, 3, 8, 25, 70, 202, 580, 1670, 4800, 13803, 39683, 114090, 328008, 943026
-		// Notably, the rounding just alternates. 3 and 8 seem like obvious choices, then that means you can't use 24. After that alternating seemed like a good idea.
 	};
-	// Hmmm, it worked okay considering it's even further from the ~2.2 ratio and I have far less certainty on the sequence (and the 3/5 one was already pretty improvised).
 
-	// I just realized I am biased towards the numbers 3 and 5 because my favorite number is 15. (It's my favorite number out of sheer luck too).
+	std::vector<long> octavarium2 = // inspired by Dream Theater's song on the album of the same name.
+	{
+		// 173/64
+		// sqrt(173*64-1)^k*e^(1-k) = 173/64 thus k = -0.00152938302945376307735815324
+		// g(n) = 173/64 * g(n-1) + -0.00152938302945376307735815324*n, g(0) = 1
+		// 1, 2/3, 7/8, 19/20, 53/54, 144/145, 389/390, 1053/1054, 2846/2847, 7694/5, 20798/9, 56222/3, 151975/6, 410809/410810
+		1, 3, 8, 20, 53, 144, 389, 1053, 2846, 7695, 20798, 56223, 151975, 410810
+	};
 
 	std::vector<long> extrapolated_ciura_tokuda =
 	{
