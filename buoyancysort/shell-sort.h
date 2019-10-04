@@ -272,6 +272,40 @@ namespace ShellSort
 		1, 3, 8, 20, 53, 144, 389, 1053, 2846, 7695, 20798, 56223, 151975, 410810
 	};
 
+	std::vector<long> octavarium3 = // inspired by Dream Theater's song on the album of the same name.
+	{
+		// 359/2^7
+		// sqrt(359*2^7-1)^k*e^(1-k) = 359/2^7 thus k = 0.0071644966771190102429781047400...
+		// g(n) = 359/2^7 * g(n-1) + 0.0071644966771190102429781047400*n, g(0) = 1
+		// 1, 2/3, 7/8, 22/3, 62/3, 174/5, 489/90, 1373/4, 3852/3, 10805/6, 30305/6, 84996/7, 238388/9, 668604/5 
+		1, 3, 8, 23, 63, 174, 490, 1374, 3852, 10805, 30306, 84996, 238388, 668605
+	};
+
+	// All of these are so in-elegant compared to, say, 2.4 or 12/5. Notably keyboards have 7 white keys and 5 black keys per octave.
+
+	std::vector<long> octavarium4 = // inspired by Dream Theater's song on the album of the same name.
+	{
+		// 12/5
+		// sqrt(sqrt(12)+sqrt(5))^k*e^(1-k) = 12/5 thus k = 0.959763455291092157165207366...
+		// g(n) = 12/5 * g(n-1) + 0.959763455291092157165207366*n, g(0) = 1
+		// 1, 3/4, 9/10, 26/27, 68/69, 168/169, 410/411, 991/992, 2387/2388, 5739/5740, 13783/13784, 33091/33092, 79430/79431, 190645/190646, 457562/457563
+		1, 4, 10, 27, 69, 168, 410, 992, 2388, 5739, 13783, 33092, 79431, 190645, 457562
+	};
+
+	std::vector<long> octavarium5 = // going to try to mirror the 2.48 sequence, by guessing k and seeing if the sequence approximates the @invisal sequence
+	{
+		// I tried to reverse engineer k using the @invisal sequence
+		// 12/5
+		// k = ? (e.g. ~.15) // I checked what n would be via inferrence after using an approximate k to solve for n, and I think 0.156198 is a candidate: sqrt(1.5)^k*e^(1-k) = 12/5
+		// g(n) = 12/5 * g(n-1) + k*n, g(0) = 1
+		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 226/227, 545/546, 1310/1311, 3145/3146, 
+		1, 3, 7, 16, 38, 94, 227, 546, 1310
+		// Holy shit I wasn't looking: look at this recurrence solution:
+		// 1/224 5^(-5 - n) (208471 3^n 4^(1 + n) - 11157 5^n (12 + 7 n))
+		// It's so pretty...
+		// I'm going to commit this before any more work.
+	};
+
 	std::vector<long> extrapolated_ciura_tokuda =
 	{
 		1, 4, 10, 23, 57, 132, 305, 692, 1565, 3530, 7953, 17904, 40294, 90673, 204028, 459077, 1032939, 2324129, 5229307, 11765959, 26755942
