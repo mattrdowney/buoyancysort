@@ -186,9 +186,10 @@ namespace ShellSort
 		return ceil(value);
 	};
 
-	// ~100% chance this was a coincidence, but I still feel it could be useful.
+	// I've confirmed that value 9 was coincidentally close to 3530.
 	std::function<long(long)> generalized_ciura3 = [](long n) // simplicity seems to work
 	{
+		// (-8 (9 + 5 n) (-1 + log(9/4)) + (9/4)^n (-122 + 144 log(3/2) + 25 log(5)))/(25 (-2 + log(5)))
 		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
 		double ratio = 2.25;
 		double skew = +0.971108; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
@@ -221,111 +222,6 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	// Yes, this gap sequence is good, but we might be able to do better.
-	// There's two competing explanations (in my mind) for the @invisal 2.48 gap sequence ( https://stackoverflow.com/questions/21508595/shellsort-2-48k-1-vs-tokudas-sequence )
-	// Explanation 1: it has something to do with 11 & 7 (which could actually imply 3 and 5 is the ideal gap sequence) -- it's possible you have to connect these sequences in-order (rather than starting with the "optimal"-ish sequence).
-	// Explanation 2: 2.48 is halfway between e and something else (e.g. 2.25 or sqrt(5)) and is essentially an ideal center. This could mean you want to middle around that point or it could mean you want to fluctuate around that point.
-	// Explanation ?: (There are plenty more reasons to think about)
-
-	// I am particularly interested in the 3/5 "factorization highway" (notation abuse since I would normally call the 2/3 highway 1-3530). Based on Median-Of-Medians and other circumstantial evidence, I think 3 and 5 are some of the more important numbers in mathematics (at least from an information theory standpoint). 2 is important in an even/odd function sense (so perhaps it is more important than both combined) but I don't think about it as much.
-	// All wild conjecture from here on: (and beforehand, really)
-	// 5^2/3^2 = 2.77777778
-	// in the 2/3 "factorization highway" you use a skew k that is the solution to the equation: sqrt(5)^k*e^(1-k) = 2.25
-	// here that could mean: sqrt(3+5)^k*e^(1-k) = (5^2)/(3^2) thus k= 0.545086 OR sqrt(3*5-1)^k*e^(1-k) = (5^2)/(3^2) thus k = 0.067759953696224392398... (I think the second is more likely)
-	// The binary representation of sqrt(3) would be used starting from the 4th digit or so.
-	// The number would become a perfect integer on the 5^2 + 1 number.
-
-	// Slight revision: I think that if the sqrt(2) binary is relevant, you start right after the decimal but the first one is ignored if you are starting from e.g. 1 or an integer.
-	// Thus g(n) = (5^2)/(3^2) * g(n-1) + 0.067759953696224392398*n, g(0) = 1
-	// Thus:
-	// -0.059554646803322220 + 1.0595546468033222 e^(1.0216512475319813664 n) - 0.038114973954126221 n
-	// 1, 2, 9, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394,
-	
-	std::vector<long> three_five =
-	{
-		1, 2, 9, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394
-	};
-
-	std::vector<long> three_five_ish = // it's not doing bad, but it isn't better. One issue: it's hard to verify by checking g(25) due to floating-point imprecision // The underlying problem could be a malformed equation or e.g. an unsolvable issue like 5^2/3^2 exceeds e, so the formula is less reliable.
-	{
-		1, 4, 10, 23, 63, 174, 487, 1352, 3755, 10433, 28980, 80499, 223610, 621142, 1725394
-	};
-
-	// I'm going to ignore 5^2/3^2 and focus on this octave / music theory angle.
-	// I like the idea of using 23/2^3. Sure it exceeds e, but it looks pretty perfect to me.
-	// 2.875 ratio. Interestingly, it relates to 2.56 (approximately the center of 2.25 and 2.875), which I also thought might be relevant because 2^6/5^2 (which I came up with because of the @invisal sequence)
-	// Thus sqrt(23*8-1)^k*e^(1-k) = 23/2^3 means k ~= 0.034929375968604340232677412848592 (if that equation was actually the right one to use)
-	// I'm just going to use intuition to round everything.
-
-	std::vector<long> octavarium = // inspired by Dream Theater's song on the album of the same name.
-	{
-		// 1, 2/3, 8/9, 24/25, 70/71, 201/202, 580/581, 1669/1670, 4800/4801, 13802/13803, 39683/4, 114089/114090, 328008/9, 943025/6, 
-		1, 3, 8, 25, 70, 202, 580, 1670, 4800, 13803, 39683, 114090, 328008, 943026
-	};
-
-	std::vector<long> octavarium2 = // inspired by Dream Theater's song on the album of the same name.
-	{
-		// 173/64
-		// sqrt(173*64-1)^k*e^(1-k) = 173/64 thus k = -0.00152938302945376307735815324
-		// g(n) = 173/64 * g(n-1) + -0.00152938302945376307735815324*n, g(0) = 1
-		// 1, 2/3, 7/8, 19/20, 53/54, 144/145, 389/390, 1053/1054, 2846/2847, 7694/5, 20798/9, 56222/3, 151975/6, 410809/410810
-		1, 3, 8, 20, 53, 144, 389, 1053, 2846, 7695, 20798, 56223, 151975, 410810
-	};
-
-	std::vector<long> octavarium3 = // inspired by Dream Theater's song on the album of the same name.
-	{
-		// 359/2^7
-		// sqrt(359*2^7-1)^k*e^(1-k) = 359/2^7 thus k = 0.0071644966771190102429781047400...
-		// g(n) = 359/2^7 * g(n-1) + 0.0071644966771190102429781047400*n, g(0) = 1
-		// 1, 2/3, 7/8, 22/3, 62/3, 174/5, 489/90, 1373/4, 3852/3, 10805/6, 30305/6, 84996/7, 238388/9, 668604/5 
-		1, 3, 8, 23, 63, 174, 490, 1374, 3852, 10805, 30306, 84996, 238388, 668605
-	};
-
-	// All of these are so in-elegant compared to, say, 2.4 or 12/5. Notably keyboards have 7 white keys and 5 black keys per octave.
-
-	std::vector<long> octavarium4 = // inspired by Dream Theater's song on the album of the same name.
-	{
-		// 12/5
-		// sqrt(sqrt(12)+sqrt(5))^k*e^(1-k) = 12/5 thus k = 0.959763455291092157165207366...
-		// g(n) = 12/5 * g(n-1) + 0.959763455291092157165207366*n, g(0) = 1
-		// 1, 3/4, 9/10, 26/27, 68/69, 168/169, 410/411, 991/992, 2387/2388, 5739/5740, 13783/13784, 33091/33092, 79430/79431, 190645/190646, 457562/457563
-		1, 4, 10, 27, 69, 168, 410, 992, 2388, 5739, 13783, 33092, 79431, 190645, 457562
-	};
-
-	std::vector<long> octavarium5 = // going to try to mirror the 2.48 sequence, by guessing k and seeing if the sequence approximates the @invisal sequence
-	{
-		// I tried to reverse engineer k using the @invisal sequence
-		// 12/5
-		// k = ? (e.g. ~.15) // I checked what n would be via inferrence after using an approximate k to solve for n, and I think 0.156198 is a candidate: sqrt(1.5)^k*e^(1-k) = 12/5
-		// g(n) = 12/5 * g(n-1) + k*n, g(0) = 1
-		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 226/227, 545/546, 1310/1311, 3145/3146, 7551/7552, 18125/18126, 43503/43504, 104411/104412, 250588/250589, 601415/601416
-		1, 3, 7, 16, 38, 94, 227, 546, 1310, 3145, 7552, 18126, 43503, 104411, 250589, 601416
-		// Holy shit I wasn't looking: look at this recurrence solution:
-		// 1/224 5^(-5 - n) (208471 3^n 4^(1 + n) - 11157 5^n (12 + 7 n))
-		// It's so pretty...
-		// I'm going to commit this before any more work.
-		// Ahhh, it got even prettier:
-		// g(n) = (5^(-n) (12^n (-218 + 49 log(3/2) + 60 log(144/25)) - 2 5^(n + 1) (7 n + 12) (log(12/5) - 1)))/(49 (log(3/2) - 2))
-	};
-
-	std::vector<long> octavarium6 = // and?
-	{
-		// 12/5
-		// g(n) = (5^(-n) (2 5^(n + 1) (7 n + 12) (log(12/5) - 1) + 12^n (218 + 49 log(2) - 120 log(12/5) - 49 log(pi))))/(49 (2 + log(2) - log(pi)))
-		// g(n) = 12/5 * g(n-1) +  	(2 - log(144 / 25)) / (2 + log(2 / pi)) *n, g(0) = 1
-		// 1, 3/4, 6/7, 16/17, 39/40, 94/95, 227/228, 547/548, 1316/1317, 3160/3161, 7597/7588, 18212/18213, 43711/43712, 104910/104911, 251787/251788, 604291/604292
-		1, 3, 7, 16, 40, 94, 228, 547, 1317, 3160, 7588, 18212, 43712, 104910, 251788, 604291
-		// nah, this seemed to do worse
-	};
-
-	std::vector<long> octavarium7 =
-	{
-		// g(n) = 12/5 * g(n-1) + k*n, g(0) = 1
-		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 226/227, 545/546, 1310/1311, 3145/3146, 7551/7552, 18125/18126, 43503/43504, 104411/104412, 250588/250589, 601415/601416
-		1, 3, 7, 15, 39, 94, 227, 545, 1311, 3145, 7552, 18125, 43504, 104411, 250589, 601415
-		// g(n) = (5^(-n) (12^n (-218 + 49 log(3/2) + 60 log(144/25)) - 2 5^(n + 1) (7 n + 12) (log(12/5) - 1)))/(49 (log(3/2) - 2))
-	};
-
 	std::vector<long> octavarium8 =
 	{
 		// g(n) = 12/5 * g(n-1) + k*n, g(0) = 1
@@ -333,6 +229,23 @@ namespace ShellSort
 		1, 3, 7, 16, 38, 94, 227, 546, 1311, 3145, 7552, 18126, 43504, 104411, 250589, 601415
 		//?, down/0, up/1, up/1, down/0, down/0,  // gonna try Apéry's constant: zeta(3) thus .0011.0011.1011.1010
 		// g(n) = (5^(-n) (12^n (-218 + 49 log(3/2) + 60 log(144/25)) - 2 5^(n + 1) (7 n + 12) (log(12/5) - 1)))/(49 (log(3/2) - 2))
+	};
+
+	std::vector<long> octavarium9 =
+	{
+		// g(n) = 12 / 5 * g(n - 1) + ((-1 + log(12 / 5)) / (-1 + log(zeta(3))))*n, g(0) = 1
+		// 1, 3/4, 6/7, 15/16, 38/39, 93/94, 225/226, 543/544, 1305/1306, 3134/3135, 7523/7524, 18059/18060, 43343/43344, 104026/104027, 249666/249667, 599202/599203
+		1, 3, 7, 16, 38, 93, 226, 544, 1306, 3134, 7524, 18060, 43344, 104026, 249667, 599202
+	};
+
+	std::vector<long> eleven_squared_seven_squared = // I believe there is a possibility that the 3^2/2^2 and 11^2/7^2 equations have k values that sum to 1 (complementary).
+	{
+		//?011.0000.
+		// possibly inverse of golden ratio: 1.1001111000110111011
+		// thus 0011.0000.1110.0100 (although this is super arbitrary, I think irrational rounding is probably better than alternating rounding, even though it would be better to just test all pairs)
+		// g(n) = 11^2/7^2 * g(n-1) + (1 - 0.9716) * n, g(0) = 1
+		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 233/234, 577/578, 1427/1428, 3525/3526, 8704/8705, 21496/21497, 53082/53083, 131081/131082, 323691/323692, 799321/799322
+		1, 3, 7, 16, 38, 94, 233, 577, 1428, 3526, 8705, 21496, 53082, 131082, 323691, 799321
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda =
