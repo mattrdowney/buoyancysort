@@ -298,12 +298,14 @@ namespace ShellSort
 		// 12/5
 		// k = ? (e.g. ~.15) // I checked what n would be via inferrence after using an approximate k to solve for n, and I think 0.156198 is a candidate: sqrt(1.5)^k*e^(1-k) = 12/5
 		// g(n) = 12/5 * g(n-1) + k*n, g(0) = 1
-		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 226/227, 545/546, 1310/1311, 3145/3146, 
-		1, 3, 7, 16, 38, 94, 227, 546, 1310
+		// 1, 3/4, 6/7, 15/16, 38/39, 94/95, 226/227, 545/546, 1310/1311, 3145/3146, 7551/7552, 18125/18126, 43503/43504, 104411/104412, 250588/250589, 601415/601416
+		1, 3, 7, 16, 38, 94, 227, 546, 1310, 3145, 7552, 18126, 43503, 104411, 250589, 601416
 		// Holy shit I wasn't looking: look at this recurrence solution:
 		// 1/224 5^(-5 - n) (208471 3^n 4^(1 + n) - 11157 5^n (12 + 7 n))
 		// It's so pretty...
 		// I'm going to commit this before any more work.
+		// Ahhh, it got even prettier:
+		// g(n) = (5^(-n) (12^n (-218 + 49 log(3/2) + 60 log(144/25)) - 2 5^(n + 1) (7 n + 12) (log(12/5) - 1)))/(49 (log(3/2) - 2))
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda =
