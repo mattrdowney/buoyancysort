@@ -72,7 +72,7 @@ int main()
 	//std::vector<long> gap_sequence = ShellSort::extrapolated_ciura_tokuda; // Yesh, I might have finally found a gap sequence that beats Ciura. It took a while and I've only done 5 tests (seeds 22-26 @ size 1,000) but it beat Ciura in 5/5.
 	//std::vector<long> gap_sequence = ShellSort::ciura_gap_sequence;
 	//std::vector<long> gap_sequence = ShellSort::three_five;
-	std::vector<long> gap_sequence = ShellSort::octavarium5;
+	std::vector<long> gap_sequence = ShellSort::octavarium8;
 	for (long gap : gap_sequence)
 	{
 		std::cout << gap << " ";
