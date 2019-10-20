@@ -1,12 +1,17 @@
 #pragma once
 
 #include <algorithm>
+#include <assert.h>
 #include <climits>
 #include <functional>
 #include <iterator>
 #include <math.h>
 #include <stddef.h>
 #include <vector>
+#include "sorted.h"
+
+//typedef int current_type;
+typedef IntThatTracksComparisons::IntThatTracksComparisons current_type;
 
 namespace ShellSort
 {
@@ -196,11 +201,55 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
+	// long overdue
+	void empirical_comparison(std::vector<long> gap_sequence1, std::vector<long> gap_sequence2, long lower_size, long upper_size)
+	{
+		// A relevant note: I don't have to worry about traditional programming benchmarking techniques, since counting comparisons is an "objective" benchmark of a deterministic algorithm (as opposed to CPU timing / caching / etc which would be "subjective").
+		std::vector<current_type> data1(upper_size);
+		std::vector<current_type> data2(upper_size);
+
+		std::random_device random_device;
+		std::mt19937 random_number_generator(random_device());
+		std::uniform_int_distribution<long> size_distribution(lower_size, upper_size);
+
+		long long comparison_count1 = 0;
+		long long comparison_count2 = 0;
+
+		const int tests = 41; // usually statistics start becoming reliable in the 20-50 range, and generally you want odd numbers for tie-breakers.
+		for (int test = 0; test < tests; test += 1)
+		{
+			// Boilerplate-ish =(, I can do a foreach but I don't think it helps with readability.
+			long size = size_distribution(random_number_generator);
+			for (long i = 0; i < size; i += 1)
+			{
+				data1[i] = size - i;
+			}
+			random_number_generator.seed(test);
+			std::shuffle(&data1[0], (&data1[size - 1]) + 1, random_number_generator);
+			for (long i = 0; i < size; i += 1)
+			{
+				data2[i] = data1[i]; // if it's not a copy, it's not a 1:1 comparison. I noticed one off-by-one and one completely incorrect algorithm in my prior (uncompiled) attempts, which is why I deem this safer.
+			}
+
+			IntThatTracksComparisons::reset_comparisons();
+			ShellSort::sort<current_type>((current_type*)data1.data(), -1, size, gap_sequence1);
+			long long comparisons = IntThatTracksComparisons::get_comparisons();
+			comparison_count1 += comparisons;
+			assert(Sorted::verify((current_type*)data1.data(), -1, size));
+			IntThatTracksComparisons::reset_comparisons();
+			ShellSort::sort<current_type>((current_type*)data2.data(), -1, size, gap_sequence2);
+			comparisons = IntThatTracksComparisons::get_comparisons();
+			comparison_count2 += comparisons;
+			assert(Sorted::verify((current_type*)data2.data(), -1, size));
+		}
+		std::cout << comparison_count1 << ":" << comparison_count2 << " (" << (comparison_count2 - comparison_count1) << ")";
+	}
+
 	std::vector<long> ciura_gap_sequence =
 	{
 		1, 4, 10, 23, 57, 132, 301, 701,
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
-		1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711
+		//1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711
 	};
 
 	std::vector<long> pratt_three_smooth_gap_sequence =
@@ -250,7 +299,10 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda =
 	{
-		1, 4, 10, 23, 57, 132, 305, 692, 1565, 3530, 7953, 17904, 40294, 90673, 204028, 459077, 1032939, 2324129, 5229307, 11765959, 26755942
+		// #Rekt (did not beat Ciura at all, for the billionth time) -- 1, 4, 10, 23, 57, 132, 305, 692 (and 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688)
+		// g(n) = 3^2/2^2 * g(n-1) + (1 - e^(-pi)) * n, g(0) = 1
+		// 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688
+		1, 4, 10, 23, 57, 132, 
 	};
 
 

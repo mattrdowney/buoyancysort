@@ -65,7 +65,7 @@ int main()
 	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 
-	IntThatTracksComparisons::reset_comparisons();
+	//IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
 	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura3, 20);
@@ -74,17 +74,18 @@ int main()
 	//std::vector<long> gap_sequence = ShellSort::three_five;
 	//std::vector<long> gap_sequence = ShellSort::tokuda_gap_sequence;
 	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator([](int n) {return std::ceil(std::pow(2.48, n-1)); }, 20); // At least my function can ever so slightly beat the 2.48 sequence. As I learn more, I can probably do something similar to Ciura/Tokuda with enough perseverance.
-	std::vector<long> gap_sequence = ShellSort::eleven_squared_seven_squared;
-	for (long gap : gap_sequence)
-	{
-		std::cout << gap << " ";
-	}
-	ShellSort::sort<current_type>((current_type*)data.data(), -1, size, gap_sequence);
+	//std::vector<long> gap_sequence = ShellSort::eleven_squared_seven_squared;
+	//for (long gap : gap_sequence)
+	//{
+	//	std::cout << gap << " ";
+	//}
+	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, gap_sequence);
+	ShellSort::empirical_comparison(ShellSort::ciura_gap_sequence, ShellSort::extrapolated_ciura_tokuda, 700, 1500);
 	//ShellSort::sort<current_type>((current_type*)data.data(), -1, size, ShellSort::tokuda_gap_sequence);
 	
-	long long comparisons = IntThatTracksComparisons::get_comparisons();
+	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
-	Sorted::verify((current_type*)data.data(), -1, size);
+	//Sorted::verify((current_type*)data.data(), -1, size);
 	//Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
@@ -92,9 +93,9 @@ int main()
 	//HeapTests::test_min_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	//HeapTests::test_max_heap_alignment<current_type>((current_type*)data.data(), -1, size, tuple_size);
 	
-	std::cout << comparisons << std::endl;
-	float cost_per_element = ((float)comparisons) / size;
-	std::cout << cost_per_element << std::endl;
+	//std::cout << comparisons << std::endl;
+	//float cost_per_element = ((float)comparisons) / size;
+	//std::cout << cost_per_element << std::endl;
 
 	char word;
 	std::cin >> word;
