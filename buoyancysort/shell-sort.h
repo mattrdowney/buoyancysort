@@ -143,7 +143,7 @@ namespace ShellSort
 		double value = 1;
 		for (int iteration = 1; iteration < n; iteration += 1)
 		{
-			value = ratio * value + skew*iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
+			value = ratio * value + skew * iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 		}
 		std::cout.precision(17);
 		std::cout << value << std::endl;
@@ -173,7 +173,7 @@ namespace ShellSort
 		const double lower_multiplier = 2.25; // irrational constant is the solution to 2^(1-k)*3^(k) = e
 		const double upper_multiplier = 2.7; // e / Euler's constant
 		const double pi = 3.141592653589793238462643383279502884197169399375105;
-		
+
 		const double phase_shift = 0;
 		const double frequency = 0.618033989; // 1 - phi
 
@@ -186,7 +186,7 @@ namespace ShellSort
 			double multiplier = pow(lower_multiplier, fraction)*pow(upper_multiplier, 1 - fraction);
 			value = multiplier * value + similarity * iteration; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
 
-			phase = std::fmod(phase + frequency, 2*pi/3); // move the multipliers in a sine curve.
+			phase = std::fmod(phase + frequency, 2 * pi / 3); // move the multipliers in a sine curve.
 		}
 		return ceil(value);
 	};
@@ -302,7 +302,7 @@ namespace ShellSort
 		// #Rekt (did not beat Ciura at all, for the billionth time) -- 1, 4, 10, 23, 57, 132, 305, 692 (and 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688)
 		// g(n) = 3^2/2^2 * g(n-1) + (1 - e^(-pi)) * n, g(0) = 1
 		// 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688
-		1, 4, 10, 23, 57, 132, 
+		1, 4, 10, 23, 57, 132,
 	};
 
 
@@ -397,4 +397,64 @@ namespace ShellSort
 		11901771 // 73017*163
 		// TODO: because of the nature of this function, you cannot efficiently sort 10,000,000 elements yet (you need more gap sequence numbers)
 	};
+
+	std::vector<long> probably_reliable4 = gap_sequence_generator([](int n) { return 11 * pow((1.25f), n) - 2 * (5 + n); }, 70);
+	std::vector<long> probably_reliable5 = gap_sequence_generator([](int n) { return pow((1.25f), n); }, 96);
+
+	//g(n) = (5 / 4) * g(n-1) + .5 * n, g(5) = 132 thus g(n) = 19 2^(13 - 2 n) 5^(-5 + n) - 2 (5 + n)
+	//std::vector<long> probably_reliable6 = gap_sequence_generator([](int n) { return 19 * pow(2, (13 - 2 * n)) * pow(5, (-5 + n)) - 2 * (5 + n); }, 70);
+	std::vector<long> probably_reliable6 = 
+	{
+		1, 4, 10, 23, 57, 132, // up to this point, just use Ciura
+		168, 213, 270, 343, 433, 547, 690, 869, 1094, 1375,
+		1727, 2167, 2718, 3408, 4270, 5348, 6696, 8381, 10489, 13123,
+		16417, 20535, 25683, 32119, 40164, 50220, 62791, 78506, 98149, 122704,
+		153398, 191766, 239727, 299679, 374618, 468294, 585388, 731757, 914718, 1143420,
+		1429299, 1786647, 2233333, 2791691, 3489638, 4362074, 5452618, 6815799, 8519776, 10649748,
+		13312213, 16640295, 20800398, 26000527, 32500688, 40625891, 50782395, 63478025, 79347564, 99184487,
+		123980642, 154975837, 193719830, 242149822, 302687313
+	};
+
+	std::vector<long> probably_reliable7 = gap_sequence_generator([](int n) { return (-566858243176225 + 623400412190497 * pow((26615281.0 / 21298225), n) - 113243855025600 * n) / 56542169014272; }, 70);
+	//std::vector<long> probably_reliable8 = gap_sequence_generator([](int n) { return (pow(21298225.0, -n) * (pow(-21298225.0, 1 + n) + pow(26615281.0, 1 + n))) / 5317056; }, 70);
+	//std::vector<long> probably_reliable8 = gap_sequence_generator([](int n) { return -4.005642408129612 + 5.005642408129612 * exp(0.22286178861539475 * n); }, 70);
+	std::vector<long> probably_reliable8 =
+	{
+		1, 2, 3, 5, 8, 11, 15, 19, 25, 33,
+		42, 54, 68, 86, 109, 137, 173, 217, 272, 341,
+		427, 535, 670, 838, 1048, 1311, 1640, 2050, 2563, 3204,
+		4005, 5006, 6257, 7820, 9773, 12214, 15265, 19077, 23840, 29793,
+		37232, 46528, 58144, 72661, 90802, 113471, 141800, 177202, 221441, 276724,
+		345809, 432141, 540025, 674842, 843316, 1053849, 1316941, 1645714, 2056564, 2569982,
+		3211574, 4013337, 5015260, 6267310, 7831931, 9787157, 12230501, 15283820, 19099394, 23867517, 29825993
+	};
+
+	//std::vector<long> probably_reliable9 = gap_sequence_generator([](int n) { return -4 + 5 * pow(1.25, n); }, 70);
+	std::vector<long> probably_reliable9 =
+	{
+		1, 2, 3, 5, 8, 11, 15, 19, 25, 33,
+		42, 54, 68, 86, 109, 138, 173, 218, 273, 342,
+		429, 538, 673, 843, 1054, 1319, 1650, 2063, 2580, 3227,
+		4034, 5044, 6306, 7884, 9856, 12321, 15403, 19255, 24070, 30088,
+		37611, 47015, 58770, 73464, 91831, 114790, 143488, 179362, 224203, 280255,
+		350320, 437901, 547378, 684223, 855280, 1069101, 1336378, 1670473, 2088093, 2610117,
+		3262648, 4078311, 5097890, 6372363, 7965455, 9956820, 12446026, 15557534, 19446918, 24308649, 30385812
+	};
+
+	// g(n) = (1.25) * g(n-1) - 1, g(2) = 9
+	// 4 + 4^(2 - n) 5^(-1 + n)
+	//std::vector<long> probably_reliable10 = gap_sequence_generator([](int n) { return 4 + pow(4, (2 - n)) * pow(5, (-1 + n)); }, 70);
+	std::vector<long> probably_reliable10 =
+	{
+		1, 4,
+		9, 10, 11, 13, 16, 19, 23, 27,
+		33, 41, 50, 62, 76, 94, 117, 146, 181, 226,
+		281, 350, 437, 546, 681, 851, 1062, 1327, 1658, 2071,
+		2588, 3235, 4042, 5052, 6314, 7892, 9864, 12329, 15411, 19263,
+		24078, 30096, 37619, 47023, 58778, 73472, 91839, 114798, 143496, 179370,
+		224211, 280263, 350328, 437909, 547386, 684231, 855288, 1069109, 1336386, 1670481,
+		2088101, 2610125, 3262656, 4078319, 5097898, 6372371, 7965463, 9956828, 12446034, 15557542, 19446926,
+	};
+
+	// None of the attempts thus far have had low variance in comparisons, which suggests my theory you could make an O(nlgn) worst case ShellSort is incorrect (a proof already exists for this, so it was a long-shot).
 }
