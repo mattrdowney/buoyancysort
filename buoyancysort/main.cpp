@@ -76,12 +76,12 @@ int main()
 	//std::vector<long> gap_sequence = ShellSort::gap_sequence_generator([](int n) {return std::ceil(std::pow(2.48, n-1)); }, 20); // At least my function can ever so slightly beat the 2.48 sequence. As I learn more, I can probably do something similar to Ciura/Tokuda with enough perseverance.
 	//std::vector<long> gap_sequence = ShellSort::eleven_squared_seven_squared;
 	std::vector<long> gap_sequence1 = ShellSort::tokuda_gap_sequence;
-	std::vector<long> gap_sequence2 = ShellSort::probably_reliable10;
+	std::vector<long> gap_sequence2 = ShellSort::probably_reliable14;
 	for (long gap : gap_sequence2)
 	{
 		std::cout << gap << " ";
 	}
-	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 10000, 100000);
+	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 100000, 1000000);
 	
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
