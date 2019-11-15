@@ -67,6 +67,9 @@ namespace ShellSort
 		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
 	}
 
+    const double e = 2.718281828459045235360287471352662497757247093699959574966;
+	const double pi = 3.141592653589793238462643383279502884197169399375105;
+
 	std::vector<long> generalized_pratt(std::set<long> factors_list, long last_value, bool exponentiate = true)
 	{
 		// Using ordered sets makes the implementation user-proof (sort of).
@@ -154,7 +157,7 @@ namespace ShellSort
 	std::function<long(long)> natural_extension = [](long n)
 	{
 		// Equivalent to 1 2 3 5 8 16 37 92 243 649 1755 4757 12919 35104 95408 259330 704914 1916137 5208581 14158372 38486424 104616926 284378265 773020247
-		double ratio = 2.718281828459045235360287471352662497757247093699959574966; // it just feels natural
+		double ratio = e; // it just feels natural
 		double skew = -1;
 		return generalized_tokuda(n, ratio, skew);
 	};
@@ -172,7 +175,6 @@ namespace ShellSort
 	{
 		const double lower_multiplier = 2.25; // irrational constant is the solution to 2^(1-k)*3^(k) = e
 		const double upper_multiplier = 2.7; // e / Euler's constant
-		const double pi = 3.141592653589793238462643383279502884197169399375105;
 
 		const double phase_shift = 0;
 		const double frequency = 0.618033989; // 1 - phi
@@ -198,6 +200,14 @@ namespace ShellSort
 		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
 		double ratio = 2.25;
 		double skew = +0.971108; // solution to sqrt(5)^k*e^(1-k) = 2.25 // I just realized: is it luck that this worked out? XD Technically, I've been trying to map onto the range [-1, +1], I am accidentally mapping onto [0, 1] here. // Oh wait, I fucked up even harder than I originally thought: I used geometric averaging despite the strong evidence that normal averaging was relevant here i.e. sqrt(5)*(k) + e*(1-k), k= ?... that being said, I don't actually have a method of finding k here, so I guess geometric averaging is still the way to go when you don't know how to interpolate (you just have to be careful because Wolfram Alpha always assumes positive I think). You probably need to exchange the k and 1-k in the equation when this happens.
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> generalized_ciura4 = [](long n) // simplicity seems to work
+	{
+		// You can think of this as either Ciura's sequence (or close to it) or an upgraded Tokuda sequence (either works, really).
+		double ratio = 5 - e;
+		double skew = e + pi - 5;
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -304,7 +314,7 @@ namespace ShellSort
 		// #Rekt (did not beat Ciura at all, for the billionth time) -- 1, 4, 10, 23, 57, 132, 305, 692 (and 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688)
 		// g(n) = 3^2/2^2 * g(n-1) + (1 - e^(-pi)) * n, g(0) = 1
 		// 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688
-		1, 4, 10, 23, 57, 132,
+		1, 4, 10, 23, 57, 132, 301, 701, 1607, 3672, 8387, 19142, 43688, 99692, 227481, 519058, 1184359, 2702385, 6166098, 14069311
 	};
 
 
@@ -524,5 +534,17 @@ namespace ShellSort
 		1, 4, 10, 25, 62, 154, 381, 941, 2323, 5738,
 		14169, 34989, 86402, 213360, 526869, 1301045, 3212784, 7933609, 19591157, 48378165,
 		119464448
+	};
+
+	// g(n) = (pi/2)^2 * g(n-1) + (e^(-pi)), g(0) = 1
+	// (4^(-n) e^(-pi) (-4^(1 + n) + pi^(2 n) (4 + e^pi (-4 + pi^2))))/(-4 + pi^2)
+	// ceil((pow(4,(-n)) * exp((-pi)) * (pow(-4, (1 + n)) + pow(pi, (2 n)) * (4 + exp(pi) * (-4 + pow(pi, 2)))))/(-4 + pow(pi, 2)))
+	//std::vector<long> probably_reliable15 = gap_sequence_generator([](int n) { return ceil((pow(4,(-n)) * exp((-3.1415926)) * (pow(-4, (1 + n)) + pow(3.1415926, (2 * n)) * (4 + exp(3.1415926) * (-4 + pow(3.1415926, 2)))))/(-4 + pow(3.1415926, 2))); }, 20);
+	std::vector<long> probably_reliable15 =
+	{
+		// 1, 3, 7, 16, 39, 95, 233, 574, 1415, 3490, 8610, 21245, 52419, 129337, 319126, 787411, 1942857, 4793807, 11828244, 29185021, 72011150 (ceiled)
+		1, 3, 7, 16, 38, 94, 233, 574, 1415, 3490,
+		8610, 21245, 52419, 129337, 319126, 787411, 1942857, 4793807, 11828244, 29185021,
+		72011150
 	};
 }
