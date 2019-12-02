@@ -211,8 +211,28 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
+
+	//std::function<long(long)> extrapolated_invisal_hybrid = [](long n) // g(k) = (e - 1/5) * g(k-1) + zeta(-1) * k, g(3) = 32.8844 (first few values from g(k) = (5 - e) * g(k-1) + zeta(2) * k, g(0) = 1)
+	//{
+	//	return generalized_tokuda(n, ratio, skew); // varying parameters
+	//};
+
+	std::function<long(long)> extrapolated_invisal = [](long n) // g(k) = (e - 1/5) * g(k-1) + zeta(-1) * k, g(0) = 1
+	{
+		double ratio = e - 1./5;
+		double skew = -1./12;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
+	std::function<long(long)> extrapolated_ciura = [](long n) // g(k) = (5 - e) * g(k-1) + zeta(2) * k, g(0) = 1
+	{
+		double ratio = 5 - e;
+		double skew = +pi*pi/6;
+		return generalized_tokuda(n, ratio, skew);
+	};
+
 	// long overdue
-	void empirical_comparison(std::vector<long> gap_sequence1, std::vector<long> gap_sequence2, long lower_size, long upper_size)
+	void empirical_comparison(std::vector<long> gap_sequence1, std::vector<long> gap_sequence2, long lower_size, long upper_size, int tests = 41)
 	{
 		// A relevant note: I don't have to worry about traditional programming benchmarking techniques, since counting comparisons is an "objective" benchmark of a deterministic algorithm (as opposed to CPU timing / caching / etc which would be "subjective").
 		std::vector<current_type> data1(upper_size);
@@ -225,7 +245,8 @@ namespace ShellSort
 		long long comparison_count1 = 0;
 		long long comparison_count2 = 0;
 
-		const int tests = 41; // usually statistics start becoming reliable in the 20-50 range, and generally you want odd numbers for tie-breakers.
+		// tests should really depend on the array size (smaller arrays means more tests)
+		//const int tests = 41; // usually statistics start becoming reliable in the 20-50 range, and generally you want odd numbers for tie-breakers.
 		for (int test = 0; test < tests; test += 1)
 		{
 			// Boilerplate-ish =(, I can do a foreach but I don't think it helps with readability.
@@ -317,6 +338,33 @@ namespace ShellSort
 		1, 4, 10, 23, 57, 132, 301, 701, 1607, 3672, 8387, 19142, 43688, 99692, 227481, 519058, 1184359, 2702385, 6166098, 14069311
 	};
 
+	std::vector<long> extrapolated_ciura_tokuda4 =
+	{
+		1, 4, 10, 23, 57, 142, 361, 917
+		// 1, 3, 7, 16, 37, 93, 234, 560, 1410, 115004129:117882077 (2877948)
+		// 1, 3, 8, 17, 37, 93, 234, 560, 1410, 115041398:116540410 (1499012)
+		// 1, 3, 8, 17, 37, 93, 235, 597, 1517
+	};
+
+	std::vector<long> extrapolated_hybrid_invisal =
+	{
+		1, 4, 12, 33, 83, 208, 522, 1313, 3306, 8323, 20958, 52777, 132905, 334691, 842845
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda2 =
+	{
+		1, 4, 13, 33, 82, 195, 454, 1047, 2401, 5493, 12549, 28651, 65392, 149226, 340515, 776983, 1772881, 4045243, 9230133, 21060592,
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda3 =
+	{
+		1, 4, 10, 23, 57, 132, 301, 758, 1909, 4805, 12099, 30467, 76723, 193208, 486550
+	};
+
+	std::vector<long> extrapolated_invisal2 = 
+	{
+		1, 3, 6, 15, 37, 93, 233, 585, 1471, 3704, 9325, 23481, 59130, 148904, 374980, 944304, 2378021, 5988526, 15080793, 37977685
+	};
 
 	// concept:
 	// First generalized_pratt<2> number

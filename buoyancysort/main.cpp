@@ -68,15 +68,25 @@ int main()
 	//IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	std::vector<long> gap_sequence1 = ShellSort::tokuda_gap_sequence;
+	std::vector<long> gap_sequence1 = ShellSort::ciura_gap_sequence;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura4, 25);
-	std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda;
+	std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda4;
+	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
+	//std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda3;
 	for (long gap : gap_sequence2)
 	{
-		std::cout << gap << " ";
+		std::cout << gap << ", ";
 	}
-	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 100000, 1000000);
+	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 300, 1500, 10000);
+	//ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 100000, 1000000);
 	
+	// 1, 4, 10, 23, 57, 132, 331, 837, 115287637:115068185 (-219452)
+	// 1, 4, 10, 23, 57, 142, 361, 910, 115268196:114914994 (-353202)
+	// 1, 4, 10, 23, 57, 142, 361, 908, 114922836:114560936 (-361900)
+	// 1, 4, 10, 23, 57, 142, 361, 825, 115166001:114920061 (-245940)
+	// 1, 4, 10, 23, 57, 142, 361, 854, 115285768:114967249 (-318519)
+	// 1, 4, 10, 23, 57, 142, 356, 892, 115264957:114893134 (-371823)
+
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
 	//Sorted::verify((current_type*)data.data(), -1, size);
