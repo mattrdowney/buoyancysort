@@ -112,6 +112,9 @@ int main()
 	// 1, 4, 10, 23, 57, 142, 361, 925, 2383, 6154, 15924, 41176, 106493, 275442, 712445, 857376311:851879428 (-5496883) // I thought this might happen DX -- two roads diverge
 
 	// Now I'm going to go back to the drawing board by re-extrapolating based on the two new values
+	// Decided on approximately g(k) = g(k-1) * 2.5846 - 1.0868*k, g(6) = 361
+	// Which meant I switched to 6150 since that's more correct (and more empirical too) -- I was short-sighted in choosing the other.
+
 
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
