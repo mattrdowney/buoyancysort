@@ -340,7 +340,7 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda4 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15884, 41042, 106063, 274116, 708464
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042, 106063, 274116, 708464
 	};
 
 	std::vector<long> extrapolated_hybrid_invisal =

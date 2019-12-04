@@ -92,12 +92,12 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Ret=long,
               _Fx=ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(461): note: see reference to function template instantiation 'std::function<long (long)>::function<ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(458): note: see reference to function template instantiation 'std::function<long (long)>::function<ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>,void>(_Fx)' being compiled
           with
           [
               _Fx=ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>
           ]
-  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(461): note: see reference to function template instantiation 'std::function<long (long)>::function<ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>,void>(_Fx)' being compiled
+  c:\users\fujitora\source\repos\buoyancysort\buoyancysort\shell-sort.h(458): note: see reference to function template instantiation 'std::function<long (long)>::function<ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>,void>(_Fx)' being compiled
           with
           [
               _Fx=ShellSort::<lambda_78d8e2477ce9b83c5035ff233e142017>
