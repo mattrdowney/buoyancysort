@@ -324,8 +324,8 @@ namespace ShellSort
 		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042, 106063, 274116, 708464
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda2 =
+	std::vector<long> extrapolated_ciura_tokuda2 = // Close to a(n) = a(n) = 2*a(n-1) + 2*a(n-2) - a(n-3) - 2*a(n-4) + 6*a(n-6), a(0) = 1,  a(1) = 4, a(2) = 10, a(3) = 23, a(4) = 57, a(5) = 142 via http://oeis.org/A221313 (although this sequence does worse)
 	{
-		1, 5, 19, 41, 112, 305
+		1, 4, 10, 23, 57, 142, 361, 927, 2380, 6107
 	};
 }
