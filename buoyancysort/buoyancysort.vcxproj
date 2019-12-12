@@ -172,6 +172,7 @@
     <ClInclude Include="ordered-max-heap.h" />
     <ClInclude Include="ordered-min-heap.h" />
     <ClInclude Include="out-of-place-hierarchysort.h" />
+    <ClInclude Include="out-of-place-shellsort.h" />
     <ClInclude Include="outlier-search.h" />
     <ClInclude Include="power-of-two.h" />
     <ClInclude Include="primality-test.h" />

@@ -138,6 +138,9 @@
     <ClInclude Include="gallop-search.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="out-of-place-shellsort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
