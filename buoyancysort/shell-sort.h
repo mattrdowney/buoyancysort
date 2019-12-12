@@ -319,13 +319,21 @@ namespace ShellSort
 
 	std::vector<long> invisal_gap_sequence = gap_sequence_generator([](int n) { return ceil(pow(2.48, n-1)); }, 20);
 
-	std::vector<long> extrapolated_ciura_tokuda1 =
+	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
 		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda2 = // Close to a(n) = a(n) = 2*a(n-1) + 2*a(n-2) - a(n-3) - 2*a(n-4) + 6*a(n-6), a(0) = 1,  a(1) = 4, a(2) = 10, a(3) = 23, a(4) = 57, a(5) = 142 via http://oeis.org/A221313 (although this sequence does worse)
+	std::vector<long> extrapolated_ciura_tokuda2 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 927, 2380, 6107
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042
 	};
+
+	// Reasonably (but by no means exhaustive) testing. Varying only one parameter at a time has limited assurances of correctness.
+	// (First set of) Retests: 4 (3-5), 10 (9-13), 23 (21-31), 57 (47-73), 142 (132-148), 361 (355-368)
+	// This gives me a little empirical confidence in the gap sequence values I intuitively believed to be true (minus the 1, 5, 17/19, 41 sequence tangent).
+	// Next, I will test the later values.
+	// via ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 45000, 120000, 41);
+	// Second set of retests: 361 (355-368), 925 (917-935)
+	// TODO: Review http://oeis.org/A221313
 }
