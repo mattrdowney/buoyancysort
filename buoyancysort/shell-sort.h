@@ -291,6 +291,16 @@ namespace ShellSort
 		}
 	}
 
+	void empirical_comparison_inner_range(std::vector<long> gap_sequence1, std::vector<long> gap_sequence2, long lower_size, long upper_size, long value, long first, long last, int tests)
+	{
+		for (long extension_value = first; extension_value <= last; extension_value += 1)
+		{
+			std::vector<long> gap_sequence2_0 = gap_sequence2;
+			std::replace(gap_sequence2_0.begin(), gap_sequence2_0.end(), value, extension_value);
+			empirical_comparison(gap_sequence1, gap_sequence2_0, lower_size, upper_size, tests);
+		}
+	}
+
 	std::vector<long> ciura_gap_sequence =
 	{
 		1, 4, 10, 23, 57, 132, 301, 701,
@@ -321,12 +331,12 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41042
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda2 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15870, 41042
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41042 // multiplier reduces at the end, not sure what that means (it could mean 41042 is wrong with a really high probability but of course I'm attached to the number)
 	};
 
 	// Reasonably (but by no means exhaustive) testing. Varying only one parameter at a time has limited assurances of correctness.
@@ -335,5 +345,7 @@ namespace ShellSort
 	// Next, I will test the later values.
 	// via ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 45000, 120000, 41);
 	// Second set of retests: 361 (355-368), 925 (917-935)
+	// Third set of retests using (g(k) = g(k-1) * 2.583333 + (-.66)*k, g(7) = 925):
+	// 2383 (2379-2400), 6150 (6145-6163), 15870 (15860-15900), 41042 (I should test this too but I'm lazy)
 	// TODO: Review http://oeis.org/A221313
 }
