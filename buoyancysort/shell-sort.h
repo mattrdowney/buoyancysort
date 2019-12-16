@@ -334,10 +334,5 @@ namespace ShellSort
 		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda2 =
-	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286 // multiplier reduces at the end, not sure what that means (it could mean 41042 is wrong with a really high probability but of course I'm attached to the number)
-	};
-
 	// TODO: Review http://oeis.org/A221313
 }
