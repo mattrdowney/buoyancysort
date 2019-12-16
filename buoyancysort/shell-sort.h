@@ -336,16 +336,8 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda2 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41042 // multiplier reduces at the end, not sure what that means (it could mean 41042 is wrong with a really high probability but of course I'm attached to the number)
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286 // multiplier reduces at the end, not sure what that means (it could mean 41042 is wrong with a really high probability but of course I'm attached to the number)
 	};
 
-	// Reasonably (but by no means exhaustive) testing. Varying only one parameter at a time has limited assurances of correctness.
-	// (First set of) Retests: 4 (3-5), 10 (9-13), 23 (21-31), 57 (47-73), 142 (132-148), 361 (355-368)
-	// This gives me a little empirical confidence in the gap sequence values I intuitively believed to be true (minus the 1, 5, 17/19, 41 sequence tangent).
-	// Next, I will test the later values.
-	// via ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 45000, 120000, 41);
-	// Second set of retests: 361 (355-368), 925 (917-935)
-	// Third set of retests using (g(k) = g(k-1) * 2.583333 + (-.66)*k, g(7) = 925):
-	// 2383 (2379-2400), 6150 (6145-6163), 15870 (15860-15900), 41042 (I should test this too but I'm lazy)
 	// TODO: Review http://oeis.org/A221313
 }
