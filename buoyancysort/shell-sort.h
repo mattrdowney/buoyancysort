@@ -331,7 +331,7 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41042
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda2 =
