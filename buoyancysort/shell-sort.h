@@ -331,7 +331,16 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286 // last value probably incorrect
+		//Cumulative sum: 1, 5, 15, 38, 95, 237, 598, 1523, 3906, 10056, 25947, 67233
+		// Ratio: 5, 3, 2.53333333, 2.5, 2.49473684, 2.52320675, 2.54682274, 2.56467498, 2.57450077, 2.5802506, !2.59116661 (strong indication it was overexpanding)
+		// Subtract: ... , 0.02320675, 0.04682274, 0.06467498, 0.07450077, 0.0802506
+		// Ratio: ... , 2.01763452, 1.38127286, 1.15192568, 1.07717813
+		// Hyperbolic regression: 0.74502606 + 1.27099534/x (ehhh, actually this is terrible. I'm guessing I need <0.00001% error before any regression solver is decent.)
+		// Subtract 1: ... , 1.01763452, 0.38127286, 0.15192568, 0.07717813
+		// Ratio: ..., 2.66904526, 2.50960114, 1.96850688
+		// Giving up on this, iterative stuff for now.
+		// Will test repeated ratio of 2.5 next.
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda2 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
