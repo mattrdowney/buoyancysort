@@ -331,7 +331,7 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15891, 41286 // last value probably incorrect
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15905, 41286 // last value probably incorrect
 		//Cumulative sum: 1, 5, 15, 38, 95, 237, 598, 1523, 3906, 10056, 25947, 67233
 		// Ratio: 5, 3, 2.53333333, 2.5, 2.49473684, 2.52320675, 2.54682274, 2.56467498, 2.57450077, 2.5802506, !2.59116661 (strong indication it was overexpanding)
 		// Subtract: ... , 0.02320675, 0.04682274, 0.06467498, 0.07450077, 0.0802506
@@ -343,9 +343,14 @@ namespace ShellSort
 		// Will test repeated ratio of 2.5 next.
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda2 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
+	std::vector<long> extrapolated_ciura_tokuda2 =
 	{
-		1, 4, 13, 37, 101, 273, 743, 2020, 5491
+		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15907, 41286
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda3 = // This is a surprisingly good gap sequence. I don't know if it's performance gets worse asymptotically, though
+	{
+		1, 4, 11, 26, 57, 120, 247, 502, 1013, 2036, 4083, 8178, 16369
 	};
 
 	// TODO: Review http://oeis.org/A221313
