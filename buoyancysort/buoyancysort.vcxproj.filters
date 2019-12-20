@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\oeis_org">
+      <UniqueIdentifier>{4db7ca04-e425-4229-b79c-f95a8dfc9cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\oeis_org\A014491">
+      <UniqueIdentifier>{c74b8ea2-18a1-404c-93fc-c983e4f90c7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,6 +147,9 @@
     <ClInclude Include="out-of-place-shellsort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="binary-nth-power.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -152,5 +161,10 @@
     <ClCompile Include="primality-test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="b014491.txt">
+      <Filter>Resource Files\oeis_org\A014491</Filter>
+    </Text>
   </ItemGroup>
 </Project>
