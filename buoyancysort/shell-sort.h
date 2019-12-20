@@ -336,12 +336,12 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda2 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15905, 41326
+		1, 4, 10, 23, 57, 142, 361, 925, 2387, 6198, 16201, 42635 // 1, 4, 10, 23, 57, 142, 361, 925, 2387, 6198, 16201, 42635, 844012709:846105467 (2092758) ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 40000, 100000, 500);
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda3 = // This is a surprisingly good gap sequence. I don't know if it's performance gets worse asymptotically, though
+	std::vector<long> extrapolated_ciura_tokuda3 = // slightly worse again, but probably similarly competitive (unless an unstable equilibrium is involved) // because this is worse, I conjecture analyzing the optimal ShellSort gap sequence is best done after applying the cumulative sum.
 	{
-		1, 4, 11, 26, 57, 120, 247, 502, 1013, 2036, 4083, 8178, 16369
+		1, 4, 10, 25, 62, 155
 	};
 
 	// TODO: Review http://oeis.org/A221313
