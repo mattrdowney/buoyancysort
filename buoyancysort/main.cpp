@@ -70,12 +70,20 @@ int main()
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
 	std::vector<long> gap_sequence1 = ShellSort::extrapolated_ciura_tokuda1;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura4, 25);
-	std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda2;
+	std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda4;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
 	//std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda3;
 	//ShellSort::empirical_comparison_range(gap_sequence1, gap_sequence2, 45000, 120000, 40991, 41200, 41);
 	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 40000, 100000, 500);
 	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence1, 50000, 100000, 41286, 41342-20, 41342+20, 11);
+
+	// 1, 4, 10, 23, 55, 143, 405, 1228, 3910, 12884, 43516, 149730, 522742, 1846666, 6587930, 23698479, 85861543, 313027067, 1147476081, 848473387:883022930 (34549543) // ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 40000, 100000, 500);
+	// Extra comparisons: ((34549543/500 trials)/((40000+100000)/2)) average or ~0.9871298; I'm thinking that may not be a coincidence (and it's related to "analytical overloading" as I call it)
+	// One idea: before starting the ShellSort, always do something similar to Median-Of-Medians.
+	// It's hard to figure out how far to take this, but since this Catalan convolution sequence seems to be far greater than any finite multiplier you need something to ensure it works for large arrays.
+	// The original idea was to compare groups of five, so you would at least have some reliable sorting at the beginning (because you can get really unlucky asymptotically).
+	// I think there's probably a better idea, perhaps one that no longer uses ShellSort.
+	// Also, one thing I've been pretty curious about for a while: what is the constant factor of the best ShellSort? E.g. is it similar to Apéry's constant -- "The reciprocal of zeta(3) is the probability that any three positive integers, chosen at random, will be relatively prime" - https://en.wikipedia.org/wiki/Ap%C3%A9ry%27s_constant
 
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
