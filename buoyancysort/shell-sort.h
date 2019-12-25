@@ -334,24 +334,34 @@ namespace ShellSort
 		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15905, 41326
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda2 =
+	std::vector<long> extrapolated_ciura_tokuda5 =
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2387, 6198, 16201, 42635 // 1, 4, 10, 23, 57, 142, 361, 925, 2387, 6198, 16201, 42635, 844012709:846105467 (2092758) ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 40000, 100000, 500);
+		1, 4, 10, 23, 57, 145, 361, 925, 2383, 6150, 15905, 41326
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda3 = // slightly worse again, but probably similarly competitive (unless an unstable equilibrium is involved) // because this is worse, I conjecture analyzing the optimal ShellSort gap sequence is best done after applying the cumulative sum.
+	std::vector<long> extrapolated_ciura_tokuda6 =
 	{
-		1, 4, 10, 25, 62, 155
+		1, 4, 10, 23, 57, 145, 373, 957, 2449, 6267, 16045, 41083
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda4 = // Differences of https://oeis.org/A014316
+	std::vector<long> extrapolated_ciura_tokuda7 =
 	{
-		1, 4, 10, 23, 57, 145, 405, 1228, 3910, 12884, 43516, 149730, 522742, 1846666, 6587930, 23698479, 85861543, 313027067, 1147476081 //, 4226826985, 15637561499, 58078683453, 216468636067
+		1, 4, 10, 23, 57, 142, 361, 930, 2401, 6192, 15937, 40936
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda5 = // Differences of https://oeis.org/A014316
+	std::vector<long> extrapolated_ciura_tokuda8 =
 	{
-		1, 4, 10, 23, 59, 146, 405, 1228, 3910, 12884, 43516, 149730, 522742, 1846666, 6587930, 23698479, 85861543, 313027067, 1147476081 //, 4226826985, 15637561499, 58078683453, 216468636067
+		1, 4, 10, 23, 57, 145, 374, 958, 2450, 6268, 16045, 41083
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda9 =
+	{
+		1, 4, 10, 23, 55, 143, 373, 960, 2452, 6267, 16041, 41079
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda10 =
+	{
+		1, 4, 10, 23, 57, 145, 361, 945, 2437, 6255, 16045, 41083
 	};
 
 	// TODO: Review http://oeis.org/A221313
