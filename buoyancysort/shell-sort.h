@@ -331,37 +331,13 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
 	{
+		1, 4, 10, 23, 57, 145, 364, 931, 2395, 6165, 15916, 41332
+		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda1_old =
+	{
 		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15905, 41326
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda5 =
-	{
-		1, 4, 10, 23, 57, 145, 361, 925, 2383, 6150, 15905, 41326
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda6 =
-	{
-		1, 4, 10, 23, 57, 145, 373, 957, 2449, 6267, 16045, 41083
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda7 =
-	{
-		1, 4, 10, 23, 57, 142, 361, 930, 2401, 6192, 15937, 40936
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda8 =
-	{
-		1, 4, 10, 23, 57, 145, 374, 958, 2450, 6268, 16045, 41083
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda9 =
-	{
-		1, 4, 10, 23, 55, 143, 373, 960, 2452, 6267, 16041, 41079
-	};
-
-	std::vector<long> extrapolated_ciura_tokuda10 =
-	{
-		1, 4, 10, 23, 57, 145, 361, 945, 2437, 6255, 16045, 41083
 	};
 
 	// TODO: Review http://oeis.org/A221313
