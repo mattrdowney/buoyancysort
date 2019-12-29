@@ -74,26 +74,8 @@ int main()
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
 	//std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda3;
 	//ShellSort::empirical_comparison_range(gap_sequence1, gap_sequence2, 45000, 120000, 40991, 41200, 41);
-	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 42000, 100000, 500);
+	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 2500, 5000, 500);
 	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence1, 42000, 100000, 41326, 41326+1, 41326+50, 41);
-
-	//1, 3, 8, 19, 47, 117, 289, 1455, 7331, 36987, 186619, 941531, 881834461:992186266 (110351805) //ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 42000, 100000, 500); -- compare to my best sequence
-	//1, 3, 8, 19, 47, 117, 289, 1455, 7331, 36987, 186619, 941531, 937280686:1151640007 (214359321) // ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 200000, 1000000, 50); -- compare to Tokuda
-
-	// then add intermediate values -- no multiplier of ~5 after 289
-
-	// 1, 3, 8, 19, 47, 117, 289, 1455, 3266, 7331, 16467, 36987, 83081, 186619, 419175, 941531, 895795456:925633717 (29838261) // ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 200000, 1000000, 50); -- compare to Tokuda
-	// 1, 3, 8, 19, 47, 117, 289, 1455, 3266, 7331, 16467, 36987, 83081, 186619, 419175, 941531, 873949013:906853855 (32904842) //ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 42000, 100000, 500); -- compare to my best sequence
-
-	// doesn't seem to work that well. Switching back to old concept
-
-	// 1, 4, 10, 23, 57, 145, 364, 917, 2312, 5832, 14711, 37113, 93625, 236190, 595844, 884728670:888618278 (3889608) //ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 42000, 100000, 500); -- compare to my best sequence
-
-	// Even that doesn't work well. Well, at least number theory + ShellSort is an interesting and challenging problem.
-	// If I knew the asymptotic multiplier I think the problem would be a lot easier, but where's the fun in that.
-
-	// Just in case the error (missing value between 289 and 1455) changed the outcome:
-	// 1, 3, 8, 19, 47, 117, 289, 648, 1455, 3266, 7331, 16467, 36987, 83081, 186619, 419175, 941531, 873060738:885654654 (12593916) //ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 42000, 100000, 500); -- compare to my best sequence
 
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 

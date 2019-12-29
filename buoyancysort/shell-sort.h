@@ -335,15 +335,19 @@ namespace ShellSort
 		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
 	};
 
-	// Apply interpolation technique: // floating comment, this was related to the 1, 3, 8, 19, 47, 117, 289, 1455, 7331... gap sequence (which has a mutliplier of ~5 after 289) // lol, apparently I didn't interpolate one value in that sequence: 289->1455
-	// E.g. 1455*sqrt((1455/7331)^-1) ~= 3266
-	// 3266/1455 ~= 7331/3266
 	std::vector<long> new_shellsort_gap_sequence = 
 	{
-		//1, 4, 10, 23, 57, 145, 364, 917, 2312, 5832, 14711, 37113, 93625, 236190, 595844
-		1, 3, 8, 19, 47, 117, 289, 648, 1455, 3266, 7331, 16467, 36987, 83081, 186619, 419175, 941531
+		1, 4, 10, 23, 57, 145, 364, 919, 2324
 	};
 
+	// If you look at "ratios (cumulative sum 1, 4, 10, 23, 57, 145, 364)" in Wolfram Alpha
+	// You get {5, 3, 38/15, 5/2, 48/19, 151/60}
+	// I would like to observe that the form seems to alternate between even/odd and odd/even and after the inflection point there seems to be a prime wherever there is an odd number.
+	// There's other interesting points (e.g. the ratios of the even numbers (2/38), (48/2), (60/48) -- which has a symmetry around the inflection point with a new 19, and ratios of 24x and 1.25x in the other two ratios)
+	// All of this is making me think ShellSort mostly works by sorting with Pratt/Tokuda's 2s and 3s (essentially).
+	// Hmmm, but I can't continue this trend.
+	// It seems like I'm locked into 151 on the denominator of the next term. Oh wait, that's fine as long as it's multiplied by 2 or 4 (since you have to get rid of the old prime number), so the even/odd thing is only true at the beginning and it also explains why the 19 is there again.
 
-	// TODO: Review http://oeis.org/A221313
+	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
+	// TODO: array size-tailored ShellSort (this could be the requirement that improves the worst case to O(n*lg(n)))
 }
