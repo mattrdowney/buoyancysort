@@ -335,10 +335,15 @@ namespace ShellSort
 		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
 	};
 
-	std::vector<long> extrapolated_ciura_tokuda1_old =
+	// Apply interpolation technique: // floating comment, this was related to the 1, 3, 8, 19, 47, 117, 289, 1455, 7331... gap sequence (which has a mutliplier of ~5 after 289) // lol, apparently I didn't interpolate one value in that sequence: 289->1455
+	// E.g. 1455*sqrt((1455/7331)^-1) ~= 3266
+	// 3266/1455 ~= 7331/3266
+	std::vector<long> new_shellsort_gap_sequence = 
 	{
-		1, 4, 10, 23, 57, 142, 361, 925, 2383, 6150, 15905, 41326
+		//1, 4, 10, 23, 57, 145, 364, 917, 2312, 5832, 14711, 37113, 93625, 236190, 595844
+		1, 3, 8, 19, 47, 117, 289, 648, 1455, 3266, 7331, 16467, 36987, 83081, 186619, 419175, 941531
 	};
+
 
 	// TODO: Review http://oeis.org/A221313
 }
