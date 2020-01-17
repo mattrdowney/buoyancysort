@@ -70,7 +70,7 @@ int main()
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
 	std::vector<long> gap_sequence1 = ShellSort::extrapolated_ciura_tokuda1;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura4, 25);
-	std::vector<long> gap_sequence2 = ShellSort::new_shellsort_gap_sequence;
+	std::vector<long> gap_sequence2 = ShellSort::newest_shellsort_gap_sequence;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
 	//std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda3;
 	//ShellSort::empirical_comparison_range(gap_sequence1, gap_sequence2, 45000, 120000, 40991, 41200, 41);
