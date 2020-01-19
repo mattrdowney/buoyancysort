@@ -335,10 +335,11 @@ namespace ShellSort
 		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
 	};
 
-	std::vector<long> best_known_shellsort_gap_sequence =
+	std::vector<long> highway_13_shellsort_gap_sequence =
 	{
-		// 1 + -1*0, 1 + 1*3, 1 + 3*4, 1 + 5*7, |||| 1 + 7*14, 1 + 9*29
-		1, 4, 13, 36, 96, 258, 673, 1745
+		// 1 + -1*0, 1 + 1*3, 1 + 2*6, 1 + 5*7, |||| 1 + 7*14, 1 + 9*29
+		1, 4, 13, 36, 96, 247, 618, 1604
+		// ?, Fermat Number + 1, prime, ?, ?, Fermat Number + 1 (no longer true, 258->247), prime, ?
 	};
 
 	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
