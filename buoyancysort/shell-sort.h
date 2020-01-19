@@ -335,9 +335,10 @@ namespace ShellSort
 		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
 	};
 
-	std::vector<long> newest_shellsort_gap_sequence =
+	std::vector<long> best_known_shellsort_gap_sequence =
 	{
-		1, 4, 10, 23, 57, 134, 313, 730, 1701, 3960, 9217, 21451, 49919, 116167, 270331, 629079
+		// 1 + -1*0, 1 + 1*3, 1 + 3*4, 1 + 5*7, |||| 1 + 7*14, 1 + 9*29
+		1, 4, 13, 36, 96, 258, 673, 1745
 	};
 
 	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
