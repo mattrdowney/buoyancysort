@@ -337,10 +337,60 @@ namespace ShellSort
 
 	std::vector<long> highway_13_shellsort_gap_sequence =
 	{
-		// 1 + -1*0, 1 + 1*3, 1 + 2*6, 1 + 5*7, |||| 1 + 7*14, 1 + 9*29
 		1, 4, 13, 36, 96, 247, 618, 1604
-		// ?, Fermat Number + 1, prime, ?, ?, Fermat Number + 1 (no longer true, 258->247), prime, ?
 	};
+
+	std::vector<long> highway_13_shellsort_gap_sequence2 = // a bit worse than expected // https://oeis.org/A031506 // I should really just pull all oeis.org sequences and try them with ShellSort sometime.
+	{
+		1, 4, 13, 36, 96, 253, 664, 1740, 4557, 11932, 31240, 81789, 214128, 560596, 1467661, 3842388, 10059504 // asymptotic ratio 1 + phi, or phi^2
+		// Even though this isn't that good, I think it's probably the sequence I'm looking for.
+	};
+
+	std::vector<long> highway_13_and_23_shellsort_gap_sequence =
+	{
+		// Splice together https://oeis.org/A226845 and https://oeis.org/A031506 (alternating), eventually the sequence becomes non-monotonic since the multipliers are 1+phi and ~2.56
+		   1, // the 1 is a part of the right group, I just didn't format properly
+		3, 4,
+		9, 13,
+		23, 36,
+		57, 96,
+		145, 253,
+		373, 664,
+		957, 1740,
+		2449, 4557,
+		6267, 11932,
+		16045, 31240,
+		41083, 81789,
+		105185, 214128,
+		269297, 560596,
+		689465, 1467661,
+		1765209, 3842388,
+		4519393, 10059504
+	};
+
+	std::vector<long> highway_13_and_23_shellsort_gap_sequence2 =
+	{
+		// Splice together https://oeis.org/A221313 and https://oeis.org/A031506 (alternating), eventually the sequence becomes non-monotonic since the multipliers are 1+phi and ~2.4863...
+		1,
+		4,
+		9, 13,
+		23, 36,
+		57, 96,
+		142, 253,
+		353, 664,
+		878, 1740,
+		2183, 4557,
+		5428, 11932,
+		13496, 31240,
+		33556, 81789,
+		83432, 214128,
+		207441, 560596,
+		515770, 1467661,
+		1282382, 3842388,
+		3188443, 10059504
+	};
+
+	// Both of these are ~1.18 times worse than Tokuda, which makes me think the actual gap sequence including 23 is between http://oeis.org/A221313 and http://oeis.org/A226845
 
 	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
 	// TODO: array size-tailored ShellSort (this could be the requirement that improves the worst case to O(n*lg(n)))
