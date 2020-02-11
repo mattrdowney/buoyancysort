@@ -67,7 +67,7 @@ namespace ShellSort
 		// Optimization: when budget exceeds above or dwindles below it's Goldilocks zone, you should switch from one gap sequence number to another.
 	}
 
-    const double e = 2.718281828459045235360287471352662497757247093699959574966;
+	const double e = 2.718281828459045235360287471352662497757247093699959574966;
 	const double pi = 3.141592653589793238462643383279502884197169399375105;
 
 	std::vector<long> generalized_pratt(std::set<long> factors_list, long last_value, bool exponentiate = true)
@@ -219,15 +219,15 @@ namespace ShellSort
 
 	std::function<long(long)> extrapolated_invisal = [](long n) // g(k) = (e - 1/5) * g(k-1) + zeta(-1) * k, g(0) = 1
 	{
-		double ratio = e - 1./5;
-		double skew = -1./12;
+		double ratio = e - 1. / 5;
+		double skew = -1. / 12;
 		return generalized_tokuda(n, ratio, skew);
 	};
 
 	std::function<long(long)> extrapolated_ciura = [](long n) // g(k) = (5 - e) * g(k-1) + zeta(2) * k, g(0) = 1
 	{
 		double ratio = 5 - e;
-		double skew = +pi*pi/6;
+		double skew = +pi * pi / 6;
 		return generalized_tokuda(n, ratio, skew);
 	};
 
@@ -327,12 +327,11 @@ namespace ShellSort
 		21479367, 49095696, 114556624, 343669872, 852913488, 2085837936
 	};
 
-	std::vector<long> invisal_gap_sequence = gap_sequence_generator([](int n) { return ceil(pow(2.48, n-1)); }, 20);
+	std::vector<long> invisal_gap_sequence = gap_sequence_generator([](int n) { return ceil(pow(2.48, n - 1)); }, 20);
 
-	std::vector<long> extrapolated_ciura_tokuda1 = // Conjecture: g(k)^(1/k) = e (2.71828...) as k approaches infinity -- actually, I'm pretty sure this can't be true unless the multiplier approaches e (which seems incorrect, but asymptotics are often slow)
+	std::vector<long> extrapolated_ciura_tokuda1 =
 	{
 		1, 4, 10, 23, 57, 145, 364, 931, 2395, 6165, 15916, 41332
-		// hypothesis: +3, +6, +12, +24, +48 (compared to previous), so 6174 next (hypothesis was wrong, performed worse too (not just a minimal improvement))
 	};
 
 	std::vector<long> highway_13_shellsort_gap_sequence =
@@ -340,58 +339,63 @@ namespace ShellSort
 		1, 4, 13, 36, 96, 247, 618, 1604
 	};
 
-	std::vector<long> highway_13_shellsort_gap_sequence2 = // a bit worse than expected // https://oeis.org/A031506 // I should really just pull all oeis.org sequences and try them with ShellSort sometime.
+	std::vector<long> highway_23_shellsort_gap_sequence = // pi function(floor(((7/4)^2)^k)), k = 1 to 23
 	{
-		1, 4, 13, 36, 96, 253, 664, 1740, 4557, 11932, 31240, 81789, 214128, 560596, 1467661, 3842388, 10059504 // asymptotic ratio 1 + phi, or phi^2
-		// Even though this isn't that good, I think it's probably the sequence I'm looking for.
+		1, 4, 10, 23, 57, 143, 369, 981, 2637, 7177, 19798, 55115, 154741, 437369, 1243773, 3554950, 10206254, 29417801, 85088893
 	};
 
-	std::vector<long> highway_13_and_23_shellsort_gap_sequence =
+	std::vector<long> highway_23_shellsort_gap_sequence2 = // pi function(floor((e)^k)), k = 1 to 23 // here onwards has nothing to do with 23 beyond that irrelevant k = 1..23
 	{
-		// Splice together https://oeis.org/A226845 and https://oeis.org/A031506 (alternating), eventually the sequence becomes non-monotonic since the multipliers are 1+phi and ~2.56
-		   1, // the 1 is a part of the right group, I just didn't format properly
-		3, 4,
-		9, 13,
-		23, 36,
-		57, 96,
-		145, 253,
-		373, 664,
-		957, 1740,
-		2449, 4557,
-		6267, 11932,
-		16045, 31240,
-		41083, 81789,
-		105185, 214128,
-		269297, 560596,
-		689465, 1467661,
-		1765209, 3842388,
-		4519393, 10059504
+		1, 4, 8, 16, 34, 79, 183, 429, 1019, 2466, 6048, 14912, 37128, 93117, 234855, 595341, 1516233, 3877186, 9950346, 25614562, 66124777, 171141897, 443963543
 	};
 
-	std::vector<long> highway_13_and_23_shellsort_gap_sequence2 =
+	std::vector<long> highway_23_shellsort_gap_sequence3 = // pi function(floor((2.8)^k)), k = 1 to 23
 	{
-		// Splice together https://oeis.org/A221313 and https://oeis.org/A031506 (alternating), eventually the sequence becomes non-monotonic since the multipliers are 1+phi and ~2.4863...
+	    1, 4, 8, 18, 39, 92, 217, 525, 1290, 3214, 8102, 20618, 52841, 136492, 354823, 926664, 2431685, 6405908, 16934813, 44909372, 119433192, 318430767, 850944168
+    };
+
+	std::vector<long> highway_23_shellsort_gap_sequence4 = // pi function(floor((3)^k)), k = 1 to 23 // http://oeis.org/A055729
+	{
+		1, 4, 9, 22, 53, 129, 327, 847, 2227, 5968, 16097, 43934, 120739, 334349, 931260, 2607165, 7332159, 20700806, 58648288, 166677978, 475023803, 1357200840
+	};
+
+	std::vector<long> highway_37_shellsort_gap_sequence = // http://oeis.org/A080145 // worse than original by a factor of 1.5% around max array size
+	{
+		1, 4, 13, 37, 101, 269, 710, 1865, 4890, 12810, 33546, 87834, 229963, 602062, 1576231, 4126639, 10803695, 28284455, 74049680 // asymptotic ratio 1 + phi, or phi^2
+	};
+
+	std::vector<long> hybrid_of_best_sequences = // http://oeis.org/A080145 // worse than original by a factor of 1.5% around max array size
+	{
+		1, 4, 13, 36, 57, 145, 364, 931, 2395, 6165, 15916, 41332 // worse (also, I was pretty sure I had already tried this)
+	};
+
+
+
+	std::vector<long> highway_23_and_37_shellsort_gap_sequence = // This does significantly better than my last version. I should really make a function for benchmarking these. You can no longer brute force the oeis.org sequences since you would have n^2 combinations.
+	{
 		1,
 		4,
-		9, 13,
-		23, 36,
-		57, 96,
-		142, 253,
-		353, 664,
-		878, 1740,
-		2183, 4557,
-		5428, 11932,
-		13496, 31240,
-		33556, 81789,
-		83432, 214128,
-		207441, 560596,
-		515770, 1467661,
-		1282382, 3842388,
-		3188443, 10059504
+		10, 13,
+		23, 37,
+		57, 101,
+		143, 269,
+		369, 710,
+		981, 1865,
+		2637, 4890,
+		7177, 12810,
+		19798, 33546,
+		55115, 87834,
+		154741, 229963,
+		437369, 602062,
+		1243773, 1576231,
+		3554950, 4126639,
+		10206254, 10803695,
+		29417801, 28284455,
+		85088893, 74049680
 	};
-
-	// Both of these are ~1.18 times worse than Tokuda, which makes me think the actual gap sequence including 23 is between http://oeis.org/A221313 and http://oeis.org/A226845
 
 	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
 	// TODO: array size-tailored ShellSort (this could be the requirement that improves the worst case to O(n*lg(n)))
+
+	// Really just trying every oeis.org sequence would be -too easy-
 }
