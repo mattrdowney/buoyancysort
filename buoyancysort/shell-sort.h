@@ -339,138 +339,15 @@ namespace ShellSort
 		1, 4, 13, 36, 96, 247, 618, 1604
 	};
 
-	std::vector<long> highway_13_final_ish =
+	std::vector<long> eulerian_numbers = // http://oeis.org/A000295
 	{
-		1, 4, 13, 38, 105, 282, 747, 1966, 5159, 13520, 35411, 92724, 242773, 635608, 1664065, 4356602, 11405757, 29860686
+		1, 4, 11, 26, 57, 120, 247, 502, 1013, 2036, 4083, 8178, 16369, 32752, 65519, 131054, 262125, 524268, 1048555, 2097130
 	};
 
-	std::vector<long> highway_7_final_ish =
+	std::vector<long> generating_function_roots = // custom based on generating function's minimum roots for n^2, n^3, n^4, n^5, n^6...
 	{
-		1, 3, 7, 16, 38, 94, 239, 617, 1605, 4190, 10956, 28668, 75037, 196431, 514243, 1346284, 3524594, 9227482, 24157835, 63246005
+		1, 4, 10, 23, 51, 109, 229, 471, 964, 1959, 3963, 7994
 	};
 
-	std::vector<long> highway_29_final_ish =
-	{
-		1, 4, 9, 29, 83, 226, 602, 1588, 4171, 10935, 28645, 75012, 196404, 514214, 1346253, 3524561, 9227447
-	};
-
-	std::vector<long> highway_non_monotonic =
-	{
-		1, 2,
-		3, 9,
-		7, 29,
-		16, 83,
-		38, 226,
-		94, 602,
-		239, 1588,
-		617, 4171,
-		1605, 10935,
-		4190, 28645,
-		10956, 75012,
-		28668, 196404,
-		75037, 514214,
-		196431, 1346253,
-		514243, 3524561,
-		1346284, 9227447,
-		3524594
-	};
-
-	std::vector<long> highway_non_monotonic_sine = // these systems are hard to test within the confines of our universe, though they may theoretically have some use. You can probably test them empirically, but it's non-trivial to take the extra comparisons into account.
-	{
-		/*1, 1, 2,*/ 1,
-		3, 4, 9, 4,
-		7, 13, 29, 13,
-		16, 38, 83, 38,
-		38, 105, 226, 105,
-		94, 282, 602, 282,
-		239, 747, 1588, 747,
-		617, 1966, 4171, 1966,
-		1605, 5159, 10935, 5159,
-		4190, 13520, 28645, 13520,
-		10956, 35411, 75012, 35411,
-		28668, 92724, 196404, 92724,
-		75037, 242773, 514214, 242773,
-		196431, 635608, 1346253, 635608,
-		514243, 1664065, 3524561, 1664065,
-		1346284, 4356602, 9227447, 4356602,
-		3524594, 11405757
-	};
-
-	std::vector<long> highway_non_monotonic_sine_hybrid =
-	{
-		1, 4, 13, 36,
-
-		94, 282, 602, 282,
-		239, 747, 1588, 747,
-		617, 1966, 4171, 1966,
-		1605, 5159, 10935, 5159,
-		4190, 13520, 28645, 13520,
-		10956, 35411, 75012, 35411,
-		28668, 92724, 196404, 92724,
-		75037, 242773, 514214, 242773,
-		196431, 635608, 1346253, 635608,
-		514243, 1664065, 3524561, 1664065,
-		1346284, 4356602, 9227447, 4356602,
-		3524594, 11405757
-	};
-
-	std::vector<long> highway_23_shellsort_gap_sequence = // pi function(floor(((7/4)^2)^k)), k = 1 to 23
-	{
-		1, 4, 10, 23, 57, 143, 369, 981, 2637, 7177, 19798, 55115, 154741, 437369, 1243773, 3554950, 10206254, 29417801, 85088893
-	};
-
-	std::vector<long> highway_23_shellsort_gap_sequence2 = // pi function(floor((e)^k)), k = 1 to 23 // here onwards has nothing to do with 23 beyond that irrelevant k = 1..23
-	{
-		1, 4, 8, 16, 34, 79, 183, 429, 1019, 2466, 6048, 14912, 37128, 93117, 234855, 595341, 1516233, 3877186, 9950346, 25614562, 66124777, 171141897, 443963543
-	};
-
-	std::vector<long> highway_23_shellsort_gap_sequence3 = // pi function(floor((2.8)^k)), k = 1 to 23
-	{
-	    1, 4, 8, 18, 39, 92, 217, 525, 1290, 3214, 8102, 20618, 52841, 136492, 354823, 926664, 2431685, 6405908, 16934813, 44909372, 119433192, 318430767, 850944168
-    };
-
-	std::vector<long> highway_23_shellsort_gap_sequence4 = // pi function(floor((3)^k)), k = 1 to 23 // http://oeis.org/A055729
-	{
-		1, 4, 9, 22, 53, 129, 327, 847, 2227, 5968, 16097, 43934, 120739, 334349, 931260, 2607165, 7332159, 20700806, 58648288, 166677978, 475023803, 1357200840
-	};
-
-	std::vector<long> highway_37_shellsort_gap_sequence = // http://oeis.org/A080145 // worse than original by a factor of 1.5% around max array size
-	{
-		1, 4, 13, 37, 101, 269, 710, 1865, 4890, 12810, 33546, 87834, 229963, 602062, 1576231, 4126639, 10803695, 28284455, 74049680 // asymptotic ratio 1 + phi, or phi^2
-	};
-
-	std::vector<long> hybrid_of_best_sequences = // http://oeis.org/A080145 // worse than original by a factor of 1.5% around max array size
-	{
-		1, 4, 13, 36, 57, 145, 364, 931, 2395, 6165, 15916, 41332 // worse (also, I was pretty sure I had already tried this)
-	};
-
-
-
-	std::vector<long> highway_23_and_37_shellsort_gap_sequence = // This does significantly better than my last version. I should really make a function for benchmarking these. You can no longer brute force the oeis.org sequences since you would have n^2 combinations.
-	{
-		1,
-		4,
-		10, 13,
-		23, 37,
-		57, 101,
-		143, 269,
-		369, 710,
-		981, 1865,
-		2637, 4890,
-		7177, 12810,
-		19798, 33546,
-		55115, 87834,
-		154741, 229963,
-		437369, 602062,
-		1243773, 1576231,
-		3554950, 4126639,
-		10206254, 10803695,
-		29417801, 28284455,
-		85088893, 74049680
-	};
-
-	// TODO: Review http://oeis.org/A221313 and http://oeis.org/A226845
-	// TODO: array size-tailored ShellSort (this could be the requirement that improves the worst case to O(n*lg(n)))
-
-	// Really just trying every oeis.org sequence would be -too easy-
+	// Really just trying every oeis.org sequence would be -too easy- (to be fair, there are a lot of sequences, but you can prioritize them by relevance (and drop certain ones entirely e.g. base tricks). Just by running from A000000 upwards you would start with the "more important" sequences.
 }
