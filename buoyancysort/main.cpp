@@ -68,18 +68,20 @@ int main()
 	//IntThatTracksComparisons::reset_comparisons();
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	std::vector<long> gap_sequence1 = ShellSort::extrapolated_ciura_tokuda1;
+	std::vector<long> gap_sequence1 = ShellSort::tokuda_gap_sequence;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::generalized_ciura4, 25);
-	std::vector<long> gap_sequence2 = ShellSort::highway_23_and_37_shellsort_gap_sequence2;
+	std::vector<long> gap_sequence2 = ShellSort::highway_7_final_ish;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
 	//std::vector<long> gap_sequence2 = ShellSort::extrapolated_ciura_tokuda3;
 	//ShellSort::empirical_comparison_range(gap_sequence1, gap_sequence2, 45000, 120000, 40991, 41200, 41);
-	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 50000, 100000, 10);
+	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 1000000, 10000000, 10);
 	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence1, 3900, 9750, 1557, 1557-50, 1557+50, 3000);
+
+	// 1, 3, 7, 16, 38, 94, 239, 617, 1605, 4190, 10956, 28668, 75037, 196431, 514243, 1346284, 3524594, 9227482, 24157835, 63246005, 2,036,150,197:2,100,479,532 (64,329,335) // ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 1000000, 10000000, 10); // tokuda_gap_sequence versus highway_7_final_ish // certified Not Terrible^TM // an extra 3.15936099% work
 
 	//long long comparisons = IntThatTracksComparisons::get_comparisons();
 
-	//Sorted::verify((current_type*)data.data(), -1, size);
+	//Sorted::verify((current_type*)data.data(), -1, size); 64329335/2036150197
 	//Print::print((current_type*)data.data(), -1, size);
 
 	//HeapTests::test_min_heap<current_type>((current_type*)data.data(), -1, size, tuple_size);
