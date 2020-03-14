@@ -27,7 +27,6 @@ namespace ShellSort
 			}
 			for (long unsorted_cursor = (before_first + 1) + gap; unsorted_cursor < after_last; unsorted_cursor += 1)
 			{
-				int a;
 				Type temp = data[unsorted_cursor];
 				long insertion_cursor;
 				for (insertion_cursor = unsorted_cursor; insertion_cursor - (before_first + 1) >= gap && data[insertion_cursor - gap] > temp; insertion_cursor -= gap)
@@ -231,6 +230,15 @@ namespace ShellSort
 		return generalized_tokuda(n, ratio, skew);
 	};
 
+	std::function<long(long)> modified_tokuda = [](long n)
+	{
+		// ceil((7/4)^(n+1) * ((3 sqrt(2) - e + ln(9/4))/ln(6))^n)
+		double rational_multiplier = (7. / 4.);
+		double other_multiplier = (3. * sqrt(2) - e + log(9. / 4.)) / log(6.);
+		
+		return (long)ceil(pow(rational_multiplier, n+1) * pow(other_multiplier, n));
+	};
+
 	// long overdue
 	void empirical_comparison(std::vector<long> gap_sequence1, std::vector<long> gap_sequence2, long lower_size, long upper_size, int tests = 41)
 	{
@@ -317,7 +325,9 @@ namespace ShellSort
 
 	std::vector<long> tokuda_gap_sequence =
 	{
-		1, 4, 9, 20, 46, 103, 233, 525, 1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
+		//1, 4, 9, 20, 46, 103, 233, 525, 
+		1, 4, 10, 23, 57, 132, 301, 701,
+		1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
 		3931496, 8845866, 19903198, 44782196, 100759940, 226709866, 510097200, 1147718700
 	};
 
@@ -348,6 +358,41 @@ namespace ShellSort
 	{
 		1, 4, 10, 23, 51, 109, 229, 471, 964, 1959, 3963, 7994
 	};
+
+	std::vector<long> modified_tokuda2 =
+	{
+		//1, 4, 10, 21, 48, 109, 247, 562, 1282, 2924, 6669, 15210, 34692, 79128, 180478, 411646, 938906, 2141514, 4884497, 11140863, 25410769, 57958455, 132195230, 301519061, 687723333, 1568601937
+		1, 4, 10, 23, 53, 109, 251, 563, 1283, 2927, 6673, 15217, 34693, 79133, 180491, 411667, 938921
+	};
+
+	std::vector<long> old_modified_tokuda =
+	{
+		1, 4, 9, 23, 57, 137, 307, 701, 1607, 3673, 8387, 19157, 43691, 99707, 227489, 519067
+	};
+
+	std::vector<long> modified_tokuda3 =
+	{
+		//1, 4, 10, 21, 48, 109, 247, 562, 1282, 2924, 6669, 15210, 34692, 79128, 180478, 411646, 938906, 2141514, 4884497, 11140863, 25410769, 57958455, 132195230, 301519061, 687723333, 1568601937
+		1, 4, 10, 23, 47, 109, 241, 563, 1279, 2927, 6661, 15217, 34687, 79133, 180473, 411667, 938881, 2141519, 4884497
+	};
+
+	// g(n) = (11^2/7^2) * g(n-1) + 1, g(0) = 1
+	// 1/72 (-49 + 49^(-n) 121^(1 + n))
+	//std::vector<long> probably_reliable14 = gap_sequence_generator([](int n) { return ceil(1.0/72 * (-49 + pow(49,(-n)) * pow(121,(1 + n)))); }, 20);
+	std::vector<long> probably_reliable14 =
+	{
+		1, 4, 10, 25, 62, 154, 381, 941, 2323, 5738,
+		14169, 34989, 86402, 213360, 526869, 1301045, 3212784, 7933609, 19591157, 48378165,
+		119464448
+	};
+
+	std::vector<long> old_modified_tokuda2 =
+	{
+		// #Rekt (did not beat Ciura at all, for the billionth time) -- 1, 4, 10, 23, 57, 132, 305, 692 (and 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688)
+		// g(n) = 3^2/2^2 * g(n-1) + (1 - e^(-pi)) * n, g(0) = 1
+		// 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688
+		1, 4, 10, 23, 57, 132, 301, 701, 1607, 3672, 8387, 19142, 43688, 99692, 227481, 519058, 1184359, 2702385, 6166098, 14069311
+	}; // this is still modestly better than Tokuda's gap sequence in practical terms, but I feel like the theory could break apart asymptotically since I'm cheating (by using Ciura); also, more importantly, if you give Tokuda's sequence the same advantage it wins.
 
 	// Really just trying every oeis.org sequence would be -too easy- (to be fair, there are a lot of sequences, but you can prioritize them by relevance (and drop certain ones entirely e.g. base tricks). Just by running from A000000 upwards you would start with the "more important" sequences.
 }

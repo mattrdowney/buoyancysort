@@ -5,7 +5,7 @@
 
 namespace Hierarchysort
 {
-	const long run_size = 2; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
+	const long run_size = 32; // this doesn't actually have to be a power of two, but I think it's easier to teach/implement when it is. // As an aside, I wonder if the reason Insertion Sort tends to work well with size 4-16 (expected 8) arrays has to do with the lg(e) term in Stirling's approximation, which is related to the coincidental order in random permutations (the term might be 2^(lg(e^2)) or ~7.39) -- although I'm at least a little wrong because complexity coefficients are relevant too.
 	const long gap = 2;
 	const long double_run_size = run_size * gap;
 
@@ -145,8 +145,10 @@ namespace Hierarchysort
 		while (vlist_elements + double_run_size < size) // < instead of <= is intentional for a minor optimization for powers of two (it saves an O(n) copy operation which is significant).
 		{
 			// Sort two runs to be combined and inserted into the VList.
-			InsertionSort::sort(data, before_first + vlist_elements, (before_first + 1) + vlist_elements + run_size);
-			InsertionSort::sort(data, before_first + vlist_elements + run_size, (before_first + 1) + vlist_elements + double_run_size);
+			std::stable_sort(&data[(before_first + 1) + vlist_elements], &data[(before_first + 1) + vlist_elements + run_size]);
+			std::stable_sort(&data[(before_first + 1) + vlist_elements + run_size], &data[(before_first + 1) + vlist_elements + double_run_size]);
+			//InsertionSort::sort(data, before_first + vlist_elements, (before_first + 1) + vlist_elements + run_size);
+			//InsertionSort::sort(data, before_first + vlist_elements + run_size, (before_first + 1) + vlist_elements + double_run_size);
 
 			long merge_counter = double_run_size;
 			// You can do a lot of cool stuff with bit shifting. To get a VList index from a size you basically just bitshift/multiply by 2 (2 because there are 2n elements in the VList). If you need the second list just add 1 since they are interlaced.
