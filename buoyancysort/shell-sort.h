@@ -152,6 +152,43 @@ namespace ShellSort
 		return ceil(value);
 	};
 
+	std::function<long(long, double, double)> generalized_tokuda2 = [](long n, double ratio, double skew) // simplicity seems to work
+	{
+		double value = 1;
+		for (int iteration = 1; iteration < n; iteration += 1)
+		{
+			value = ratio * value + skew; // possible rationale for adding k on each iteration, every iteration costs one more (sort of like the "Two Egg Problem" with k eggs) so you have to account for the added cost on each step.
+		}
+		std::cout.precision(17);
+		std::cout << value << std::endl;
+		return ceil(value);
+	};
+
+	std::function<long(long)> generalized_invisal_best = [](long n)
+	{
+		// Equivalent to 1 2 3 5 8 16 37 92 243 649 1755 4757 12919 35104 95408 259330 704914 1916137 5208581 14158372 38486424 104616926 284378265 773020247
+		double ratio = 2.48; // it just feels natural
+		double skew = 64. / 85.;
+		return generalized_tokuda2(n, ratio, skew);
+		// ~10th try (more or less): 2.48, 0.753 (pretty good)
+		// also tried (maybe notable):
+		// 2.52, 0.64
+		// 2.502907875095892, 0.666666666
+		// 2.502907875095892, 0.697
+		// 2.48, ln(3) - ln(2)/2
+		// 2.48, ln(1/2*(e^2-pi))
+		// 2.48, 61/81
+		// 2.48, 64/85 (finally a better sequence -- with small sample size)
+	};
+
+	std::function<long(long)> generalized_invisal_test = [](long n)
+	{
+		// Equivalent to 1 2 3 5 8 16 37 92 243 649 1755 4757 12919 35104 95408 259330 704914 1916137 5208581 14158372 38486424 104616926 284378265 773020247
+		double ratio = 2.48; // it just feels natural
+		double skew = .7528;
+		return generalized_tokuda2(n, ratio, skew);
+	};
+
 	// Actually, this can't be swap-optimal, right? My first impression is that swap optimal should approximately be n-1, n-2, n-3, n-4... 3, 2, 1 (which isn't actually true, but I think there would be more gaps).
 	std::function<long(long)> natural_extension = [](long n)
 	{
@@ -393,6 +430,16 @@ namespace ShellSort
 		// 1, 3/4, 9/10, 23/24, 56/57, 131/132, 302/303, 687/688
 		1, 4, 10, 23, 57, 132, 301, 701, 1607, 3672, 8387, 19142, 43688, 99692, 227481, 519058, 1184359, 2702385, 6166098, 14069311
 	}; // this is still modestly better than Tokuda's gap sequence in practical terms, but I feel like the theory could break apart asymptotically since I'm cheating (by using Ciura); also, more importantly, if you give Tokuda's sequence the same advantage it wins.
+
+	std::vector<long> modified_invisal =
+	{
+		1, 4, 9, 22, 54, 133, 330, 818, 2029, 5031, 12476, 30940, 76731, 190293, 471927, 1170378, 2902537, 7198291, 17851761, 44272367, 109795470, 272292765, 675286057, 1674709420 //, 4153279362, 10300132818, 25544329388, 63349936883, 157107843470, 389627451805, 966276080477
+	};
+
+	std::vector<long> modified_invisal_original =
+	{
+		1, 3, 7, 16, 38, 94, 233, 577, 1431, 3549, 8801, 21826, 54128, 134237, 332908, 825611, 2047515, 5077835, 12593031, 31230716, 77452175, 192081394, 476361856, 1181377402
+	};
 
 	// Really just trying every oeis.org sequence would be -too easy- (to be fair, there are a lot of sequences, but you can prioritize them by relevance (and drop certain ones entirely e.g. base tricks). Just by running from A000000 upwards you would start with the "more important" sequences.
 }

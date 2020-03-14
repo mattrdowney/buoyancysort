@@ -49,7 +49,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Fx=ShellSort::<lambda_1f436e6320fbd598a4ed6b1fd342fbdc>
           ]
   Generating code
-  46 of 511 functions ( 9.0%) were compiled, the rest were copied from previous compilation.
+  3 of 592 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
