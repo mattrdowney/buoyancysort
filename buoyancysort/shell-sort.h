@@ -377,12 +377,12 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 =
 	{
-		1, 4, 10, 23, 57, 145, 364, 1173, 2990, 6165, 15916, 41332
+		1, 4, 10, 23, 57, 145, 364, 920, 2990, 6165, 15916, 41332
 	};
 
 	std::vector<long> extrapolated_ciura_tokuda_retry =
 	{
-		1, 4, 10, 23, 57, 145, 364, 1173, 2990, 6165, 15916, 41332
+		1, 4, 10, 23, 57, 145, 364, 920, 2990, 6165, 15916, 41332
 	};
 
 	std::vector<long> highway_13_shellsort_gap_sequence =
