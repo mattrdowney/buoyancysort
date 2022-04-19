@@ -348,7 +348,7 @@ namespace ShellSort
 
 	std::vector<long> ciura_gap_sequence =
 	{
-		1, 4, 10, 23, 57, 132, 301, 701,
+		1, 4, 10, 23, 57, 132, 301, 701, 1750 // 1750 is fake
 		// The following values are extrapolated via T(n) = floor(T(n-1)*2.25)
 		//1577, 3548, 7983, 17961, 40412, 90927, 204585, 460316, 1035711
 	};
@@ -362,8 +362,7 @@ namespace ShellSort
 
 	std::vector<long> tokuda_gap_sequence =
 	{
-		//1, 4, 9, 20, 46, 103, 233, 525, 
-		1, 4, 10, 23, 57, 132, 301, 701,
+		1, 4, 9, 20, 46, 103, 233, 525,
 		1182, 2660, 5985, 13467, 30301, 68178, 153401, 345152, 776591, 1747331,
 		3931496, 8845866, 19903198, 44782196, 100759940, 226709866, 510097200, 1147718700
 	};
@@ -378,7 +377,12 @@ namespace ShellSort
 
 	std::vector<long> extrapolated_ciura_tokuda1 =
 	{
-		1, 4, 10, 23, 57, 145, 364, 931, 2395, 6165, 15916, 41332
+		1, 4, 10, 23, 57, 145, 364, 1173, 2990, 6165, 15916, 41332
+	};
+
+	std::vector<long> extrapolated_ciura_tokuda_retry =
+	{
+		1, 4, 10, 23, 57, 145, 364, 1173, 2990, 6165, 15916, 41332
 	};
 
 	std::vector<long> highway_13_shellsort_gap_sequence =
@@ -441,5 +445,14 @@ namespace ShellSort
 		1, 3, 7, 16, 38, 94, 233, 577, 1431, 3549, 8801, 21826, 54128, 134237, 332908, 825611, 2047515, 5077835, 12593031, 31230716, 77452175, 192081394, 476361856, 1181377402
 	};
 
+	/// https://en.wikipedia.org/wiki/Heegner_number#Consecutive_primes (Heegner(n) - streak(Heegner(n)))
+	std::vector<long> heegner_minus_consecutive_prime_streaks =
+	{
+		//1, 2, 3, 5, 7, 11, 31, 53, 141
+		1, 4, 10, 31, 53, 141
+	};
+
 	// Really just trying every oeis.org sequence would be -too easy- (to be fair, there are a lot of sequences, but you can prioritize them by relevance (and drop certain ones entirely e.g. base tricks). Just by running from A000000 upwards you would start with the "more important" sequences.
 }
+
+

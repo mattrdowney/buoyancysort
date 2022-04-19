@@ -15,6 +15,8 @@ namespace ShellSort
 		// Probably inefficient to move elements when size is sufficiently small (possibly <=23)
 		// While there is theoretically a way to combine unwind and rewind operations to reduce copy operations, it should be cache incoherent (and probably should be avoided).
 
+		// This function is cache-oblivious, but when the array gets small enough it should just do in-place Shellsort (since it's wasteful to copy when the whole cache line fits in memory).
+
 		for (long gap_index = gap_sequence.size() - 1; gap_index >= 0; gap_index -= 1)
 		{
 			long gap = gap_sequence[gap_index];
