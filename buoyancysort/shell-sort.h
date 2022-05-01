@@ -392,7 +392,12 @@ namespace ShellSort
 
 	std::vector<long> highway_13_shellsort_gap_sequence2 =
 	{
-		1, 4, 13, 38, 95, 242, 604, 1521, 3802, 9501
+		1, 4, 13, 36, 99, 242, 559, 1453, 3741, 9450 //, 8128*pi approx?
+	};
+
+	std::vector<long> highway_perfect_shellsort_gap_sequence2 =
+	{
+		1, 10, 13, 145, 242, 2990, 9501
 	};
 
 	std::vector<long> eulerian_numbers = // http://oeis.org/A000295

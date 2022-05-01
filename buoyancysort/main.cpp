@@ -78,7 +78,7 @@ int main()
 	// Unoptimized hierarchysort (original, null hypothesis, 10,000,000, Release): 1.765 seconds 
 
 	//Hierarchysort::in_place<current_type>((current_type*)data.data(), -1, size);
-	std::vector<long> gap_sequence1 = ShellSort::tokuda_gap_sequence;
+	std::vector<long> gap_sequence1 = ShellSort::highway_13_shellsort_gap_sequence2;
 	//std::vector<long> gap_sequence1 = ShellSort::invisal_gap_sequence;
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::modified_tokuda, 25);
 	//gap_sequence2.insert(gap_sequence2.begin(), 1);
@@ -90,8 +90,8 @@ int main()
 	//std::vector<long> gap_sequence2 = ShellSort::gap_sequence_generator(ShellSort::extrapolated_ciura, 20);
 	std::vector<long> gap_sequence2 = ShellSort::highway_13_shellsort_gap_sequence2;
 	//ShellSort::empirical_comparison_range(gap_sequence1, gap_sequence2, 300000, 700000, 1700, 1800, 1000);
-	ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 12000, 24000, 20000);
-	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence2, 9000, 30000, 6772, 6771, 9030, 101);
+	//ShellSort::empirical_comparison(gap_sequence1, gap_sequence2, 12000, 24000, 200);
+	ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence2, 9000, 25000, 559, 550, 605, 301);
 	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence2, 9000, 30000, 7895, 7676, 8087, 101);
 	//ShellSort::empirical_comparison_inner_range(gap_sequence1, gap_sequence1, 3900, 9750, 1557, 1557-50, 1557+50, 3000);
 
